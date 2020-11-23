@@ -1,0 +1,21 @@
+{
+  "name": "prehistoric-involution",
+  "version": "1.0.0",
+  "description": "Second coming of the prehistoric simulation",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --require ts-node/register 'test/**/*.ts'"
+  },
+  "author": "Rocky Li",
+  "license": "MIT",
+  "dependencies": {
+    "simplex-noise": "^2.4.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.14",
+    "@types/mocha": "^8.0.4",
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
+    "ts-node": "^9.0.0"
+  }
+}

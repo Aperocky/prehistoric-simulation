@@ -1,0 +1,3 @@
+**/*.swp
+src/**/*.js
+node_modules/*
