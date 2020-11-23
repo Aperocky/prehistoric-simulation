@@ -8,7 +8,7 @@ describe('simplexGenerator', () => {
         expect(map[0].length).to.equal(10);
         // Expect all values to be between 0 and 1
         let flatMap = [].concat(...map);
-        assert(flatMap.every((e, i, arr) => e < 1 && e > 0));
+        assert(flatMap.every((e) => e < 1 && e > 0));
     })
 
     it('scale to 100x100', () => {

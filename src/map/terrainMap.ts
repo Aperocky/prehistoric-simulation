@@ -1,4 +1,5 @@
 import simplexGenerator from './simplexGenerator';
+import calculateRiverMap from './calculateRiverMap';
 
 export enum Terrain {
     Deep = 0,
@@ -20,6 +21,6 @@ export class TerrainMap {
     constructor(size: number) {
         this.heightMap = generator(size, "altitude");
         this.precipMap = generator(size, "precip");
-        
+        this.riverMap = calculateRiverMap(this.heightMap, this.precipMap, 5);
     }
 }
