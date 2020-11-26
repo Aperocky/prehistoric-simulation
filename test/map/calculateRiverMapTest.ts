@@ -118,13 +118,13 @@ describe('calculateRiverMap', () => {
     });
 
     it('test getShoreAndBottomLocations', () => {
-        expect(testfuncs.getShoreAndBottomLocations(DUMMY_SMALL_MATRIX, 
+        expect(testfuncs.getShoreAndBottomLocations(DUMMY_SMALL_MATRIX,
                 testfuncs.getDirectionMap(DUMMY_SMALL_MATRIX)))
                 .to.deep.equal(DUMMY_SMALL_MATRIX_SHORES);
-        expect(testfuncs.getShoreAndBottomLocations(IMPLODING_MATRIX, 
+        expect(testfuncs.getShoreAndBottomLocations(IMPLODING_MATRIX,
                 testfuncs.getDirectionMap(IMPLODING_MATRIX)).length)
                 .to.equal(6);
-        expect(testfuncs.getShoreAndBottomLocations(LAND_MAP, 
+        expect(testfuncs.getShoreAndBottomLocations(LAND_MAP,
                 testfuncs.getDirectionMap(LAND_MAP)).length)
                 .to.equal(2);
     });
@@ -169,6 +169,6 @@ describe('calculateRiverMap', () => {
         let landCount = [].concat(...heightMap).filter(e => e >= constants.ALTITUDE_ADJUST).length;
         assert(allRiverLength >= bigRiverLength);
         assert(landCount > allRiverLength);
-        console.log(`All River Length: ${allRiverLength}, Big River Length: ${bigRiverLength}, Land Count: ${landCount}`);
+        // console.log(`All River Length: ${allRiverLength}, Big River Length: ${bigRiverLength}, Land Count: ${landCount}`);
     });
 })

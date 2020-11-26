@@ -1,5 +1,5 @@
-import generator from '../../src/map/simplexGenerator'
-import { expect, assert } from 'chai'
+import generator from '../../src/map/simplexGenerator';
+import { expect, assert } from 'chai';
 
 describe('simplexGenerator', () => {
     it('creates 10x10 default map', () => {
