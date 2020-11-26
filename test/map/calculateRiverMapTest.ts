@@ -1,5 +1,5 @@
 import riverMap, { testfuncs } from '../../src/map/calculateRiverMap';
-import * as constants from '../../src/constant/constants';
+import * as mapConstants from '../../src/constant/mapConstants';
 import simplexGenerator from '../../src/map/simplexGenerator'
 import { expect, assert } from 'chai';
 
@@ -166,7 +166,7 @@ describe('calculateRiverMap', () => {
         // Count rivers
         let bigRiverLength = [].concat(...bigRivers).filter(e => e < 9).length
         let allRiverLength = [].concat(...allRivers).filter(e => e < 9).length
-        let landCount = [].concat(...heightMap).filter(e => e >= constants.ALTITUDE_ADJUST).length;
+        let landCount = [].concat(...heightMap).filter(e => e >= mapConstants.ALTITUDE_ADJUST).length;
         assert(allRiverLength >= bigRiverLength);
         assert(landCount > allRiverLength);
         // console.log(`All River Length: ${allRiverLength}, Big River Length: ${bigRiverLength}, Land Count: ${landCount}`);

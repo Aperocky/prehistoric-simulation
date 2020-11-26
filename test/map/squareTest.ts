@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Square, Terrain } from '../../src/map/square';
-import * as constants from '../../src/constant/constants';
+import * as mapConstants from '../../src/constant/mapConstants';
 
 describe('square', () => {
     it('Test Desert Square Generation', () => {
@@ -22,7 +22,7 @@ describe('square', () => {
         expect(square.isRiver()).to.be.true;
         expect(square.isWater()).to.be.false;
         expect(square.terrain).to.equal(Terrain.Grass);
-        expect(square.precip).to.be.closeTo(constants.PRECIPITATION_SCALAR*0.1, 0.001);
+        expect(square.precip).to.be.closeTo(mapConstants.PRECIPITATION_SCALAR*0.1, 0.001);
     });
 
     it('Test Forest Square Generation', () => {

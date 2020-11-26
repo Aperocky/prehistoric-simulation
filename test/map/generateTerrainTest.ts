@@ -1,7 +1,7 @@
 import generateTerrain, { testfuncs } from '../../src/map/generateTerrain';
 import { Square, Terrain } from '../../src/map/square';
 import { expect } from 'chai';
-import * as constants from '../../src/constant/constants';
+import * as mapConstants from '../../src/constant/mapConstants';
 
 const SMALL_MAP = [
     [0.9, 0.9, 0.9],
@@ -40,7 +40,7 @@ describe('generateTerrain', () => {
         rivers.forEach(currRiver => {
             expect(currRiver.riverDirection).to.not.equal(9);
             expect(currRiver.riverDirection).to.not.equal(4);
-            let direction = constants.DIRECTIONS.get(currRiver.riverDirection);
+            let direction = mapConstants.DIRECTIONS.get(currRiver.riverDirection);
             let xnew = currRiver.x + direction[0];
             let ynew = currRiver.y + direction[1];
             let downstream = terrain[ynew][xnew];

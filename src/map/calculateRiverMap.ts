@@ -1,4 +1,4 @@
-import * as constants from '../constant/constants';
+import * as mapConstants from '../constant/mapConstants';
 
 export default function calculateRiverMap(heightMap: number[][],
         precipMap: number[][], cutoff: number): number[][] {
@@ -9,7 +9,7 @@ export default function calculateRiverMap(heightMap: number[][],
     for (let y = 0; y < size; y++) {
         let latitude = []
         for (let x = 0; x < size; x++) {
-            if (heightMap[y][x] >= constants.ALTITUDE_ADJUST) {
+            if (heightMap[y][x] >= mapConstants.ALTITUDE_ADJUST) {
                 if (getVolume(x, y, precipMap, directionMap) > cutoff) {
                     latitude.push(directionMap[y][x]);
                 } else {
@@ -41,7 +41,7 @@ function getUpstreams(x, y, directionMap): number[][] {
     yArr.forEach(i => {
         xArr.forEach(j => {
             if (!(x == j && y == i)) {
-                let direction = constants.DIRECTIONS.get(directionMap[i][j]);
+                let direction = mapConstants.DIRECTIONS.get(directionMap[i][j]);
                 if (direction[0] == x-j && direction[1] == y-i) {
                     upstreams.push([j, i]);
                 }
@@ -56,13 +56,13 @@ function getShoreAndBottomLocations(heightMap, directionMap): number[][] {
     let size = heightMap.length;
     for (let y = 0; y < size; y++) {
         for (let x = 0; x < size; x++) {
-            if (heightMap[y][x] >= constants.ALTITUDE_ADJUST) {
+            if (heightMap[y][x] >= mapConstants.ALTITUDE_ADJUST) {
                 if (directionMap[y][x] == 4) {
                     locList.push([x,y]);
                 } else {
-                    let direction = constants.DIRECTIONS.get(directionMap[y][x]);
+                    let direction = mapConstants.DIRECTIONS.get(directionMap[y][x]);
                     let destination = [x + direction[0], y + direction[1]];
-                    if (heightMap[destination[1]][destination[0]] < constants.ALTITUDE_ADJUST) {
+                    if (heightMap[destination[1]][destination[0]] < mapConstants.ALTITUDE_ADJUST) {
                         locList.push([x,y]);
                     }
                 }

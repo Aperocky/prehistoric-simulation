@@ -1,7 +1,7 @@
 import simplexGenerator from './simplexGenerator';
 import calculateRiverMap from './calculateRiverMap';
 import { Square } from './square';
-import * as constants from '../constant/constants';
+import * as mapConstants from '../constant/mapConstants';
 
 export default function generateTerrain(size: number): Square[][] {
     let heightMap = simplexGenerator(size, "altitude");
@@ -11,7 +11,7 @@ export default function generateTerrain(size: number): Square[][] {
 
 function genSquareMap(heightMap: number[][], precipMap: number[][]): Square[][] {
     let size = heightMap.length;
-    let riverMap = calculateRiverMap(heightMap, precipMap, 5);
+    let riverMap = calculateRiverMap(heightMap, precipMap, mapConstants.RIVER_THRESHOLD);
     let squareMap: Square[][] = [];
     for (let y = 0; y < size; y++) {
         let latitude: Square[] = [];

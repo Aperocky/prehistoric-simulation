@@ -1,4 +1,4 @@
-import * as constants from '../constant/constants';
+import * as mapConstants from '../constant/mapConstants';
 
 export enum Terrain {
     Water = 1,
@@ -38,11 +38,11 @@ export class Square {
     }
 
     private getRealHeight(rawHeight: number): number {
-        return (rawHeight - constants.ALTITUDE_ADJUST) * constants.ALTITUDE_SCALAR;
+        return (rawHeight - mapConstants.ALTITUDE_ADJUST) * mapConstants.ALTITUDE_SCALAR;
     }
 
     private getRealPrecip(rawPrecip: number): number {
-        return rawPrecip * constants.PRECIPITATION_SCALAR;
+        return rawPrecip * mapConstants.PRECIPITATION_SCALAR;
     }
 
     private getTerrain(): Terrain {
@@ -50,13 +50,13 @@ export class Square {
             return Terrain.Water;
         }
         let effectivePrecip = this.precip + (this.isRiver() ? 300 : 0);
-        if (this.altitude < constants.MOUNTAIN_ALTITUDE) {
-            return effectivePrecip < constants.DESERT_BIOME_PRECIP_CUTOFF
+        if (this.altitude < mapConstants.MOUNTAIN_ALTITUDE) {
+            return effectivePrecip < mapConstants.DESERT_BIOME_PRECIP_CUTOFF
                     ? Terrain.Desert
-                    : effectivePrecip < constants.GRASS_BIOME_PRECIP_CUTOFF
+                    : effectivePrecip < mapConstants.GRASS_BIOME_PRECIP_CUTOFF
                     ? Terrain.Grass : Terrain.Forest;
         }
-        return effectivePrecip > constants.MOUNTAIN_BIOME_PRECIP_CUTOFF
+        return effectivePrecip > mapConstants.MOUNTAIN_BIOME_PRECIP_CUTOFF
                 ? Terrain.MountainGrass : Terrain.MountainRock;
     }
 }
