@@ -4,7 +4,9 @@
   "description": "Second coming of the prehistoric simulation",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require ts-node/register 'test/**/*.ts'"
+    "test": "mocha --require ts-node/register --require jsdom-global/register 'test/**/*.ts'",
+    "clean": "find src -name '*.js' | xargs rm",
+    "compile": "./compile.sh"
   },
   "author": "Rocky Li",
   "license": "MIT",
@@ -13,9 +15,14 @@
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",
+    "@types/jsdom": "^16.2.5",
     "@types/mocha": "^8.0.4",
+    "@types/pixi.js": "^5.0.0",
     "chai": "^4.2.0",
+    "jsdom": "16.4.0",
+    "jsdom-global": "3.0.2",
     "mocha": "^8.2.1",
+    "pixi.js": "^5.3.3",
     "ts-node": "^9.0.0"
   }
 }

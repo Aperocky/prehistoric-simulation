@@ -1,6 +1,10 @@
 {
     "compilerOptions": {
         "esModuleInterop": true,
-        "target": "es2015"
-    }
+        "target": "es5",
+        "removeComments": true
+    },
+    "files": [
+        "src/main.ts"
+    ]
 }
