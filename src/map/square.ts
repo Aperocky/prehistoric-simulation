@@ -54,7 +54,8 @@ export class Square {
         if (this.isWater()) {
             return Terrain.Water;
         }
-        let effectivePrecip = this.precip + this.flowVolume * mapConstants.RIVER_PRECIP_EFFECT;
+        let flowPrecip = this.flowVolume * mapConstants.RIVER_PRECIP_EFFECT;
+        let effectivePrecip = this.precip + ((flowPrecip > 300) ? 300 : flowPrecip);
         if (this.altitude < mapConstants.MOUNTAIN_ALTITUDE) {
             return effectivePrecip < mapConstants.DESERT_BIOME_PRECIP_CUTOFF
                     ? Terrain.Desert

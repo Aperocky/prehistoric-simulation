@@ -8,10 +8,10 @@ export const PRECIPITATION_ADJUST = 0;
 export const RIVER_THRESHOLD = 5;
 export const RIVER_PRECIP_EFFECT = 50;
 
-export const MOUNTAIN_ALTITUDE = 800;
+export const MOUNTAIN_ALTITUDE = 700;
 
 export const DESERT_BIOME_PRECIP_CUTOFF = 400;
-export const GRASS_BIOME_PRECIP_CUTOFF = 700;
+export const GRASS_BIOME_PRECIP_CUTOFF = 900;
 export const MOUNTAIN_BIOME_PRECIP_CUTOFF = 600;
 
 const DIRECTIONS_LEGEND = [
@@ -31,4 +31,9 @@ DIRECTIONS.set(6, [1, -1]);
 DIRECTIONS.set(7, [1, 0]);
 DIRECTIONS.set(8, [1, 1]);
 
+export const RIVER_WIDTH: number[][] = [
+    [5, 1],
+    [10, 2],
+    [20, 3]
+]
 // END MAP GENERATION CONSTANTS

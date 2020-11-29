@@ -16,7 +16,7 @@ const ALTITUDE_OCTAVES = {
         [1, 1],
         [2, 0.5],
         [4, 0.3],
-        [8, 0.2]
+        [8, 0.1],
     ],
     exponent: 2.0
 }
