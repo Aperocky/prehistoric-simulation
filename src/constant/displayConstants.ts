@@ -11,6 +11,12 @@ export const FOREST_COLOR = [15, 120, 50];
 export const MOUNTAIN_COLOR = [200, 200, 200];
 export const MOUNTAIN_GREEN = [180, 240, 180];
 
+export type ColorScale = {
+    baseColor: number[];
+    topColor: number[];
+    steps: number;
+}
+
 export const BASE_COLOR_MAP: Map<number, number[]> = new Map(); 
 BASE_COLOR_MAP.set(1, WATER_COLOR);
 BASE_COLOR_MAP.set(2, GRASS_COLOR);

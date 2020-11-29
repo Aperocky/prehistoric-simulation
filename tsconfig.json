@@ -2,7 +2,11 @@
     "compilerOptions": {
         "esModuleInterop": true,
         "target": "es5",
-        "removeComments": true
+        "removeComments": true,
+        "lib": [
+            "es6",
+            "dom"
+        ]
     },
     "files": [
         "src/main.ts"

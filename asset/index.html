@@ -10,6 +10,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/xterm.css" />
 
     <!-- Custom styles for this template -->
     <style type="text/css">
@@ -29,19 +30,12 @@
         .sig {
             padding: 10px;
         }
-        .ubscript {
-            max-height: 20px;
-        }
-        .inlineb {
-            display: inline-block;
-            margin: 10px;
-        }
         #console {
             font-family: monospace;
             color: #eee;
             padding: 20px;
             width: 100%;
-            height: 450px;
+            min-height: 100%;
             background: #222;
             border-radius: 40px;
             border: 10px solid #555;
@@ -53,9 +47,9 @@
 <body>
 <div class="container" id="mebody">
     <div class="row sig">
-        <div class="col-md-8" id="canvas">
+        <div class="col-md-7" id="canvas">
         </div>
-        <div class="col-md-4" id="control">
+        <div class="col-md-5" id="console">
         </div>
     </div>
 </div>

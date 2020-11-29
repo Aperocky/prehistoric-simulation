@@ -3,6 +3,8 @@ import * as displayConstants from '../constant/displayConstants';
 import { MapSprite } from './base/mapSprite';
 import { Square } from '../map/square';
 
+const APP_DIV_ID = "canvas";
+
 // A logical aggregation of all canvas operations
 export class MapCanvas {
 
