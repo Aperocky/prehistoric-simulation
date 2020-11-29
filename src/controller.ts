@@ -1,5 +1,6 @@
 import { Square } from './map/square';
 import generateTerrain from './map/generateTerrain';
+import * as mapConstants from './constant/displayConstants';
 import { MapCanvas } from './view/mapCanvas';
 import { ReplTerminal } from './view/replTerminal';
 
@@ -12,14 +13,14 @@ export class Controller {
     replTerminal: ReplTerminal;
 
     constructor() {
-        this.terrain = generateTerrain(50);
+        this.terrain = generateTerrain(mapConstants.DEFUALT_MAP_SIZE);
         this.mapCanvas = new MapCanvas();
         this.mapCanvas.createMapSprites(this.terrain);
         this.replTerminal = new ReplTerminal(this);
     }
 
     regenerateTerrain() {
-        this.terrain = generateTerrain(50);
+        this.terrain = generateTerrain(mapConstants.DEFUALT_MAP_SIZE);
         this.mapCanvas.createMapSprites(this.terrain);
     }
 }

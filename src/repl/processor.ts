@@ -29,9 +29,9 @@ export default function processor(controller: Controller, command: string): stri
 function help(): string[] {
     let result: string[] = [];
     HELP_MAP.forEach((val, key) => {
-        let command = val.shift();
+        let command = val[0];
         if (val.length) {
-            command += ` (${val.toString()})`;
+            command += ` (${val.slice(1).toString()})`;
         }
         result.push(command)
         let helpMessage: string[] = FUNC_MAP.get(key)(undefined, 'help');

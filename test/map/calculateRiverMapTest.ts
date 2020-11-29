@@ -64,10 +64,10 @@ const FLOW_VOLUME_PRECIP = [
     [0, 0, 0]
 ]
 
-const FLOW_VOLUME_RIVERMAP_CUTOFF_0_8 = [
-    [9, 9, 9],
-    [8, 8, 9],
-    [9, 7, 9]
+const FLOW_VOLUME_RIVERMAP_VOLUME = [
+    [0.2, 0.3, 0.4],
+    [10, 1, 0.0],
+    [0, 10, 0]
 ]
 
 const FLOW_RECURSION_MAP = [
@@ -78,20 +78,14 @@ const FLOW_RECURSION_MAP = [
 
 const FLOW_RECURSION_PRECIP = [
     [0.2, 0.3, 0.1],
-    [0.55, 0.1, 0.9],
+    [0.55, 0.2, 0.9],
     [0.1, 0.2, 0.3]
 ]
 
-const FLOW_RECURSION_RIVERMAP_CUTOFF_1 = [
-    [9, 9, 9],
-    [9, 9, 5],
-    [9, 9, 4]
-]
-
-const FLOW_RECURSION_RIVERMAP_CUTOFF_HALF = [
-    [9, 9, 9],
-    [8, 9, 5],
-    [9, 7, 4]
+const FLOW_RECURSION_RIVERMAP_VOLUME = [
+    [0.2, 0.3, 0.1],
+    [0.55, 0.4, 1.3],
+    [0.1, 0.85, 2.85]
 ]
 
 describe('calculateRiverMap', () => {
@@ -144,28 +138,26 @@ describe('calculateRiverMap', () => {
         expect(testfuncs.getVolume(1, 1, FLOW_VOLUME_PRECIP, testfuncs.getDirectionMap(FLOW_VOLUME_MAP)))
                .to.equal(1);
         expect(testfuncs.getVolume(1, 1, FLOW_RECURSION_PRECIP, testfuncs.getDirectionMap(FLOW_RECURSION_MAP)))
-               .to.be.closeTo(0.3, 0.00001);
+               .to.be.closeTo(0.4, 0.00001);
         expect(testfuncs.getVolume(2, 2, FLOW_RECURSION_PRECIP, testfuncs.getDirectionMap(FLOW_RECURSION_MAP)))
-               .to.be.closeTo(2.75, 0.00001);
+               .to.be.closeTo(2.85, 0.00001);
     });
 
     it('test calculateRiverMap', () => {
-        expect(riverMap(FLOW_RECURSION_MAP, FLOW_RECURSION_PRECIP, 1))
-               .to.deep.equal(FLOW_RECURSION_RIVERMAP_CUTOFF_1);
-        expect(riverMap(FLOW_RECURSION_MAP, FLOW_RECURSION_PRECIP, 0.5))
-               .to.deep.equal(FLOW_RECURSION_RIVERMAP_CUTOFF_HALF);
-        expect(riverMap(FLOW_VOLUME_MAP, FLOW_VOLUME_PRECIP, 0.8))
-               .to.deep.equal(FLOW_VOLUME_RIVERMAP_CUTOFF_0_8);
+        expect(riverMap(FLOW_RECURSION_MAP, FLOW_RECURSION_PRECIP).flowVolumes)
+               .to.deep.equal(FLOW_RECURSION_RIVERMAP_VOLUME);
+        expect(riverMap(FLOW_VOLUME_MAP, FLOW_VOLUME_PRECIP).flowVolumes)
+               .to.deep.equal(FLOW_VOLUME_RIVERMAP_VOLUME);
     });
 
     it('stress test calculateRiverMap', () => {
         let heightMap = simplexGenerator(50, "altitude");
         let precipMap = simplexGenerator(50, "precip");
-        let bigRivers = riverMap(heightMap, precipMap, 3);
-        let allRivers = riverMap(heightMap, precipMap, 1.5);
+        let bigRivers = riverMap(heightMap, precipMap).flowVolumes;
+        let allRivers = riverMap(heightMap, precipMap).flowVolumes;
         // Count rivers
-        let bigRiverLength = [].concat(...bigRivers).filter(e => e < 9).length
-        let allRiverLength = [].concat(...allRivers).filter(e => e < 9).length
+        let bigRiverLength = [].concat(...bigRivers).filter(e => e > 3).length
+        let allRiverLength = [].concat(...allRivers).filter(e => e > 1).length
         let landCount = [].concat(...heightMap).filter(e => e >= mapConstants.ALTITUDE_ADJUST).length;
         assert(allRiverLength >= bigRiverLength);
         assert(landCount > allRiverLength);

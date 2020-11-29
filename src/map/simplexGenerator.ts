@@ -5,17 +5,18 @@ const DEFAULT_OCTAVES = {
         [0.5, 2],
         [1, 1],
         [2, 0.5],
-        [4, 0.2]
+        [4, 0.3]
     ],
     exponent: 1.0
 }
 
 const ALTITUDE_OCTAVES = {
     bands: [
-        [0.5, 2],
+        [0.5, 1],
         [1, 1],
         [2, 0.5],
-        [4, 0.2]
+        [4, 0.3],
+        [8, 0.2]
     ],
     exponent: 2.0
 }

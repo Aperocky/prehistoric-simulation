@@ -1,27 +1,31 @@
 import * as mapConstants from '../constant/mapConstants';
 
-export default function calculateRiverMap(heightMap: number[][],
-        precipMap: number[][], cutoff: number): number[][] {
+export interface FlowBundle {
+    flowDirections: number[][];
+    flowVolumes: number[][];
+}
+
+export default function calculateRiverMap(heightMap: number[][], precipMap: number[][]): FlowBundle {
     // Returns an array of direction where sufficient waterflow volume exists.
     let size = heightMap.length;
     let directionMap = getDirectionMap(heightMap);
     let riverMap: number[][] = [];
+    let flowVolumes: number[][] = [];
     for (let y = 0; y < size; y++) {
         let latitude = []
         for (let x = 0; x < size; x++) {
             if (heightMap[y][x] >= mapConstants.ALTITUDE_ADJUST) {
-                if (getVolume(x, y, precipMap, directionMap) > cutoff) {
-                    latitude.push(directionMap[y][x]);
-                } else {
-                    latitude.push(9);
-                }
+                latitude.push(getVolume(x, y, precipMap, directionMap));
             } else {
-                latitude.push(9);
+                latitude.push(0);
             }
         }
-        riverMap.push(latitude);
+        flowVolumes.push(latitude);
     }
-    return riverMap;
+    return {
+        flowDirections: directionMap,
+        flowVolumes: flowVolumes
+    };
 }
 
 function getVolume(x, y, precipMap, directionMap): number {

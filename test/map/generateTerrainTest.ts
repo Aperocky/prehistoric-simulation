@@ -38,18 +38,14 @@ describe('generateTerrain', () => {
         let rivers = [].concat(...terrain).filter(s => s.isRiver())
         // Validate river flows
         rivers.forEach(currRiver => {
-            expect(currRiver.riverDirection).to.not.equal(9);
-            expect(currRiver.riverDirection).to.not.equal(4);
-            let direction = mapConstants.DIRECTIONS.get(currRiver.riverDirection);
+            expect(currRiver.flowDirection).to.not.equal(9);
+            expect(currRiver.flowDirection).to.not.equal(4);
+            let direction = mapConstants.DIRECTIONS.get(currRiver.flowDirection);
             let xnew = currRiver.x + direction[0];
             let ynew = currRiver.y + direction[1];
             let downstream = terrain[ynew][xnew];
             if (downstream.isWater()) {
-                if (downstream.riverDirection == 4) {
-                    expect(downstream.altitude).to.be.gt(0);
-                } else {
-                    expect(downstream.altitude).to.be.lt(0);
-                }
+                expect(downstream.isRiver()).to.be.false;
             } else {
                 expect(downstream.isRiver()).to.be.true;
             }

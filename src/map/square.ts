@@ -15,26 +15,31 @@ export class Square {
     altitude: number;
     precip: number;
     terrain: Terrain;
-    riverDirection: number;
+    flowDirection: number;
+    flowVolume: number;
     // Good for a square to know its current location.
     x: number;
     y: number;
 
-    constructor(height: number, precip: number, riverDirection: number, x: number, y: number) {
+    constructor(height: number, precip: number, flowDirection: number, flowVolume: number,
+            x: number, y: number) {
         this.x = x;
         this.y = y;
         this.altitude = this.getRealHeight(height);
         this.precip = this.getRealPrecip(precip);
-        this.riverDirection = riverDirection;
+        this.flowDirection = flowDirection;
+        this.flowVolume = flowVolume;
         this.terrain = this.getTerrain();
     }
 
     isRiver(): boolean {
-        return !(this.riverDirection == 4 || this.riverDirection == 9);
+        return (!this.isWater() && this.flowVolume > mapConstants.RIVER_THRESHOLD);
     }
 
     isWater(): boolean {
-        return this.riverDirection == 4 || this.altitude < 0;
+        return this.flowDirection == 4
+            && this.flowVolume > mapConstants.RIVER_THRESHOLD
+            || this.altitude < 0;
     }
 
     private getRealHeight(rawHeight: number): number {
@@ -49,7 +54,7 @@ export class Square {
         if (this.isWater()) {
             return Terrain.Water;
         }
-        let effectivePrecip = this.precip + (this.isRiver() ? 300 : 0);
+        let effectivePrecip = this.precip + this.flowVolume * mapConstants.RIVER_PRECIP_EFFECT;
         if (this.altitude < mapConstants.MOUNTAIN_ALTITUDE) {
             return effectivePrecip < mapConstants.DESERT_BIOME_PRECIP_CUTOFF
                     ? Terrain.Desert

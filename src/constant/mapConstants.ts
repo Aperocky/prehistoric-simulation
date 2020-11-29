@@ -6,6 +6,7 @@ export const ALTITUDE_ADJUST = 0.3;
 export const PRECIPITATION_SCALAR = 1500;
 export const PRECIPITATION_ADJUST = 0;
 export const RIVER_THRESHOLD = 5;
+export const RIVER_PRECIP_EFFECT = 50;
 
 export const MOUNTAIN_ALTITUDE = 800;
 
