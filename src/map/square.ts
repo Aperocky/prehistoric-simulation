@@ -9,6 +9,14 @@ export enum Terrain {
     MountainGrass = 6
 }
 
+export const TERRAIN_STR : Map<number, string> = new Map(); 
+TERRAIN_STR.set(1, "Water");
+TERRAIN_STR.set(2, "Grass");
+TERRAIN_STR.set(3, "Forest");
+TERRAIN_STR.set(4, "Mountain");
+TERRAIN_STR.set(5, "Desert");
+TERRAIN_STR.set(6, "Highland");
+
 // Square represent each locations.
 export class Square {
 

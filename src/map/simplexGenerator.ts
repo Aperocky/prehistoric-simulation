@@ -27,7 +27,7 @@ const PRECIP_OCTAVES = {
         [1, 1],
         [2, 0.5]
     ],
-    exponent: 1.5 
+    exponent: 1.5
 }
 
 const TYPE_MAP = {

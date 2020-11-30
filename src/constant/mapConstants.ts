@@ -1,14 +1,14 @@
 // MAP GENERATION CONSTANTS
 
 export const ALTITUDE_SCALAR = 2000;
-export const ALTITUDE_ADJUST = 0.3;
+export const ALTITUDE_ADJUST = 0.25;
 
 export const PRECIPITATION_SCALAR = 1500;
 export const PRECIPITATION_ADJUST = 0;
 export const RIVER_THRESHOLD = 5;
 export const RIVER_PRECIP_EFFECT = 50;
 
-export const MOUNTAIN_ALTITUDE = 700;
+export const MOUNTAIN_ALTITUDE = 800;
 
 export const DESERT_BIOME_PRECIP_CUTOFF = 400;
 export const GRASS_BIOME_PRECIP_CUTOFF = 900;
