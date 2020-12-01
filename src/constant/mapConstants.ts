@@ -32,6 +32,17 @@ DIRECTIONS.set(6, [1, -1]);
 DIRECTIONS.set(7, [1, 0]);
 DIRECTIONS.set(8, [1, 1]);
 
+export const DIRECTIONS_DESCRIPTION: Map<number, string> = new Map();
+DIRECTIONS_DESCRIPTION.set(0, "Northwest");
+DIRECTIONS_DESCRIPTION.set(1, "West");
+DIRECTIONS_DESCRIPTION.set(2, "Southwest");
+DIRECTIONS_DESCRIPTION.set(3, "North");
+DIRECTIONS_DESCRIPTION.set(4, "Nowhere");
+DIRECTIONS_DESCRIPTION.set(5, "South");
+DIRECTIONS_DESCRIPTION.set(6, "Northeast");
+DIRECTIONS_DESCRIPTION.set(7, "East");
+DIRECTIONS_DESCRIPTION.set(8, "Southeast");
+
 export const RIVER_WIDTH: number[][] = [
     [5, 1],
     [10, 2],

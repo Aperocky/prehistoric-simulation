@@ -2,6 +2,7 @@ import { Controller } from '../controller';
 import regenerateMap from './functions/regenerateMap';
 import debug from './functions/debug';
 import describeMap from './functions/describeMap';
+import describeSquare from './functions/describeSquare';
 
 
 interface ReplFunction {
@@ -15,11 +16,14 @@ FUNC_MAP.set("reg", regenerateMap);
 FUNC_MAP.set("debug", debug);
 FUNC_MAP.set("describe-map", describeMap);
 FUNC_MAP.set("map", describeMap);
+FUNC_MAP.set("describe-square", describeSquare);
+FUNC_MAP.set("square", describeSquare);
 
 
 const HELP_MAP: Map<string, string[]> = new Map();
 HELP_MAP.set("regenerate", ["regenerate", "reg"]);
 HELP_MAP.set("describe-map", ["describe-map", "map"]);
+HELP_MAP.set("describe-square", ["describe-square", "square"]);
 
 
 export default function processor(controller: Controller, command: string): string[] {

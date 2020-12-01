@@ -3,7 +3,7 @@
 export const DEFAULT_DISPLAY_HEIGHT = 800;
 export const DEFAULT_DISPLAY_WIDTH = 800;
 export const DEFAULT_SQUARE_SIZE = 16;
-export const DEFUALT_MAP_SIZE = 50;
+export const DEFAULT_MAP_SIZE = 50;
 
 export const WATER_COLOR = [16, 165, 245];
 export const DESERT_COLOR = [225, 190, 145];

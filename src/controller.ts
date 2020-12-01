@@ -13,14 +13,14 @@ export class Controller {
     replTerminal: ReplTerminal;
 
     constructor() {
-        this.terrain = generateTerrain(mapConstants.DEFUALT_MAP_SIZE);
+        this.terrain = generateTerrain(mapConstants.DEFAULT_MAP_SIZE);
         this.mapCanvas = new MapCanvas();
         this.mapCanvas.createMapSprites(this.terrain);
         this.replTerminal = new ReplTerminal(this);
     }
 
     regenerateTerrain() {
-        this.terrain = generateTerrain(mapConstants.DEFUALT_MAP_SIZE);
+        this.terrain = generateTerrain(mapConstants.DEFAULT_MAP_SIZE);
         this.mapCanvas.createMapSprites(this.terrain);
     }
 }
