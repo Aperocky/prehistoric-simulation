@@ -2,3 +2,4 @@
 src/**/*.js
 asset/*.js
 node_modules/*
+.webconfig

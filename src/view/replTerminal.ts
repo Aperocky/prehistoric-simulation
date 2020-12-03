@@ -75,6 +75,8 @@ export class ReplTerminal {
                     this.command = this.command.slice(0, this.command.length - 1);
                     term.write("\b \b");
                 }
+            } else if (ev.keyCode == 37 || ev.keyCode == 39) {
+                // Disable.
             } else if (ev.keyCode == 38) {
                 if (this.pointer < this.history.length) {
                     this.pointer++;

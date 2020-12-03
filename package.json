@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha --require ts-node/register --require jsdom-global/register 'test/**/*.ts'",
     "clean": "find src -name '*.js' | xargs rm",
-    "compile": "./compile.sh"
+    "compile": "./compile.sh",
+    "push": "./push.sh"
   },
   "author": "Rocky Li",
   "license": "MIT",
