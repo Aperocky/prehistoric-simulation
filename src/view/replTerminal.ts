@@ -61,7 +61,8 @@ export class ReplTerminal {
         this.pointer = 0;
         this.history = [];
         let term = this.terminal;
-        term.write("Welcome to prehistoric-involution!");
+        term.write("Welcome to prehistoric-involution!" + CARRIAGE_RETURN);
+        term.write("Type 'help' for help");
         this.execute();
         term.onKey((event) => {
             let key = event.key;
@@ -94,5 +95,10 @@ export class ReplTerminal {
                 term.write(key);
             }
         });
+    }
+
+    writeCommand(command: string): void {
+        this.command = command;
+        this.terminal.write(CURR_LINE_REFRESH + TERMINAL_ADDR + this.command);
     }
 }

@@ -13,6 +13,9 @@ export const FOREST_COLOR = [15, 120, 50];
 export const MOUNTAIN_COLOR = [200, 200, 200];
 export const MOUNTAIN_GREEN = [180, 240, 180];
 
+export const HIGHLIGHT_COLOR = [255, 255, 0];
+export const HIGHLIGHT_ALPHA = 0.3;
+
 export type ColorScale = {
     baseColor: number[];
     topColor: number[];

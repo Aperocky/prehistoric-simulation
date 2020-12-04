@@ -26,4 +26,9 @@ describe('replProcessor', () => {
         let result: string[] = processor(undefined, "help");
         expect(result).to.not.be.empty;
     });
+    it('test man', () => {
+        let result: string[] = processor(undefined, "man debug");
+        expect(result.length).to.equal(3);
+        expect(result[1]).to.equal("MULTILINE");
+    });
 });

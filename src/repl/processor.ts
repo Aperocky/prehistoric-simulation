@@ -31,6 +31,8 @@ export default function processor(controller: Controller, command: string): stri
     let base = args.shift();
     if (base === "help") {
         return help();
+    } else if (base === "man" && args.length) {
+        return processor(controller, `${args[0]} help`)
     } else if (FUNC_MAP.has(base)) {
         return FUNC_MAP.get(base)(controller, ...args);
     } else {

@@ -3,6 +3,7 @@ import * as displayConstants from '../constant/displayConstants';
 import { MapSprite } from './base/mapSprite';
 import { RiverGraphic } from './base/riverGraphic';
 import { Square } from '../map/square';
+import { ReplTerminal } from './replTerminal';
 
 const APP_DIV_ID = "canvas";
 
@@ -20,6 +21,7 @@ export class MapCanvas {
                 height: displayConstants.DEFAULT_DISPLAY_HEIGHT
         });
         this.mainContainer = new PIXI.Container();
+        this.mainContainer.interactive = true;
         this.app.stage.addChild(this.mainContainer);
         this.mapSprites = [];
     }
@@ -44,6 +46,16 @@ export class MapCanvas {
         });
         this.riverGraphics.forEach((river) => {
             this.mainContainer.addChild(river);
+        });
+    }
+
+    createTerrainHooks(replTerminal: ReplTerminal): void {
+        this.mainContainer.on("mouseout", (event) => {
+            console.log("exiting main container");
+            replTerminal.writeCommand("");
+        });
+        this.mapSprites.forEach((sprite) => {
+            sprite.addHooks(replTerminal);
         });
     }
 }

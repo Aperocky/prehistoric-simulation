@@ -21,7 +21,7 @@ export default function regenerateMap(controller: Controller, ...args: string[])
             }
         }
     }
-    controller.regenerateTerrain();
+    controller.generateTerrain();
     let results = ["Successfully regenerated map"];
     if (showflag) {
         results = results.concat(describeMap(controller));
