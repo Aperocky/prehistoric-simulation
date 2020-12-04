@@ -1,8 +1,8 @@
 import { Controller } from '../controller';
-import regenerateMap from './functions/regenerateMap';
-import debug from './functions/debug';
-import describeMap from './functions/describeMap';
-import describeSquare from './functions/describeSquare';
+import regenerateMap from './mapfuncs/regenerateMap';
+import debug from './mapfuncs/debug';
+import describeMap from './mapfuncs/describeMap';
+import describeSquare from './mapfuncs/describeSquare';
 
 
 interface ReplFunction {

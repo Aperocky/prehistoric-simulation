@@ -1,5 +1,5 @@
 import { Controller } from '../../controller';
-import { argparse, KeyValue } from './util';
+import { argparse, KeyValue } from '../parser';
 import { Square, Terrain, TERRAIN_STR } from '../../map/square';
 
 const HELP = [

@@ -1,4 +1,4 @@
-import { argparse, KeyValue } from '../../../src/repl/functions/util';
+import { argparse, KeyValue } from '../../src/repl/parser';
 import { expect } from 'chai';
 
 describe('argparse', () => {
