@@ -17,25 +17,22 @@ export class Household {
         if (households.length) {
             this.location = households[0].location;
             this.holderId = households[0].holderId;
-            this.adults = [].concat(households.map(h => h.adults));
+            this.adults = [].concat(...households.map(h => h.adults));
             this.isSingle = this.adults.length == 1;
-            this.dependents = [].concat(households.map(h => h.dependents));
+            this.dependents = [].concat(...households.map(h => h.dependents));
             this.storage.mergeStorages(households.map(h => h.storage));
+            [].concat(...[this.adults, this.dependents]).map(p => {
+                p.setHousehold(this);
+            });
         } else if (person && location) {
             this.location = location;
             this.holderId = person.id;
             this.isSingle = true;
             this.adults = [person];
             this.dependents = [];
+            person.setHousehold(this);
         } else {
             throw new TypeError("incomplete parameter exception");
         }
-    }
-
-    work(simProduction: SimProduction): void {
-        let persons = this.adults.concat(this.dependents);
-        persons.forEach(p => {
-            p.work.doWork(simProduction, this.location, p);
-        });
     }
 }

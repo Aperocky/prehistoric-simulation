@@ -7,6 +7,8 @@ import { Work } from './work/work';
 
 export class Person {
 
+    household: Household;
+
     id: string;
     heritage: Heritage;
     age: number;
@@ -16,6 +18,10 @@ export class Person {
         this.heritage = heritage;
         this.age = 0;
         this.id = uuid();
-        this.work = new Work();
+        this.work = new Work(this);
+    }
+
+    setHousehold(household: Household): void {
+        this.household = household;
     }
 }

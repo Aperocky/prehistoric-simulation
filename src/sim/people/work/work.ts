@@ -7,44 +7,64 @@ const INITIAL_WORK_TYPE = "HUNT";
 
 export class Work {
 
+    readonly person: Person;
+
     work: string;
     produce: number;
+    workLocation: Location;
     workConsumption: { [res: string]: number };
     experience: { [work: string]: number };
 
-    constructor() {
+    constructor(person: Person) {
+        this.person = person;
         this.work = INITIAL_WORK_TYPE;
         this.produce = 0;
         this.experience = {};
         this.workConsumption = {};
+        this.workLocation = null;
     }
 
-    doWork(simProduction: SimProduction, location: Location, person: Person): void {
+    doWork(simProduction: SimProduction): void {
+        if (this.person.age < 10) {
+            return;
+        }
+        let location = this.person.household.location;
         let workType = WORK_TYPES[this.work];
         if (workType.workLocation == "private") {
             this.produce = workType.produceFunc(
-                    workType.strengthMod(this.workConsumption, person),
+                    workType.strengthMod(this.workConsumption, this.person),
                     simProduction.terrain[location.y][location.x]);
             return;
         }
-        let workLocation = randomWalk(
+        this.workLocation = randomWalk(
                 location,
                 simProduction.terrain,
                 workType.searchdist,
                 workType.workLocation == WorkLocation.Water);
-        simProduction.addWork(person, workLocation);
+        simProduction.addWork(this.person, this.workLocation);
     }
 
-    getPaid(simProduction: SimProduction, person: Person): number {
+    getPaid(simProduction: SimProduction): void {
+        if (this.person.age < 10) {
+            this.produce = 0;
+            return;
+        }
         let workType = WORK_TYPES[this.work];
         if (workType.workLocation == "private") {
             return;
         }
-        if (person.id in simProduction.distribute) {
-            this.produce = simProduction.distribute[person.id];
+        if (this.person.id in simProduction.distributeLedger) {
+            this.produce = simProduction.distributeLedger[this.person.id];
         } else {
             console.log("Did not find compensation, sue?");
             this.produce = 0;
+        }
+    }
+
+    addProduceToStorage(): void {
+        if (this.produce > 0) {
+            let resource = WORK_TYPES[this.work].produceType;
+            this.person.household.storage.addResource(resource, this.produce);
         }
     }
 }

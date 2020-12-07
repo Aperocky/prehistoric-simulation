@@ -29,6 +29,19 @@ export const WILL_TURNER = (() => {
     return will;
 })();
 
+export const LIZ_SWANN = (() => {
+    let liz = new Person({
+        surname: "Swann",
+        name: "Elizabeth",
+        father: ORIGIN_NAME,
+        mother: ORIGIN_NAME,
+        gender: 0,
+        children: []
+    });
+    liz.age = 18;
+    return liz;
+})();
+
 describe('person', () => {
     it('test seeding person', () => {
         let heritage: Heritage = {

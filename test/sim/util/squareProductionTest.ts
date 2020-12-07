@@ -1,6 +1,5 @@
 import { SquareProduction } from '../../../src/sim/util/squareProduction';
 import { Square } from '../../../src/map/square';
-import { testfuncs as terrain } from '../../../src/map/generateTerrain';
 import { GRASS_SQUARE } from '../../map/squareTest';
 import { JACK_SPARROW, WILL_TURNER } from '../people/personTest';
 import { expect } from 'chai';
