@@ -67,4 +67,8 @@ export class Work {
             this.person.household.storage.addResource(resource, this.produce);
         }
     }
+
+    getDesiredWorkConsumption(): { [resourceType: string]: number } {
+        return WORK_TYPES[this.work].consume;
+    }
 }

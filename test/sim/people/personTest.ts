@@ -1,5 +1,6 @@
 import { Person } from '../../../src/sim/people/person';
 import { Heritage } from '../../../src/sim/people/properties/heritage';
+import { ResourceType } from '../../../src/sim/people/properties/resourceTypes';
 import { ORIGIN_NAME } from '../../../src/constant/simConstants';
 import { expect } from 'chai';
 
@@ -55,5 +56,17 @@ describe('person', () => {
         let jack: Person = new Person(heritage);
         expect(jack.heritage.father).to.equal(ORIGIN_NAME);
         expect(jack.age).to.equal(0);
+    });
+    
+    it('test desired consumption', () => {
+        expect(LIZ_SWANN.getConsumption()[ResourceType.Food]).to.equal(1);
+    });
+
+    it('test work consumption', () => {
+        WILL_TURNER.work.work = "FISH";
+        expect(WILL_TURNER.getConsumption()[ResourceType.Wood]).to.equal(0.3);
+        expect(WILL_TURNER.getConsumption()[ResourceType.Food]).to.equal(1);
+        // Cleanup
+        WILL_TURNER.work.work = "HUNT";
     });
 });

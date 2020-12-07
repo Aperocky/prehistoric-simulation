@@ -25,4 +25,18 @@ export class Simulation {
     initialize(count: number = INITIAL_PERSON_COUNT): void {
         initializeSim(this, this.terrain, count);
     }
+
+    runTurn(): void {
+        // Work iteration - get produce to bank.
+        this.simProduction.globalWorkIteration(this.people);
+        // Consume iteration - consume stuff
+        this.consume();
+    }
+
+    consume(): void {
+        this.households.forEach(hh => {
+            hh.getProjectedConsumption();
+            hh.consume();
+        });
+    }
 }

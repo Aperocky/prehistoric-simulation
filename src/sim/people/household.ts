@@ -12,6 +12,9 @@ export class Household {
     dependents: Person[];
     storage: Storage;
 
+    projectedConsumption: { [resourceType: string]: number };
+    percentSatisfied: { [resourceType: string]: number };
+
     constructor(households: Household[], person?: Person, location?: Location) {
         this.storage = new Storage();
         if (households.length) {
@@ -34,5 +37,33 @@ export class Household {
         } else {
             throw new TypeError("incomplete parameter exception");
         }
+        this.projectedConsumption = {};
+        this.percentSatisfied = {};
+    }
+
+    getProjectedConsumption(): void {
+        let consumption = {};
+        [].concat(...[this.adults, this.dependents]).map(p => {
+            let pc = p.getConsumption();
+            for (const [key, val] of Object.entries(pc)) {
+                if (key in consumption) {
+                    consumption[key] += val;
+                } else {
+                    consumption[key] = val;
+                }
+            }
+        });
+        this.projectedConsumption = consumption;
+    }
+
+    consume(): void {
+        this.percentSatisfied = {};
+        for (const [key, val] of Object.entries(this.projectedConsumption)) {
+            let actual = this.storage.spendResource(key, val);
+            this.percentSatisfied[key] = actual/val;
+        }
+        [].concat(...[this.adults, this.dependents]).map(p => {
+            p.consume();
+        });
     }
 }

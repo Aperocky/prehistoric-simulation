@@ -16,5 +16,14 @@ describe('simulation', () => {
         expect(sim.households.length).to.equal(3);
         expect(Object.keys(sim.people).length).to.equal(3);
     });
+
+    it('test consumption', () => {
+        let sim = new Simulation(TEST_TERRAIN);
+        sim.initialize(5);
+        sim.simProduction.globalWorkIteration(sim.people);
+        expect(sim.households[0].storage.getResource("food")).to.be.gt(0);
+        sim.consume();
+        expect(sim.households[0].adults[0].consumption["food"]).to.be.gt(0);
+    });
 });
 
