@@ -56,4 +56,11 @@ export class Person {
             this.consumption[key] = val * percentSatisfied;
         }
     }
+
+    isHungry(): boolean {
+        if (ResourceType.Food in this.consumption) {
+            return this.consumption[ResourceType.Food] < this.getBaseFoodConsumption();
+        }
+        return false; // Not yet initiated
+    }
 }

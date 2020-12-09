@@ -13,7 +13,7 @@ export const JACK_SPARROW = (() => {
         gender: 1,
         children: []
     });
-    jack.age = 20;
+    jack.age = 50;
     return jack;
 })();
 
@@ -68,5 +68,15 @@ describe('person', () => {
         expect(WILL_TURNER.getConsumption()[ResourceType.Food]).to.equal(1);
         // Cleanup
         WILL_TURNER.work.work = "HUNT";
+    });
+
+    it('test isHungry', () => {
+        expect(WILL_TURNER.isHungry()).to.be.false;
+        WILL_TURNER.consumption = {"food": 0.3};
+        expect(WILL_TURNER.isHungry()).to.be.true;
+        WILL_TURNER.consumption = {"food": 1.3};
+        expect(WILL_TURNER.isHungry()).to.be.false;
+        // cleanup
+        WILL_TURNER.consumption = {};
     });
 });
