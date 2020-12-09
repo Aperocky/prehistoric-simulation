@@ -5,7 +5,7 @@ import { JACK_SPARROW, WILL_TURNER } from '../people/personTest';
 import { expect } from 'chai';
 
 
-describe('squareProduction', () => {
+describe('sim:squareProduction', () => {
     it('test squareProduction', () => {
         let sqp = new SquareProduction(GRASS_SQUARE);
         sqp.addRegistryItem(JACK_SPARROW);

@@ -2,9 +2,12 @@ import { Person } from './person';
 import { Storage } from './properties/storage';
 import { Location } from '../util/location';
 import { SimProduction } from '../util/simProduction';
+import { v4 as uuid } from 'uuid';
+
 
 export class Household {
 
+    id: string;
     holderId: string;
     location: Location;
     isSingle: boolean;
@@ -16,6 +19,7 @@ export class Household {
     percentSatisfied: { [resourceType: string]: number };
 
     constructor(households: Household[], person?: Person, location?: Location) {
+        this.id = uuid();
         this.storage = new Storage();
         if (households.length) {
             this.location = households[0].location;

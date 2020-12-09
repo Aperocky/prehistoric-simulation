@@ -5,8 +5,7 @@ import { LIZ_SWANN, WILL_TURNER, JACK_SPARROW } from '../personTest';
 import { ORIGIN_NAME } from '../../../../src/constant/simConstants';
 import { expect } from 'chai';
 
-describe('action:courtship', () => {
-
+describe('people:courtship', () => {
     it('test successful courtship', () => {
         LIZ_SWANN.consumption = {"food": 0.5};
         LIZ_SWANN.heritage.father = "GovSwann";

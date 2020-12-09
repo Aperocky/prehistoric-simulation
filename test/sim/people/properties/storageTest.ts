@@ -2,7 +2,7 @@ import { Storage } from '../../../../src/sim/people/properties/storage';
 import { ResourceType } from '../../../../src/sim/people/properties/resourceTypes';
 import { expect } from 'chai';
 
-describe('storage', () => {
+describe('people:storage', () => {
     it('test storage', () => {
         let storage = new Storage();
         storage.addGold(10);

@@ -56,21 +56,21 @@ export class SimProduction {
         }
     }
 
-    work(people: { [id: string]: Person }): void {
-        Object.values(people).forEach(p => {
+    work(people: Map<string, Person>): void {
+        people.forEach(p => {
             p.work.doWork(this);
         });
     }
 
-    distribute(people: { [id: string]: Person }): void {
-        Object.values(people).forEach(p => {
+    distribute(people: Map<string, Person>): void {
+        people.forEach(p => {
             p.work.getPaid(this);
             p.work.addProduceToStorage();
         });
     }
 
     // Invoke once per turn for recording and rewarding work
-    globalWorkIteration(people: { [id: string]: Person }): void {
+    globalWorkIteration(people: Map<string, Person>): void {
         this.reset();
         this.work(people);
         this.calculate();

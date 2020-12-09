@@ -2,7 +2,7 @@ import processor from '../../src/repl/processor';
 import { expect } from 'chai';
 
 
-describe('replProcessor', () => {
+describe('repl:replProcessor', () => {
     it('test command not found', () => {
         let result: string[] = processor(undefined, "BIEK");
         expect(result.length).to.equal(1);

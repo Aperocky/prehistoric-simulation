@@ -6,15 +6,15 @@ import { TEST_SIM } from '../simTest';
 import { expect } from 'chai';
 
 
-describe('simProduction', () => {
+describe('sim:simProduction', () => {
     it('test simProduction', () => {
-        Object.values(TEST_SIM.people).map(p => {
+        TEST_SIM.people.forEach(p => {
             p.work.doWork(TEST_SIM.simProduction);
         });
         TEST_SIM.simProduction.calculate();
         expect(Object.keys(TEST_SIM.simProduction.distributeLedger).length).to.equal(3);
         TEST_SIM.simProduction.distribute(TEST_SIM.people);
-        let randomPerson = Object.values(TEST_SIM.people)[0];
+        let randomPerson = TEST_SIM.people.values().next().value;
         expect(randomPerson.work.produce > 0).to.be.true;
         TEST_SIM.simProduction.reset();
         expect(TEST_SIM.simProduction.distributeLedger).to.be.empty;
@@ -22,6 +22,9 @@ describe('simProduction', () => {
         TEST_SIM.households.forEach(hh => {
             hh.storage = new Storage();
         })
+        TEST_SIM.people.forEach(p => {
+            p.work.produce = 0;
+        });
     });
 
     it('test globalWorkIteration', () => {
@@ -31,6 +34,9 @@ describe('simProduction', () => {
             expect(hh.storage.getResource("food")).to.be.gt(0);
             // cleanup
             hh.storage = new Storage();
+        });
+        TEST_SIM.people.forEach(p => {
+            p.work.produce = 0;
         });
     });
 });

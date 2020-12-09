@@ -8,9 +8,9 @@ import { Household } from '../../../../src/sim/people/household';
 import { SquareProduction } from '../../../../src/sim/util/squareProduction';
 
 
-describe('work', () => {
+describe('people:work', () => {
     it('test basic populate work', () => {
-        let household: Household = TEST_SIM.households[0];
+        let household: Household = TEST_SIM.households.values().next().value;
         let person = household.adults[0]
         expect(person.work.workLocation).to.be.null;
         person.work.doWork(TEST_SIM.simProduction);
@@ -23,12 +23,12 @@ describe('work', () => {
     });
 
     it('test work compensation', () => {
-        let household: Household = TEST_SIM.households[0];
+        let household: Household = TEST_SIM.households.values().next().value;
         let person = household.adults[0]
         person.work.doWork(TEST_SIM.simProduction);
         TEST_SIM.simProduction.calculate();
-        let justThisPerson = {}
-        justThisPerson[person.id] = person;
+        let justThisPerson = new Map();
+        justThisPerson.set(person.id, person);
         TEST_SIM.simProduction.distribute(justThisPerson);
         expect(person.work.produce > 0).to.be.true;
         expect(person.household.storage.getResource("food")).to.be.gt(0);

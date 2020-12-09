@@ -88,7 +88,7 @@ const FLOW_RECURSION_RIVERMAP_VOLUME = [
     [0.1, 0.85, 2.85]
 ]
 
-describe('calculateRiverMap', () => {
+describe('map:calculateRiverMap', () => {
     it('test getArr', () => {
         expect(testfuncs.getArr(0, 10)).to.deep.equal([0,1]);
         expect(testfuncs.getArr(9, 10)).to.deep.equal([8,9]);

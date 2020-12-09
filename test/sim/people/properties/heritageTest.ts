@@ -4,7 +4,7 @@ import { Person } from '../../../../src/sim/people/person';
 import { expect } from 'chai';
 
 
-describe('heritage', () => {
+describe('people:heritage', () => {
     it('test initializing heritage', () => {
         let heritage = initialHeritage();
         expect(heritage.father).to.equal(ORIGIN_NAME);

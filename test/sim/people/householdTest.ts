@@ -7,7 +7,7 @@ import { WILL_TURNER, LIZ_SWANN } from './personTest';
 import { TEST_SIM } from '../simTest';
 import { expect } from 'chai';
 
-describe('household', () => {
+describe('people:household', () => {
     it('test seeding household', () => {
         let heritage: Heritage = {
             surname: "Sparrow",

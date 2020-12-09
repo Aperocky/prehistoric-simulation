@@ -1,7 +1,7 @@
 import generator from '../../src/map/simplexGenerator';
 import { expect, assert } from 'chai';
 
-describe('simplexGenerator', () => {
+describe('map:simplexGenerator', () => {
     it('creates 10x10 default map', () => {
         let map = generator(10, "default");
         expect(map.length).to.equal(10);

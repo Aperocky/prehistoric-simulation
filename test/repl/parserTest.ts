@@ -1,7 +1,7 @@
 import { argparse, KeyValue } from '../../src/repl/parser';
 import { expect } from 'chai';
 
-describe('argparse', () => {
+describe('repl:argparse', () => {
     it('test no args', () => {
         let result = argparse([]);
         expect(result).to.be.empty;

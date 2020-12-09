@@ -4,7 +4,7 @@ import * as mapConstants from '../../src/constant/mapConstants';
 
 export const GRASS_SQUARE = new Square(0.5, 0.3, 5, 1, 1, 1);
 
-describe('square', () => {
+describe('map:square', () => {
     it('Test Desert Square Generation', () => {
         let square = new Square(0.5, 0, 9, 1, 1, 1);
         expect(square.isRiver()).to.be.false;

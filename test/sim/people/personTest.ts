@@ -43,7 +43,7 @@ export const LIZ_SWANN = (() => {
     return liz;
 })();
 
-describe('person', () => {
+describe('people:person', () => {
     it('test seeding person', () => {
         let heritage: Heritage = {
             surname: "Sparrow",

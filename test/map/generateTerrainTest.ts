@@ -15,7 +15,7 @@ const SMALL_PRECIP = [
     [0.1, 0.2, 0.3]
 ]
 
-describe('generateTerrain', () => {
+describe('map:generateTerrain', () => {
     it('Test genSquareMap', () => {
         let terrain: Square[][] = testfuncs.genSquareMap(SMALL_MAP, SMALL_PRECIP);
         expect(terrain[1][1].isRiver()).to.be.true;

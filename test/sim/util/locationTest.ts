@@ -18,7 +18,7 @@ const PRECIP = [
 
 export const TEST_TERRAIN = terrain.genSquareMap(ALTITUDE, PRECIP);
 
-describe('location', () => {
+describe('sim:location', () => {
     it('test getAdjacentLocations', () => {
         let location: Location = { x: 1, y: 0};
         let adjacents = testfuncs.getAdjacentLocations(location);
