@@ -39,7 +39,7 @@ describe('sim:simulation', () => {
         expect(sim.people.size).to.equal(3);
     });
 
-    it('test consumption', () => {
+    it('test basic consumption', () => {
         let sim = new Simulation(TEST_TERRAIN);
         sim.initialize(5);
         sim.simProduction.globalWorkIteration(sim.people);
@@ -48,12 +48,40 @@ describe('sim:simulation', () => {
         expect(sim.households.values().next().value.adults[0].consumption["food"]).to.be.gt(0);
     });
 
+    it('test large consumption', () => {
+        let sim = getSimulationOnTerrain();
+        sim.simProduction.globalWorkIteration(sim.people);
+        sim.consume();
+        sim.households.forEach(hh => {
+            let hasFood = hh.storage.getResource("food") > 0;
+            let person = hh.adults[0];
+            if (hasFood) {
+                expect(person.isHungry()).to.be.false;
+            } else if (person.work.produce == person.getBaseFoodConsumption()) {
+                expect(person.isHungry()).to.be.false;
+            } else {
+                expect(person.isHungry()).to.be.true;
+            }
+        });
+    });
+
     it('test runTurn', () => {
-        let largeSim = getSimulationOnTerrain();
+        let sim = getSimulationOnTerrain();
         let turn = 0;
-        while (turn < 5) {
-            largeSim.runTurn();
+        while (turn < 30) {
+            sim.runTurn();
             turn++;
+            // Ensure sanity
+            sim.households.forEach(hh => {
+                hh.dependents.forEach(d => {
+                    expect(d.household.id).to.equal(hh.id);
+                    expect(sim.people.has(d.id)).to.be.true;
+                });
+                hh.adults.forEach(a => {
+                    expect(a.household.id).to.equal(hh.id);
+                    expect(sim.people.has(a.id)).to.be.true;
+                });
+            })
         }
     });
 

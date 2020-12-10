@@ -4,6 +4,8 @@ import { MapSprite } from './base/mapSprite';
 import { RiverGraphic } from './base/riverGraphic';
 import { Square } from '../map/square';
 import { ReplTerminal } from './replTerminal';
+import { SimDisplay } from './simDisplay';
+
 
 const APP_DIV_ID = "canvas";
 
@@ -14,6 +16,7 @@ export class MapCanvas {
     mainContainer: PIXI.Container;
     mapSprites: MapSprite[];
     riverGraphics: RiverGraphic[];
+    simDisplay: SimDisplay;
 
     constructor() {
         this.app = new PIXI.Application({
@@ -24,6 +27,7 @@ export class MapCanvas {
         this.mainContainer.interactive = true;
         this.app.stage.addChild(this.mainContainer);
         this.mapSprites = [];
+        this.simDisplay = new SimDisplay(this.mainContainer);
     }
 
     createMapSprites(terrain: Square[][]) {

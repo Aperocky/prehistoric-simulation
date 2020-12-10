@@ -7,8 +7,8 @@ import { Person } from '../people/person';
 import { INITIAL_AGE } from '../../constant/simConstants';
 
 
-export default function initializeSim(sim: Simulation, terrain: Square[][], population: number): void {
-    let initialLocations = getRandomLandLocations(terrain, population);
+export default function initializeSim(sim: Simulation, population: number): void {
+    let initialLocations = getRandomLandLocations(sim.terrain, population);
     initialLocations.map(loc => {
         let person = new Person(initialHeritage());
         sim.people.set(person.id, person);

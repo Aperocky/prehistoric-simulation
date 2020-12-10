@@ -54,6 +54,9 @@ export class Person {
     consume(): void {
         this.consumption = {}
         for (const [key, val] of Object.entries(this.getConsumption())) {
+            if (this.household === undefined) {
+                console.log(this);
+            }
             let percentSatisfied = this.household.percentSatisfied[key];
             this.consumption[key] = val * percentSatisfied;
         }
@@ -73,6 +76,9 @@ export class Person {
         let foodPerc = this.consumption[ResourceType.Food]/this.getBaseFoodConsumption();
         foodPerc = foodPerc > 1 ? 1 : foodPerc;
         let hungerEffect = (1 - foodPerc) * 10;
+        if (this.age > 60) {
+            sickChance += (this.age - 60) * 0.01;
+        }
         let sickEffect = Math.random() < sickChance ? 20 : 0;
         let youth = (60 - this.age)/10;
         let overall  = youth - sickEffect - hungerEffect;

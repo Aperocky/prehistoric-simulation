@@ -9,9 +9,12 @@ Matched couples move like EU4 generals and admirals.
 */
 export default function matchingService(sim: Simulation): number {
     let singles = Array.from(sim.households.values()).filter(hh => hh.isSingle);
-    let girls = singles.filter(hh => !hh.adults[0].heritage.gender);
-    let boys = singles.filter(hh => hh.adults[0].heritage.gender);
+    let girls = singles.filter(hh => hh.adults[0].heritage.gender === 0);
+    let boys = singles.filter(hh => hh.adults[0].heritage.gender === 1);
     let matched: Set<string> = new Set();
+    if (!(girls.length)) {
+        return 0;
+    }
     boys.forEach(boy => {
         let girl = girls[Math.floor(Math.random()*girls.length)];
         if (matched.has(girl.id)) {

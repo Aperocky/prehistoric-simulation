@@ -1,9 +1,11 @@
 import { Person } from './person';
 import { Storage } from './properties/storage';
+import { Simulation } from '../sim';
 import { Location, getTerrainFromLocation } from '../util/location';
 import { Square, Terrain } from '../../map/square';
 import { childHeritage } from './properties/heritage';
 import { ResourceType } from './properties/resourceTypes';
+import move from './actions/move';
 import { v4 as uuid } from 'uuid';
 import { SICK_PROBABILITY } from '../../constant/mapConstants';
 
@@ -72,6 +74,18 @@ export class Household {
         this.allDo(p => p.consume());
     }
 
+    runTurn(sim: Simulation): void {
+        this.runHealth(sim);
+        if (sim.households.has(this.id)) {
+            let baby = this.birth();
+            if (baby != null) {
+                sim.people.set(baby.id, baby);
+            }
+        }
+        move(this, sim.terrain);
+        this.adulthood(sim);
+    }
+
     birth(): Person | null {
         if (this.isSingle) {
             return null;
@@ -87,6 +101,7 @@ export class Household {
         if (Math.random() < this.birthChance(woman)) {
             let baby = new Person(childHeritage(man, woman));
             this.dependents.push(baby);
+            baby.setHousehold(this);
             man.heritage.children.push(baby.id);
             woman.heritage.children.push(baby.id);
             return baby;
@@ -94,10 +109,11 @@ export class Household {
         return null;
     }
 
-    runTurn(map: Square[][]): void {
-        let terrain = getTerrainFromLocation(map, this.location);
+    runHealth(sim: Simulation): void {
+        let terrain = getTerrainFromLocation(sim.terrain, this.location);
         let sickProbability = SICK_PROBABILITY.get(terrain);
         this.allDo(p => p.runHealth(sickProbability));
+        this.mortality(sim);
     }
 
     birthChance(woman: Person): number {
@@ -106,6 +122,62 @@ export class Household {
                 : (woman.age - 25) * 0.03;
         let foodEffect = (1 - this.percentSatisfied[ResourceType.Food]) * 2
         return 0.6 - ageEffect - foodEffect;
+    }
+
+    adulthood(sim: Simulation): void {
+        if (!(this.dependents.length)) {
+            return;
+        }
+        let largestSibling = this.dependents[0];
+        if (largestSibling.age > 18) {
+            this.dependents.shift();
+            let household = new Household([], largestSibling, this.location);
+            let gift: number = this.storage.getResource(ResourceType.Food)/(this.dependents.length + 4)
+            household.storage.addResource(ResourceType.Food, gift);
+            this.storage.spendResource(ResourceType.Food, gift);
+            sim.households.set(household.id, household);
+        } else if (this.percentSatisfied[ResourceType.Food] < 1) {
+            let scarcity = (1 - this.percentSatisfied[ResourceType.Food]) * 10;
+            if (largestSibling.age > 18 - scarcity) {
+                this.dependents.shift();
+                let household = new Household([], largestSibling, this.location);
+                sim.households.set(household.id, household);
+            }
+        }
+    }
+
+    private mortality(sim: Simulation): void {
+        this.adults.forEach(p => {
+            if (p.health < 0) {
+                this.funeral(sim, p, true);
+            }
+        });
+        this.dependents.forEach(p => {
+            if (p.health < 0) {
+                this.funeral(sim, p, false);
+            }
+        });
+    }
+
+    private funeral(sim: Simulation, deceased: Person, adult: boolean): void {
+        sim.people.delete(deceased.id);
+        if (adult) {
+            if (this.isSingle) {
+                if (this.dependents.length) {
+                    let oldest = this.dependents.shift();
+                    this.adults = [oldest];
+                } else {
+                    sim.households.delete(this.id);
+                }
+            } else {
+                this.adults = this.adults.filter(p => p.id != deceased.id);
+                if (this.adults.length == 1) {
+                    this.isSingle = true;
+                }
+            }
+        } else {
+            this.dependents = this.dependents.filter(p => p.id != deceased.id);
+        }
     }
 
     private getRandomAdultByGender(gender: number): Person | null {

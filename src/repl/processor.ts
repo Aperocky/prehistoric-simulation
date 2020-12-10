@@ -4,6 +4,7 @@ import debug from './mapfuncs/debug';
 import describeMap from './mapfuncs/describeMap';
 import describeSquare from './mapfuncs/describeSquare';
 import repository from './mapfuncs/repository';
+import runTurn from './simfuncs/runTurn';
 
 
 interface ReplFunction {
@@ -21,6 +22,8 @@ FUNC_MAP.set("describe-square", describeSquare);
 FUNC_MAP.set("square", describeSquare);
 FUNC_MAP.set("repository", repository);
 FUNC_MAP.set("repo", repository);
+FUNC_MAP.set("run-turn", runTurn);
+FUNC_MAP.set("run", runTurn);
 
 
 const HELP_MAP: Map<string, string[]> = new Map();
@@ -28,6 +31,7 @@ HELP_MAP.set("regenerate", ["regenerate", "reg"]);
 HELP_MAP.set("describe-map", ["describe-map", "map"]);
 HELP_MAP.set("describe-square", ["describe-square", "square"]);
 HELP_MAP.set("repository", ["repository", "repo"]);
+HELP_MAP.set("run-turn", ["run-turn", "run"]);
 
 
 export default function processor(controller: Controller, command: string): string[] {
