@@ -48,4 +48,13 @@ export const RIVER_WIDTH: number[][] = [
     [10, 2],
     [20, 3]
 ]
+
+export const SICK_PROBABILITY: Map<number, number> = new Map();
+SICK_PROBABILITY.set(2, 0.05);
+SICK_PROBABILITY.set(3, 0.2);
+SICK_PROBABILITY.set(4, 0.15);
+SICK_PROBABILITY.set(5, 0.05);
+SICK_PROBABILITY.set(6, 0.1);
+SICK_PROBABILITY.set(7, 0.08);
+
 // END MAP GENERATION CONSTANTS

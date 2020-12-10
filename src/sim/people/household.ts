@@ -1,8 +1,11 @@
 import { Person } from './person';
 import { Storage } from './properties/storage';
-import { Location } from '../util/location';
-import { SimProduction } from '../util/simProduction';
+import { Location, getTerrainFromLocation } from '../util/location';
+import { Square, Terrain } from '../../map/square';
+import { childHeritage } from './properties/heritage';
+import { ResourceType } from './properties/resourceTypes';
 import { v4 as uuid } from 'uuid';
+import { SICK_PROBABILITY } from '../../constant/mapConstants';
 
 
 export class Household {
@@ -66,8 +69,55 @@ export class Household {
             let actual = this.storage.spendResource(key, val);
             this.percentSatisfied[key] = actual/val;
         }
-        [].concat(...[this.adults, this.dependents]).map(p => {
-            p.consume();
-        });
+        this.allDo(p => p.consume());
+    }
+
+    birth(): Person | null {
+        if (this.isSingle) {
+            return null;
+        }
+        if (!(ResourceType.Food in this.percentSatisfied)) {
+            throw new Error("Process failure, food not populated");
+        }
+        let man = this.getRandomAdultByGender(1);
+        let woman = this.getRandomAdultByGender(0);
+        if (man == null || woman == null) {
+            return null;
+        }
+        if (Math.random() < this.birthChance(woman)) {
+            let baby = new Person(childHeritage(man, woman));
+            this.dependents.push(baby);
+            man.heritage.children.push(baby.id);
+            woman.heritage.children.push(baby.id);
+            return baby;
+        }
+        return null;
+    }
+
+    runTurn(map: Square[][]): void {
+        let terrain = getTerrainFromLocation(map, this.location);
+        let sickProbability = SICK_PROBABILITY.get(terrain);
+        this.allDo(p => p.runHealth(sickProbability));
+    }
+
+    birthChance(woman: Person): number {
+        let ageEffect = woman.age < 25
+                ? (25 - woman.age)**2 * 0.004
+                : (woman.age - 25) * 0.03;
+        let foodEffect = (1 - this.percentSatisfied[ResourceType.Food]) * 2
+        return 0.6 - ageEffect - foodEffect;
+    }
+
+    private getRandomAdultByGender(gender: number): Person | null {
+        let currSex = this.adults.filter(p => p.heritage.gender == gender); // open to progressive ideas
+        if (currSex.length) {
+            return currSex[Math.floor(Math.random() * currSex.length)];
+        } else {
+            return null;
+        }
+    }
+
+    private allDo(func: (person: Person) => void): void {
+        [].concat(...[this.adults, this.dependents]).map(func);
     }
 }

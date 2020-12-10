@@ -57,7 +57,7 @@ describe('people:person', () => {
         expect(jack.heritage.father).to.equal(ORIGIN_NAME);
         expect(jack.age).to.equal(0);
     });
-    
+
     it('test desired consumption', () => {
         expect(LIZ_SWANN.getConsumption()[ResourceType.Food]).to.equal(1);
     });
@@ -78,5 +78,31 @@ describe('people:person', () => {
         expect(WILL_TURNER.isHungry()).to.be.false;
         // cleanup
         WILL_TURNER.consumption = {};
+    });
+
+    it('test runHealth', () => {
+        expect(WILL_TURNER.age).to.equal(20);
+        expect(WILL_TURNER.health).to.equal(10);
+        WILL_TURNER.consumption = {"food": 1};
+        WILL_TURNER.runHealth(0);
+        expect(WILL_TURNER.age).to.equal(21);
+        expect(WILL_TURNER.health).to.equal(14);
+        // cleanup
+        WILL_TURNER.age = 20;
+        WILL_TURNER.health = 10;
+        WILL_TURNER.consumption = {};
+    });
+
+    it('test runHealth sick', () => {
+        expect(JACK_SPARROW.age).to.equal(50);
+        expect(JACK_SPARROW.health).to.equal(10);
+        JACK_SPARROW.consumption = {"food": 1};
+        JACK_SPARROW.runHealth(1);
+        expect(JACK_SPARROW.age).to.equal(51);
+        expect(JACK_SPARROW.health).to.equal(-9);
+        // cleanup
+        JACK_SPARROW.age = 50;
+        JACK_SPARROW.health = 10;
+        JACK_SPARROW.consumption = {};
     });
 });

@@ -15,6 +15,7 @@ export class Person {
     age: number;
     work: Work;
     consumption: { [resourceType: string]: number };
+    health: number;
 
     constructor(heritage: Heritage) {
         this.heritage = heritage;
@@ -22,6 +23,7 @@ export class Person {
         this.id = uuid();
         this.work = new Work(this);
         this.consumption = {};
+        this.health = 10;
     }
 
     setHousehold(household: Household): void {
@@ -62,5 +64,19 @@ export class Person {
             return this.consumption[ResourceType.Food] < this.getBaseFoodConsumption();
         }
         return false; // Not yet initiated
+    }
+
+    runHealth(sickChance: number): void {
+        if (!(ResourceType.Food in this.consumption)) {
+            throw new Error("no food consumption found");
+        }
+        let foodPerc = this.consumption[ResourceType.Food]/this.getBaseFoodConsumption();
+        foodPerc = foodPerc > 1 ? 1 : foodPerc;
+        let hungerEffect = (1 - foodPerc) * 10;
+        let sickEffect = Math.random() < sickChance ? 20 : 0;
+        let youth = (60 - this.age)/10;
+        let overall  = youth - sickEffect - hungerEffect;
+        this.age += 1;
+        this.health += overall;
     }
 }

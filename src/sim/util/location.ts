@@ -1,4 +1,4 @@
-import { Square } from '../../map/square';
+import { Square, Terrain } from '../../map/square';
 
 
 export type Location = {
@@ -23,6 +23,11 @@ export function getRandomLandLocations(terrain: Square[][], count: number): Loca
             .map(sq => { return { x: sq.x, y: sq.y }});
     return [...Array(count)]
             .map(x => availableLocations[Math.floor(Math.random()*availableLocations.length)]);
+}
+
+
+export function getTerrainFromLocation(terrain: Square[][], location: Location): Terrain {
+    return terrain[location.y][location.x].terrain;
 }
 
 

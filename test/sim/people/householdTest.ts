@@ -84,4 +84,33 @@ describe('people:household', () => {
         WILL_TURNER.setHousehold(undefined);
         WILL_TURNER.consumption = {}
     });
+
+    it('test birth', () => {
+        let lizhouse = new Household([], LIZ_SWANN, {x: 6, y: 9});
+        let willhouse = new Household([], WILL_TURNER, {x: 9, y: 6});
+        let pirates = new Household([willhouse, lizhouse]);
+        pirates.percentSatisfied["food"] = 1;
+        expect(pirates.birthChance(LIZ_SWANN)).to.be.gt(0);
+        while (true) {
+            let baby = pirates.birth();
+            if (baby != null) {
+               expect(baby.heritage.surname).to.equal("Turner");
+               expect(baby.heritage.mother).to.equal(LIZ_SWANN.id);
+               expect(baby.heritage.father).to.equal(WILL_TURNER.id);
+               expect(baby.age).to.equal(0);
+               expect(baby.health).to.equal(10);
+               expect(pirates.dependents.length).to.equal(1);
+               expect(LIZ_SWANN.heritage.children[0]).to.equal(baby.id);
+               expect(WILL_TURNER.heritage.children[0]).to.equal(baby.id);
+               break;
+            }
+        }
+        pirates.percentSatisfied["food"] = 0.6;
+        expect(pirates.birthChance(LIZ_SWANN)).to.be.lt(0);
+        // cleanup
+        LIZ_SWANN.heritage.children = [];
+        WILL_TURNER.heritage.children = [];
+        LIZ_SWANN.setHousehold(undefined);
+        WILL_TURNER.setHousehold(undefined);
+    });
 });
