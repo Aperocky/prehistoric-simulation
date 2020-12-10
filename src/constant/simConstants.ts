@@ -2,6 +2,8 @@ export const ORIGIN_NAME = "ORIGIN";
 export const INITIAL_PERSON_COUNT = 20;
 export const INITIAL_AGE = [13, 26];
 
+export const REPO_LOCATION = "https://github.com/Aperocky/prehistoric-simulation";
+
 export const SURNAMES = [
     "Smith",
     "Johnson",

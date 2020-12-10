@@ -3,6 +3,7 @@ import regenerateMap from './mapfuncs/regenerateMap';
 import debug from './mapfuncs/debug';
 import describeMap from './mapfuncs/describeMap';
 import describeSquare from './mapfuncs/describeSquare';
+import repository from './mapfuncs/repository';
 
 
 interface ReplFunction {
@@ -18,12 +19,15 @@ FUNC_MAP.set("describe-map", describeMap);
 FUNC_MAP.set("map", describeMap);
 FUNC_MAP.set("describe-square", describeSquare);
 FUNC_MAP.set("square", describeSquare);
+FUNC_MAP.set("repository", repository);
+FUNC_MAP.set("repo", repository);
 
 
 const HELP_MAP: Map<string, string[]> = new Map();
 HELP_MAP.set("regenerate", ["regenerate", "reg"]);
 HELP_MAP.set("describe-map", ["describe-map", "map"]);
 HELP_MAP.set("describe-square", ["describe-square", "square"]);
+HELP_MAP.set("repository", ["repository", "repo"]);
 
 
 export default function processor(controller: Controller, command: string): string[] {

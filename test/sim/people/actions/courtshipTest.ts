@@ -28,6 +28,14 @@ describe('people:courtship', () => {
     });
 
     it('test sibling', () => {
+        LIZ_SWANN.heritage.father = "GovSwann";
+        WILL_TURNER.heritage.father = "GovSwann";
+        LIZ_SWANN.heritage.mother = "LadySwann";
+        WILL_TURNER.heritage.mother = "Biek";
         expect(courtship(LIZ_SWANN, WILL_TURNER)).to.be.false;
+        LIZ_SWANN.heritage.father = ORIGIN_NAME;
+        WILL_TURNER.heritage.father = ORIGIN_NAME;
+        LIZ_SWANN.heritage.mother = ORIGIN_NAME;
+        WILL_TURNER.heritage.mother = ORIGIN_NAME;
     });
 });

@@ -8,7 +8,7 @@ const HELP = [
     "describe selected square",
     "x: x coordinate of the square",
     "y: y coordinate of the square",
-    "example$ describe-square x=1 y=1"
+    "example$ square x=1 y=1"
 ];
 
 export default function describeSquare(controller: Controller, ...args: string[]): string[] {

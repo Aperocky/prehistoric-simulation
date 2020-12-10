@@ -3,13 +3,16 @@ import { Simulation } from '../../src/sim/sim';
 import { Square } from '../../src/map/square';
 import { INITIAL_PERSON_COUNT } from '../../src/constant/simConstants';
 import generateTerrain from '../../src/map/generateTerrain';
+import matchingService from '../../src/sim/util/matchingService';
 import { expect } from 'chai';
+
 
 export const TEST_SIM = (() => {
     let sim = new Simulation(TEST_TERRAIN);
     sim.initialize(3);
     return sim;
 })();
+
 
 export function getSimulationOnTerrain(): Simulation {
     let terrain: Square[][];
@@ -26,9 +29,8 @@ export function getSimulationOnTerrain(): Simulation {
     return sim;
 }
 
-describe('sim:simulation', () => {
 
-    let largeSim = getSimulationOnTerrain();
+describe('sim:simulation', () => {
 
     it('test initialization', () => {
         let sim = new Simulation(TEST_TERRAIN);
@@ -47,11 +49,26 @@ describe('sim:simulation', () => {
     });
 
     it('test runTurn', () => {
+        let largeSim = getSimulationOnTerrain();
         let turn = 0;
         while (turn < 5) {
             largeSim.runTurn();
             turn++;
         }
+    });
+
+    it('test matchingService', () => {
+        let largeSim = getSimulationOnTerrain();
+        largeSim.simProduction.globalWorkIteration(largeSim.people);
+        largeSim.consume();
+        let singleCount = largeSim.households.size;
+        let matched = matchingService(largeSim);
+        expect(largeSim.households.size).to.equal(singleCount - matched);
+        largeSim.households.forEach((hh, hhid) => {
+            hh.adults.forEach(p => {
+                expect(p.household).to.equal(hh);
+            });
+        });
     });
 });
 
