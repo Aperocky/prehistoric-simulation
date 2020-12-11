@@ -9,6 +9,13 @@ export class Storage {
         this.gold = 0;
     }
 
+    // Food spoils
+    spoils(): void {
+        if (this.getResource("food")) {
+            this.spendResource("food", this.getResource("food") * 0.2);
+        }
+    }
+
     mergeStorages(storages: Storage[]): void {
         storages.forEach(s => {
             this.addGold(s.gold);

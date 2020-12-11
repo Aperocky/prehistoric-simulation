@@ -16,7 +16,7 @@ export const MOUNTAIN_GREEN = [180, 240, 180];
 export const HIGHLIGHT_COLOR = [255, 255, 0];
 export const HIGHLIGHT_ALPHA = 0.3;
 
-export const FAMILY_DISPLAY_COLOR = [130, 160, 190];
+export const FAMILY_DISPLAY_COLOR = [255, 255, 255];
 export const FAMILY_RADIUS = 8;
 
 export type ColorScale = {

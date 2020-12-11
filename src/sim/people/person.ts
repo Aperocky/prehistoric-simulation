@@ -84,5 +84,12 @@ export class Person {
         let overall  = youth - sickEffect - hungerEffect;
         this.age += 1;
         this.health += overall;
+        if (this.health > 100) {
+            this.health = 100;
+        }
+    }
+
+    getName(): string {
+        return `${this.heritage.name} ${this.heritage.surname}`;
     }
 }

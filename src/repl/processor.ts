@@ -5,6 +5,8 @@ import describeMap from './mapfuncs/describeMap';
 import describeSquare from './mapfuncs/describeSquare';
 import repository from './mapfuncs/repository';
 import runTurn from './simfuncs/runTurn';
+import describeHousehold from './simfuncs/describeHousehold';
+import describeSim from './simfuncs/describeSim';
 
 
 interface ReplFunction {
@@ -24,6 +26,10 @@ FUNC_MAP.set("repository", repository);
 FUNC_MAP.set("repo", repository);
 FUNC_MAP.set("run-turn", runTurn);
 FUNC_MAP.set("run", runTurn);
+FUNC_MAP.set("describe-household", describeHousehold);
+FUNC_MAP.set("hh", describeHousehold);
+FUNC_MAP.set("describe-sim", describeSim);
+FUNC_MAP.set("sim", describeSim);
 
 
 const HELP_MAP: Map<string, string[]> = new Map();
@@ -32,6 +38,8 @@ HELP_MAP.set("describe-map", ["describe-map", "map"]);
 HELP_MAP.set("describe-square", ["describe-square", "square"]);
 HELP_MAP.set("repository", ["repository", "repo"]);
 HELP_MAP.set("run-turn", ["run-turn", "run"]);
+HELP_MAP.set("describe-household", ["describe-household", "hh"]);
+HELP_MAP.set("describe-sim", ["describe-sim", "sim"]);
 
 
 export default function processor(controller: Controller, command: string): string[] {

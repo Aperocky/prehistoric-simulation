@@ -13,7 +13,6 @@ import { SICK_PROBABILITY } from '../../constant/mapConstants';
 export class Household {
 
     id: string;
-    holderId: string;
     location: Location;
     isSingle: boolean;
     adults: Person[];
@@ -28,7 +27,6 @@ export class Household {
         this.storage = new Storage();
         if (households.length) {
             this.location = households[0].location;
-            this.holderId = households[0].holderId;
             this.adults = [].concat(...households.map(h => h.adults));
             this.isSingle = this.adults.length == 1;
             this.dependents = [].concat(...households.map(h => h.dependents));
@@ -38,7 +36,6 @@ export class Household {
             });
         } else if (person && location) {
             this.location = location;
-            this.holderId = person.id;
             this.isSingle = true;
             this.adults = [person];
             this.dependents = [];
@@ -84,6 +81,7 @@ export class Household {
         }
         move(this, sim.terrain);
         this.adulthood(sim);
+        this.storage.spoils();
     }
 
     birth(): Person | null {
@@ -121,7 +119,7 @@ export class Household {
                 ? (25 - woman.age)**2 * 0.004
                 : (woman.age - 25) * 0.03;
         let foodEffect = (1 - this.percentSatisfied[ResourceType.Food]) * 2
-        return 0.6 - ageEffect - foodEffect;
+        return (0.6 - ageEffect - foodEffect) * 0.8;
     }
 
     adulthood(sim: Simulation): void {

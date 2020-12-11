@@ -28,12 +28,12 @@ export class Controller {
         this.simulation = new Simulation(this.terrain);
         initializeSim(this.simulation, 50);
         this.mapCanvas.simDisplay.setSim(this.simulation);
-        this.mapCanvas.simDisplay.syncSim();
+        this.mapCanvas.simDisplay.syncSim(this.replTerminal);
     }
 
     runTurn() {
         this.simulation.runTurn();
-        this.mapCanvas.simDisplay.syncSim();
-        console.log(this.mapCanvas.mainContainer.children.length);
+        this.mapCanvas.simDisplay.syncSim(this.replTerminal);
+        this.mapCanvas.app.renderer.render(this.mapCanvas.mainContainer);
     }
 }

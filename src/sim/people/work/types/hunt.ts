@@ -7,17 +7,17 @@ function gathererTerrainCapacity(square: Square): number[] {
     // individual and cap
     switch (square.terrain) {
         case 2: // Grass
-            return [4, 8];
+            return [4, 6];
         case 3: // Forest
-            return [2, 10];
+            return [2, 8];
         case 4: // Mountain
             return [2, 4];
         case 5: // Desert
-            return [1, 3];
+            return [1, 2];
         case 6: // Highland
-            return [3, 6];
+            return [2.5, 5];
         case 7: // Woods
-            return [3, 12];
+            return [3, 10];
         default:
             return [0, 0];
     }
@@ -32,7 +32,7 @@ export const Gatherer: WorkType = {
     produceFunc: (strength, square) => {
         let capacity: number[] = gathererTerrainCapacity(square);
         let produce = strength * capacity[0];
-        if (produce > strength * capacity[1]) {
+        if (produce > capacity[1]) {
             return capacity[1];
         }
         return produce;

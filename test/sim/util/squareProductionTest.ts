@@ -13,9 +13,9 @@ describe('sim:squareProduction', () => {
         sqp.addRegistryItem(WILL_TURNER);
         expect(sqp.getStrength("HUNT")).to.equal(2);
         sqp.calculateProduce();
-        expect(sqp.productionRegistry["HUNT"]).to.equal(8);
-        expect(sqp.distributeRegistry[JACK_SPARROW.id]).to.equal(4);
-        expect(sqp.distributeRegistry[WILL_TURNER.id]).to.equal(4);
+        expect(sqp.productionRegistry["HUNT"]).to.equal(6);
+        expect(sqp.distributeRegistry[JACK_SPARROW.id]).to.equal(3);
+        expect(sqp.distributeRegistry[WILL_TURNER.id]).to.equal(3);
         sqp.reset();
         expect(sqp.distributeRegistry).to.be.empty;
     });

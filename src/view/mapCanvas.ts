@@ -27,7 +27,7 @@ export class MapCanvas {
         this.mainContainer.interactive = true;
         this.app.stage.addChild(this.mainContainer);
         this.mapSprites = [];
-        this.simDisplay = new SimDisplay(this.mainContainer);
+        this.simDisplay = new SimDisplay(this.app, this.mainContainer);
     }
 
     createMapSprites(terrain: Square[][]) {
