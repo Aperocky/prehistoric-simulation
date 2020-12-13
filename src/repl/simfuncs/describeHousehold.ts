@@ -2,6 +2,7 @@ import { Controller } from '../../controller';
 import { argparse, KeyValue } from '../parser';
 import { Household } from '../../sim/people/household';
 import { Simulation } from '../../sim/sim';
+import { WORK_TYPES } from '../../sim/people/work/workTypes';
 
 const HELP = [
     "describe household information",
@@ -44,12 +45,14 @@ function describe(sim: Simulation, household: Household): string[] {
     result.push(`@ x=${household.location.x} y=${household.location.y}`);
     result.push('------- ADULTS -------');
     household.adults.forEach(p => {
-        result.push(`${p.getName()}, age: ${p.age}, health: ${Math.floor(p.health)}`);
+        let workstr = WORK_TYPES[p.work.work].name;
+        result.push(`${workstr} ${p.getName()}, age: ${p.age}, health: ${Math.floor(p.health)}`);
     });
     if (household.dependents.length) {
         result.push('------ CHILDREN ------');
         household.dependents.forEach(p => {
-            result.push(`${p.getName()}, age: ${p.age}, health: ${Math.floor(p.health)}`);
+            let workstr = p.age > 10 ? WORK_TYPES[p.work.work].name : "Child";
+            result.push(`${workstr} ${p.getName()}, age: ${p.age}, health: ${Math.floor(p.health)}`);
         });
     }
     result.push('------ STORAGE ------');

@@ -17,7 +17,7 @@ export const Fisher: WorkType = {
         let depthMultiplier = 2 + square.altitude/500;
         return Math.sqrt(strength) * depthMultiplier;
     },
-    searchdist: 3,
+    searchdist: 5,
     workLocation: WorkLocation.Water,
     produceType: ResourceType.Food
 }

@@ -30,6 +30,7 @@ export class Square {
     // Good for a square to know its current location.
     x: number;
     y: number;
+    isCoast: boolean;
 
     constructor(height: number, precip: number, flowDirection: number, flowVolume: number,
             x: number, y: number) {
@@ -40,6 +41,11 @@ export class Square {
         this.flowDirection = flowDirection;
         this.flowVolume = flowVolume;
         this.terrain = this.getTerrain();
+        this.isCoast = false;
+    }
+
+    setCoast(): void {
+        this.isCoast = true;
     }
 
     isRiver(): boolean {

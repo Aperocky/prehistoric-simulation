@@ -15,6 +15,18 @@ const SMALL_PRECIP = [
     [0.1, 0.2, 0.3]
 ]
 
+const ALTITUDE = [
+    [0.9, 0.9, 0.1],
+    [0.9, 0.8, 0.2],
+    [0.1, 0.2, 0.3]
+]
+
+const PRECIP = [
+    [0.8, 0.4, 0.2],
+    [0.5, 0.1, 0.9],
+    [0.1, 0.2, 0.3]
+]
+
 describe('map:generateTerrain', () => {
     it('Test genSquareMap', () => {
         let terrain: Square[][] = testfuncs.genSquareMap(SMALL_MAP, SMALL_PRECIP);
@@ -31,6 +43,15 @@ describe('map:generateTerrain', () => {
                 expect(terrain[y][x].y).to.equal(y);
             }
         }
+    });
+
+    it('Test setCoast', () => {
+        let terrain: Square[][] = testfuncs.genSquareMap(ALTITUDE, PRECIP);
+        expect(terrain[0][0].isCoast).to.be.false;
+        expect(terrain[0][1].isCoast).to.be.true;
+        expect(terrain[1][1].isCoast).to.be.true;
+        expect(terrain[1][0].isCoast).to.be.true;
+        expect(terrain[2][2].isCoast).to.be.false;
     });
 
     it('test generateTerrain', () => {

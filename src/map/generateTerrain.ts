@@ -1,4 +1,5 @@
 import simplexGenerator from './simplexGenerator';
+import setCoast from './setCoast';
 import calculateRiverMap, { FlowBundle } from './calculateRiverMap';
 import { Square } from './square';
 import * as mapConstants from '../constant/mapConstants';
@@ -23,6 +24,7 @@ function genSquareMap(heightMap: number[][], precipMap: number[][]): Square[][] 
         }
         squareMap.push(latitude);
     }
+    setCoast(squareMap);
     return squareMap;
 }
 
