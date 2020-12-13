@@ -26,7 +26,7 @@ function gathererTerrainCapacity(square: Square): number[] {
 export const Gatherer: WorkType = {
     name: "Gatherer",
     consume: {},
-    strengthMod: (consumed, person) => {
+    strengthMod: (person) => {
         return defaultAgeMod(person);
     },
     produceFunc: (strength, square) => {

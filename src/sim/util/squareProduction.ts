@@ -25,8 +25,7 @@ export class SquareProduction {
 
     addRegistryItem(person: Person): void {
         let workType = person.work.work; // That's right, work work.
-        let workStrength = WORK_TYPES[workType].strengthMod(
-                person.work.workConsumption, person);
+        let workStrength = WORK_TYPES[workType].strengthMod(person);
         if (workType in this.workRegistry) {
             this.workRegistry[workType][person.id] = workStrength;
         } else {

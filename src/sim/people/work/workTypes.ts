@@ -11,7 +11,7 @@ export enum WorkLocation {
 export type WorkType = {
     name: string;
     consume: { [resourceType: string] : number };
-    strengthMod: (consumed: {[res: string]: number}, person: Person) => number;
+    strengthMod: (person: Person) => number;
     produceFunc: (strength: number, square: Square) => number;
     searchdist: number;
     workLocation: string;

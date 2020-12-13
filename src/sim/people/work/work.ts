@@ -32,7 +32,7 @@ export class Work {
         let workType = WORK_TYPES[this.work];
         if (workType.workLocation == "private") {
             this.produce = workType.produceFunc(
-                    workType.strengthMod(this.workConsumption, this.person),
+                    workType.strengthMod(this.person),
                     simProduction.terrain[location.y][location.x]);
             return;
         }

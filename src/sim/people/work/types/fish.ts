@@ -6,8 +6,9 @@ import { ResourceType } from '../../properties/resourceTypes';
 export const Fisher: WorkType = {
     name: "Fisher",
     consume: {"wood": 0.3},
-    strengthMod: (consumed, person) => {
+    strengthMod: (person) => {
         let woodMultiplier = 0.5
+        let consumed = person.work.workConsumption;
         if (ResourceType.Wood in consumed) {
             return (0.1 - consumed[ResourceType.Wood])/0.2 + 0.5;
         }
