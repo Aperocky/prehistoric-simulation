@@ -144,6 +144,10 @@ export class Household {
         }
     }
 
+    totalPersons(): number {
+        return this.dependents.length + this.adults.length;
+    }
+
     private mortality(sim: Simulation): void {
         this.adults.forEach(p => {
             if (p.health < 0) {

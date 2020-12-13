@@ -1,5 +1,5 @@
 import { Person } from '../../../src/sim/people/person';
-import { Heritage } from '../../../src/sim/people/properties/heritage';
+import { Heritage, initialHeritage } from '../../../src/sim/people/properties/heritage';
 import { ResourceType } from '../../../src/sim/people/properties/resourceTypes';
 import { ORIGIN_NAME } from '../../../src/constant/simConstants';
 import { expect } from 'chai';
@@ -42,6 +42,10 @@ export const LIZ_SWANN = (() => {
     liz.age = 18;
     return liz;
 })();
+
+export function getRandomOriginPerson() {
+    return new Person(initialHeritage());
+}
 
 describe('people:person', () => {
     it('test seeding person', () => {

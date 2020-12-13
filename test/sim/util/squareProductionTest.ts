@@ -1,7 +1,7 @@
 import { SquareProduction } from '../../../src/sim/util/squareProduction';
 import { Square } from '../../../src/map/square';
 import { GRASS_SQUARE } from '../../map/squareTest';
-import { JACK_SPARROW, WILL_TURNER } from '../people/personTest';
+import { JACK_SPARROW, WILL_TURNER, getRandomOriginPerson } from '../people/personTest';
 import { expect } from 'chai';
 
 
@@ -19,4 +19,19 @@ describe('sim:squareProduction', () => {
         sqp.reset();
         expect(sqp.distributeRegistry).to.be.empty;
     });
+
+    it('test over capacity', () => {
+        let sqp = new SquareProduction(GRASS_SQUARE);
+        let count = 5;
+        while (count > 0) {
+            let person = getRandomOriginPerson();
+            person.age = 20;
+            sqp.addRegistryItem(person);
+            count--;
+        }
+        expect(sqp.getStrength("HUNT")).to.equal(5);
+        sqp.calculateProduce();
+        expect(sqp.productionRegistry["HUNT"]).to.equal(6);
+        expect(Object.keys(sqp.distributeRegistry).length).to.equal(5);
+    })
 });

@@ -16,6 +16,10 @@ export const MOUNTAIN_GREEN = [180, 240, 180];
 export const HIGHLIGHT_COLOR = [255, 255, 0];
 export const HIGHLIGHT_ALPHA = 0.3;
 
+export const POPULATION_DENSITY_COLOR = [255, 0, 0];
+export const POPULATION_DENSITY_FACTOR = 0.01;
+export const POPULATION_DENSITY_ALPHA_MAX = 0.7;
+
 export const FAMILY_DISPLAY_COLOR = [255, 255, 255];
 export const FAMILY_RADIUS = 8;
 
@@ -33,3 +37,8 @@ BASE_COLOR_MAP.set(4, MOUNTAIN_COLOR);
 BASE_COLOR_MAP.set(5, DESERT_COLOR);
 BASE_COLOR_MAP.set(6, MOUNTAIN_GREEN);
 BASE_COLOR_MAP.set(7, WOOD_COLOR);
+
+export enum DisplayMode {
+    Default = "DEFAULT",
+    PopulationDensity = "DENSITY"
+}

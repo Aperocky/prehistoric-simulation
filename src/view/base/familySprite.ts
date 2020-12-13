@@ -15,7 +15,7 @@ export class FamilySprite extends PIXI.Sprite {
         this.zIndex = 100;
         this.interactive = true;
         this.household = household;
-        this.scale.set(0.4);
+        this.scale.set(0.3);
         this.alpha = 0.7;
         let adjust = this.getAdjustFromMapRegistry(mapRegistry);
         if (adjust != null) {
@@ -54,11 +54,11 @@ export class FamilySprite extends PIXI.Sprite {
 
     addHooks(replTerminal: ReplTerminal): void {
         this.on("mouseover", (event) => {
-            this.scale.set(0.8);
+            this.scale.set(0.7);
             replTerminal.writeCommand(`describe-household id=${this.household.id}`);
         });
         this.on("mouseout", (event) => {
-            this.scale.set(0.4);
+            this.scale.set(0.3);
         });
         this.on("click", (event) => {
             replTerminal.execute();

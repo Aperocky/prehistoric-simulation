@@ -12,14 +12,8 @@ const RADIUS = displayConstants.FAMILY_RADIUS;
 const COLOR = displayConstants.FAMILY_DISPLAY_COLOR
 
 
-export enum Mode {
-    Default = "DEFAULT"
-}
-
-
 export class SimDisplay {
 
-    mode: Mode;
     sim: Simulation;
     familySprites: Map<string, FamilySprite>;
     mapRegistry: Map<string, number>;
@@ -27,7 +21,6 @@ export class SimDisplay {
     roundTexture: PIXI.Texture;
 
     constructor(app: PIXI.Application, mainContainer: PIXI.Container) {
-        this.mode = Mode.Default;
         this.familySprites = new Map();
         this.mapRegistry = new Map();
         this.mainContainer = mainContainer;
@@ -65,6 +58,18 @@ export class SimDisplay {
                 this.mainContainer.addChild(familySprite);
                 this.familySprites.set(hh.id, familySprite);
             }
+        });
+    }
+
+    changeModeToDefault() {
+        this.familySprites.forEach(fam => {
+            fam.visible = true;
+        });
+    }
+
+    changeModeToPopulationDensity() {
+        this.familySprites.forEach(fam => {
+            fam.visible = false;
         });
     }
 }

@@ -5,6 +5,7 @@ import { INITIAL_PERSON_COUNT } from '../../src/constant/simConstants';
 import generateTerrain from '../../src/map/generateTerrain';
 import matchingService from '../../src/sim/util/matchingService';
 import { expect } from 'chai';
+import { locationToString } from '../../src/sim/util/location';
 
 
 export const TEST_SIM = (() => {
@@ -97,6 +98,20 @@ describe('sim:simulation', () => {
                 expect(p.household).to.equal(hh);
             });
         });
+    });
+
+    it('test densityMap', () => {
+        let sim = getSimulationOnTerrain();
+        let turn = 0;
+        while (turn < 10) {
+            sim.runTurn();
+            turn++;
+        }
+        expect(sim.densityMap.turn).to.equal(0);
+        let hh = sim.households.values().next().value;
+        let locstr = locationToString(hh.location);
+        expect(sim.getPopulationOfSquare(locstr)).to.be.gt(0);
+        expect(sim.densityMap.turn).to.equal(10);
     });
 });
 

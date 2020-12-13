@@ -54,9 +54,6 @@ export class Person {
     consume(): void {
         this.consumption = {}
         for (const [key, val] of Object.entries(this.getConsumption())) {
-            if (this.household === undefined) {
-                console.log(this);
-            }
             let percentSatisfied = this.household.percentSatisfied[key];
             this.consumption[key] = val * percentSatisfied;
         }

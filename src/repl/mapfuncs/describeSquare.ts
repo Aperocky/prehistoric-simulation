@@ -3,6 +3,7 @@ import { argparse, KeyValue } from '../parser';
 import { Square, Terrain, TERRAIN_STR } from '../../map/square';
 import { DEFAULT_MAP_SIZE } from '../../constant/displayConstants';
 import { DIRECTIONS_DESCRIPTION } from '../../constant/mapConstants';
+import { locationToString } from '../../sim/util/location';
 
 const HELP = [
     "describe selected square",
@@ -57,6 +58,25 @@ function describe(controller: Controller, x: number, y: number): string[] {
                 : square.flowVolume < 20
                 ? "Stream" : "River";
         result.push(`${rdesc} flows ${DIRECTIONS_DESCRIPTION.get(square.flowDirection)}`);
+    }
+    return result.concat(describePopulation(controller, x, y));
+}
+
+function describePopulation(controller: Controller, x: number, y: number): string[] {
+    let locstr = locationToString({x: x, y: y});
+    let householdCount = 0;
+    let personCount = 0;
+    controller.simulation.households.forEach(hh => {
+        if (locationToString(hh.location) === locstr) {
+            householdCount++;
+            personCount += hh.totalPersons();
+        }
+    });
+    let result = []
+    if (householdCount) {
+        result.push("------ PEOPLE ------");
+        result.push(`${householdCount} households are here`);
+        result.push(`${personCount} ${personCount > 1 ? "people" : "person"} live here`);
     }
     return result;
 }

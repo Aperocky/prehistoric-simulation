@@ -34,6 +34,7 @@ export class Controller {
     runTurn() {
         this.simulation.runTurn();
         this.mapCanvas.simDisplay.syncSim(this.replTerminal);
+        this.mapCanvas.maintainMode();
         this.mapCanvas.app.renderer.render(this.mapCanvas.mainContainer);
     }
 }

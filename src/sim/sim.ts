@@ -2,6 +2,7 @@ import { Household } from './people/household';
 import { Person } from './people/person';
 import { SimProduction } from './util/simProduction';
 import { Square } from '../map/square';
+import { DensityMap } from './util/densityMap';
 import initializeSim from './util/initializeSim';
 import matchingService from './util/matchingService';
 import { INITIAL_PERSON_COUNT } from '../constant/simConstants';
@@ -15,12 +16,16 @@ export class Simulation {
     simProduction: SimProduction;
     readonly terrain: Square[][];
 
+    // Read helpers
+    densityMap: DensityMap;
+
     constructor(terrain: Square[][]) {
         this.turn = 0;
         this.terrain = terrain;
         this.people = new Map();
         this.households = new Map();
         this.simProduction = new SimProduction(terrain);
+        this.densityMap = new DensityMap(this);
     }
 
     initialize(count: number = INITIAL_PERSON_COUNT): void {
@@ -46,5 +51,9 @@ export class Simulation {
             hh.getProjectedConsumption();
             hh.consume();
         });
+    }
+
+    getPopulationOfSquare(location: string): number {
+        return this.densityMap.getPopulationOfSquare(this, location);
     }
 }
