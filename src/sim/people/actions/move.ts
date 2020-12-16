@@ -8,7 +8,7 @@ export default function move(household: Household, terrain: Square[][]): void {
     // If hungry in current location, move.
     let foodSecurity = household.percentSatisfied[ResourceType.Food];
     let distance = 0;
-    if (foodSecurity < 1) {
+    if (Math.random() > foodSecurity) {
         distance = household.dependents.length ? 3 : 5;
     } else if (household.isSingle) {
         distance = 3;

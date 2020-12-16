@@ -33,6 +33,7 @@ export class Simulation {
     }
 
     runTurn(): void {
+        this.allDo(hh => hh.changeWork(this));
         // Work iteration - get produce to bank.
         this.simProduction.globalWorkIteration(this.people);
         // Match Singles!
@@ -40,14 +41,12 @@ export class Simulation {
         // Consume iteration - consume stuff
         this.consume();
         // Run turn for each household.
-        this.households.forEach(hh => {
-            hh.runTurn(this);
-        });
+        this.allDo(hh => hh.runTurn(this));
         this.turn++;
     }
 
     consume(): void {
-        this.households.forEach(hh => {
+        this.allDo(hh => {
             hh.getProjectedConsumption();
             hh.consume();
         });
@@ -55,5 +54,9 @@ export class Simulation {
 
     getPopulationOfSquare(location: string): number {
         return this.densityMap.getPopulationOfSquare(this, location);
+    }
+
+    private allDo(func: (hh: Household) => void) {
+        this.households.forEach(func);
     }
 }

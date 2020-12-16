@@ -7,7 +7,7 @@ export default function setCoast(terrain: Square[][]): void {
         for (let x = 0; x < size; x++) {
             let square = terrain[y][x];
             if (square.isWater()) {
-                break;
+                continue;
             }
             let adjacents = getAdjacentLocations(x, y);
             adjacents.forEach(adj => {

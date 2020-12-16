@@ -1,6 +1,15 @@
 import { WorkType, WorkLocation, defaultAgeMod } from '../workTypes';
 import { Square } from '../../../../map/square';
 import { ResourceType } from '../../properties/resourceTypes';
+import { Person } from '../../person';
+
+
+function changeFunc(person: Person, square: Square): string {
+    if (!square.isCoast) {
+        return "HUNT";
+    }
+    return "FISH";
+}
 
 
 export const Fisher: WorkType = {
@@ -12,12 +21,13 @@ export const Fisher: WorkType = {
         if (ResourceType.Wood in consumed) {
             return (0.1 - consumed[ResourceType.Wood])/0.2 + 0.5;
         }
-        return defaultAgeMod(person) * woodMultiplier;
+        return defaultAgeMod(person) * woodMultiplier * 8;
     },
     produceFunc: (strength, square) => {
         let depthMultiplier = 2 + square.altitude/500;
         return Math.sqrt(strength) * depthMultiplier;
     },
+    changeFunc: changeFunc,
     searchdist: 5,
     workLocation: WorkLocation.Water,
     produceType: ResourceType.Food

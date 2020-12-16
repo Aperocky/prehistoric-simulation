@@ -13,6 +13,7 @@ export type WorkType = {
     consume: { [resourceType: string] : number };
     strengthMod: (person: Person) => number;
     produceFunc: (strength: number, square: Square) => number;
+    changeFunc: (person: Person, square: Square) => string;
     searchdist: number;
     workLocation: string;
     produceType: ResourceType;

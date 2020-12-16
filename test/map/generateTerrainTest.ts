@@ -51,7 +51,8 @@ describe('map:generateTerrain', () => {
         expect(terrain[0][1].isCoast).to.be.true;
         expect(terrain[1][1].isCoast).to.be.true;
         expect(terrain[1][0].isCoast).to.be.true;
-        expect(terrain[2][2].isCoast).to.be.false;
+        expect(terrain[2][1].isCoast).to.be.false;
+        expect(terrain[2][2].isCoast).to.be.true;
     });
 
     it('test generateTerrain', () => {

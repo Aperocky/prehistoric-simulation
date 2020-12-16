@@ -2,6 +2,7 @@ import { WorkType, WORK_TYPES, WorkLocation } from './workTypes';
 import { Location, randomWalk } from '../../util/location';
 import { SimProduction } from '../../util/simProduction';
 import { Person } from '../person';
+import { Square } from '../../../map/square';
 
 const INITIAL_WORK_TYPE = "HUNT";
 
@@ -22,6 +23,11 @@ export class Work {
         this.experience = {};
         this.workConsumption = {};
         this.workLocation = null;
+    }
+
+    changeWork(square: Square): void {
+        let newWork = WORK_TYPES[this.work].changeFunc(this.person, square);
+        this.work = newWork;
     }
 
     doWork(simProduction: SimProduction): void {

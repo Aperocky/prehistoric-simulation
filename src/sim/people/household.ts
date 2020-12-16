@@ -71,6 +71,16 @@ export class Household {
         this.allDo(p => p.consume());
     }
 
+    changeWork(sim: Simulation): void {
+        let square = sim.terrain[this.location.y][this.location.x];
+        this.allDo(p => {
+            if (p.age < 10) {
+                return;
+            }
+            p.work.changeWork(square);
+        });
+    }
+
     runTurn(sim: Simulation): void {
         this.runHealth(sim);
         if (sim.households.has(this.id)) {

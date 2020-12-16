@@ -24,7 +24,7 @@ describe('sim:location', () => {
         let adjacents = testfuncs.getAdjacentLocations(location);
         expect(adjacents.length).to.equal(4);
     });
-    
+
     it('test isInMap', () => {
         let outofbounds = { x: 2, y: 3 };
         let inbound = { x: 2, y: 2 };

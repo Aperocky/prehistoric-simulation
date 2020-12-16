@@ -59,6 +59,23 @@ describe('people:household', () => {
         WILL_TURNER.consumption = {};
     });
 
+    it('test changeWork', () => {
+        let house = new Household([], WILL_TURNER, {x: 1, y: 1});
+        house.getProjectedConsumption();
+        house.storage.addResource("food", 0.5);
+        house.consume();
+        expect(WILL_TURNER.work.work).to.equal("HUNT");
+        expect(TEST_SIM.terrain[1][1].isCoast).to.be.true;
+        for (let i = 0; i < 100; i++) {
+            house.changeWork(TEST_SIM);
+        }
+        expect(WILL_TURNER.work.work).to.equal("FISH");
+        // cleanup
+        WILL_TURNER.setHousehold(undefined);
+        WILL_TURNER.consumption = {};
+        WILL_TURNER.work.work = "HUNT";
+    });
+
     it('test multi household consumption', () => {
         let lizhouse = new Household([], LIZ_SWANN, {x: 6, y: 9});
         let willhouse = new Household([], WILL_TURNER, {x: 9, y: 6});

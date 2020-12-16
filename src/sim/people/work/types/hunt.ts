@@ -1,6 +1,7 @@
 import { WorkType, WorkLocation, defaultAgeMod } from '../workTypes';
 import { Square } from '../../../../map/square';
 import { ResourceType } from '../../properties/resourceTypes';
+import { Person } from '../../person';
 
 
 function gathererTerrainCapacity(square: Square): number[] {
@@ -23,6 +24,21 @@ function gathererTerrainCapacity(square: Square): number[] {
     }
 }
 
+function changeFunc(person: Person, square: Square): string {
+    if (square.isCoast) {
+        if (person.isHungry()) {
+            if (Math.random() < 0.8) {
+                return "FISH";
+            }
+        } else {
+            if (Math.random() < 0.2) {
+                return "FISH";
+            }
+        }
+    }
+    return "HUNT";
+}
+
 export const Gatherer: WorkType = {
     name: "Gatherer",
     consume: {},
@@ -37,6 +53,7 @@ export const Gatherer: WorkType = {
         }
         return produce;
     },
+    changeFunc: changeFunc,
     searchdist: 4,
     workLocation: WorkLocation.Land,
     produceType: ResourceType.Food

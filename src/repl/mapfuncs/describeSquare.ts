@@ -47,9 +47,10 @@ export default function describeSquare(controller: Controller, ...args: string[]
 
 function describe(controller: Controller, x: number, y: number): string[] {
     let square: Square = controller.terrain[y][x];
+    let coastStr: string = square.isCoast ? "Coastal " : "";
     let result: string[] = [];
     result.push(`----- SQUARE AT (${x}, ${y}) -----`);
-    result.push(`Terrain: ${TERRAIN_STR.get(square.terrain)}`);
+    result.push(`Terrain: ${coastStr}${TERRAIN_STR.get(square.terrain)}`);
     result.push(`Altitude: ${square.altitude} m`);
     result.push(`Precipitation: ${square.precip} mm`);
     if (square.isRiver()) {
