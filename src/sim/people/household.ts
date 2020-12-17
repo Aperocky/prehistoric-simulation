@@ -158,6 +158,12 @@ export class Household {
         return this.dependents.length + this.adults.length;
     }
 
+    populateSquareInfo(sim: Simulation): void {
+        let square = sim.terrain[this.location.y][this.location.x];
+        square.simInfo.households.push(this);
+        this.allDo(p => square.simInfo.people.push(p));
+    }
+
     private mortality(sim: Simulation): void {
         this.adults.forEach(p => {
             if (p.health < 0) {

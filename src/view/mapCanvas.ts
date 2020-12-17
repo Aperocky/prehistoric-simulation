@@ -96,8 +96,7 @@ export class MapCanvas {
         this.simDisplay.changeModeToPopulationDensity();
         this.mapSprites.forEach(sprite => {
             let square = sprite.square;
-            let locstr = locationToString({x: square.x, y: square.y});
-            let population = this.simDisplay.sim.getPopulationOfSquare(locstr);
+            let population = square.simInfo.people.length;
             sprite.tint = sprite.getPopulationDensityColor(population);
         });
     }

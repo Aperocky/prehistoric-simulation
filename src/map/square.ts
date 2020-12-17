@@ -1,4 +1,5 @@
 import * as mapConstants from '../constant/mapConstants';
+import { SimSquare, initSimInfo } from './simSquare';
 
 export enum Terrain {
     Water = 1,
@@ -31,6 +32,9 @@ export class Square {
     x: number;
     y: number;
     isCoast: boolean;
+    
+    // Sim related information
+    simInfo: SimSquare;
 
     constructor(height: number, precip: number, flowDirection: number, flowVolume: number,
             x: number, y: number) {
@@ -42,6 +46,7 @@ export class Square {
         this.flowVolume = flowVolume;
         this.terrain = this.getTerrain();
         this.isCoast = false;
+        this.simInfo = initSimInfo();
     }
 
     setCoast(): void {

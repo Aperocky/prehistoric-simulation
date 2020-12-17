@@ -25,7 +25,7 @@ export const Fisher: WorkType = {
     },
     produceFunc: (strength, square) => {
         let depthMultiplier = 2 + square.altitude/500;
-        return Math.sqrt(strength) * depthMultiplier;
+        return strength**0.6 * depthMultiplier;
     },
     changeFunc: changeFunc,
     searchdist: 5,

@@ -49,6 +49,15 @@ describe('sim:simulation', () => {
         expect(sim.households.values().next().value.adults[0].consumption["food"]).to.be.gt(0);
     });
 
+    it('test populateSquareInfo', () => {
+        let sim = new Simulation(TEST_TERRAIN);
+        sim.initialize(5);
+        let household = sim.households.values().next().value;
+        let square = sim.terrain[household.location.y][household.location.x];
+        expect(square.simInfo.households).to.contain(household);
+        expect(square.simInfo.people.length).to.be.gt(0);
+    });
+
     it('test large consumption', () => {
         let sim = getSimulationOnTerrain();
         sim.simProduction.globalWorkIteration(sim.people);
@@ -98,20 +107,6 @@ describe('sim:simulation', () => {
                 expect(p.household).to.equal(hh);
             });
         });
-    });
-
-    it('test densityMap', () => {
-        let sim = getSimulationOnTerrain();
-        let turn = 0;
-        while (turn < 10) {
-            sim.runTurn();
-            turn++;
-        }
-        expect(sim.densityMap.turn).to.equal(0);
-        let hh = sim.households.values().next().value;
-        let locstr = locationToString(hh.location);
-        expect(sim.getPopulationOfSquare(locstr)).to.be.gt(0);
-        expect(sim.densityMap.turn).to.equal(10);
     });
 });
 
