@@ -61,7 +61,8 @@ function describe(controller: Controller, x: number, y: number): string[] {
                 ? "Stream" : "River";
         result.push(`${rdesc} flows ${DIRECTIONS_DESCRIPTION.get(square.flowDirection)}`);
     }
-    return result.concat(describePopulation(controller, x, y));
+    result = result.concat(describePopulation(controller, x, y));
+    return result.concat(describeProduction(controller, x, y));
 }
 
 function describePopulation(controller: Controller, x: number, y: number): string[] {
@@ -90,5 +91,19 @@ function describePopulation(controller: Controller, x: number, y: number): strin
                 result.push(`${key}: ${value}`)
             });
     }
+    return result;
+}
+
+function describeProduction(controller: Controller, x: number, y: number): string[] {
+    let result = [];
+    let squareProduction = controller.simulation.simProduction.board[y][x];
+    Object.entries(squareProduction.productionRegistry).forEach(entry => {
+        let [workType, produce] = entry;
+        let workforce = Object.values(squareProduction.workRegistry[workType]).length;
+        let workName = WORK_TYPES[workType].name;
+        let produceType = WORK_TYPES[workType].produceType;
+        produce = Math.floor(produce * 100)/100;
+        result.push(`${workforce} ${workName} produces ${produce} unit of ${produceType}`);
+    });
     return result;
 }

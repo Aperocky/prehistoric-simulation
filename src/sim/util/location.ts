@@ -34,7 +34,7 @@ export function getTerrainFromLocation(terrain: Square[][], location: Location):
 export function randomWalk(loc: Location, terrain: Square[][], steps: number, mode: boolean = false): Location {
     let currloc = loc;
     for (let i = 0; i < steps; i++) {
-        let adjacents = getAdjacentLocations(loc).filter(l => isLegitLocation(l, terrain, mode));
+        let adjacents = getAdjacentLocations(currloc).filter(l => isLegitLocation(l, terrain, mode));
         if (adjacents.length) {
             currloc = adjacents[Math.floor(Math.random()*adjacents.length)];
         } else {

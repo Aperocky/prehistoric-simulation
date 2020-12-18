@@ -32,7 +32,7 @@ export class Square {
     x: number;
     y: number;
     isCoast: boolean;
-    
+
     // Sim related information
     simInfo: SimSquare;
 

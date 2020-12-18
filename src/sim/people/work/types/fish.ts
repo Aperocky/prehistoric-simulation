@@ -21,7 +21,7 @@ export const Fisher: WorkType = {
         if (ResourceType.Wood in consumed) {
             return (0.1 - consumed[ResourceType.Wood])/0.2 + 0.5;
         }
-        return defaultAgeMod(person) * woodMultiplier * 8;
+        return defaultAgeMod(person) * woodMultiplier * 4;
     },
     produceFunc: (strength, square) => {
         let depthMultiplier = 2 + square.altitude/500;

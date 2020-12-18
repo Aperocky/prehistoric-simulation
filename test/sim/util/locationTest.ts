@@ -18,6 +18,19 @@ const PRECIP = [
 
 export const TEST_TERRAIN = terrain.genSquareMap(ALTITUDE, PRECIP);
 
+const TEST_RANDOM_WALK_GROUND = (() => {
+    let alt = Array(10).fill(0).map(e => Array(10).fill(0.9));
+    let precip = Array(10).fill(0).map(e => Array(10).fill(0));
+    return terrain.genSquareMap(alt, precip);
+})();
+
+const TEST_RANDOM_WALK_WATER = (() => {
+    let alt = Array(10).fill(0).map(e => Array(10).fill(0.1));
+    alt[4][4] = 0.8;
+    let precip = Array(10).fill(0).map(e => Array(10).fill(0));
+    return terrain.genSquareMap(alt, precip);
+})();
+
 describe('sim:location', () => {
     it('test getAdjacentLocations', () => {
         let location: Location = { x: 1, y: 0};
@@ -74,4 +87,19 @@ describe('sim:location', () => {
         expect(randos.length).to.equal(4);
         expect(TEST_TERRAIN[randos[0].y][randos[0].x].isWater()).to.be.false;
     });
+
+    it('test large randomWalk ground', () => {
+        let start = {x: 0, y: 0};
+        let iteration = 0;
+        while (true) {
+            let destination = randomWalk(start, TEST_RANDOM_WALK_GROUND, 10);
+            if (destination.x + destination.y > 1) {
+                break
+            }
+            iteration++;
+            if (iteration > 20) {
+                throw new Error("randomWalk is not leaving next square");
+            }
+        }
+    })
 });
