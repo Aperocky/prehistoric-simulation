@@ -2,6 +2,7 @@ import { Controller } from '../../controller';
 import { argparse, KeyValue } from '../parser';
 import { Household } from '../../sim/people/household';
 import { Simulation } from '../../sim/sim';
+import { describeWork } from '../util';
 
 const HELP = [
     "describe simulation information",
@@ -39,5 +40,7 @@ function describeSim(sim: Simulation): string[] {
     result.push(`Average health: ${Math.floor(totalHealth/sim.people.size * 100)/100}`);
     result.push(`Female: ${female} Male: ${sim.people.size - female}`);
     result.push(`Single households: ${single}`);
+    result.push("--------- WORK ---------");
+    result = result.concat(describeWork(Array.from(sim.people.values())));
     return result;
 }

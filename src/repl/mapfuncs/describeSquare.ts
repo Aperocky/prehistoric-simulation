@@ -5,6 +5,7 @@ import { DEFAULT_MAP_SIZE } from '../../constant/displayConstants';
 import { DIRECTIONS_DESCRIPTION } from '../../constant/mapConstants';
 import { locationToString } from '../../sim/util/location';
 import { WORK_TYPES } from '../../sim/people/work/workTypes';
+import { describeWork } from '../util';
 
 const HELP = [
     "describe selected square",
@@ -73,23 +74,7 @@ function describePopulation(controller: Controller, x: number, y: number): strin
         result.push(`${square.simInfo.households.length} households are here`);
         result.push(`${square.simInfo.people.length} persons live here`);
         result.push("------- WORK -------");
-        let workHash: {[work: string]: number} = {};
-        square.simInfo.people.forEach(p => {
-            let work = p.age < 10
-                    ? "Child"
-                    : WORK_TYPES[p.work.work].name;
-            if (work in workHash) {
-                workHash[work] += 1;
-            } else {
-                workHash[work] = 1;
-            }
-        });
-        Object.entries(workHash)
-            .sort(([,a],[,b]) => b-a)
-            .forEach(entry => {
-                const [key, value] = entry;
-                result.push(`${key}: ${value}`)
-            });
+        result = result.concat(describeWork(square.simInfo.people));
     }
     return result;
 }
