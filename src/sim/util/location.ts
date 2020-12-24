@@ -31,6 +31,32 @@ export function getTerrainFromLocation(terrain: Square[][], location: Location):
 }
 
 
+export function oceanCrossing(loc: Location, terrain: Square[][], steps: number, minsteps: number): Location {
+    if (steps < minsteps) {
+        throw new Error("Steps must be equal or larger than minsteps");
+    }
+    if (steps < 3) {
+        return loc;
+    }
+    let currloc = loc;
+    for (let i = 0; i < steps; i++) {
+        let adjacents = getAdjacentLocations(currloc).filter(l => isLegitLocation(l, terrain, true));
+        if (adjacents.length) {
+            currloc = adjacents[Math.floor(Math.random()*adjacents.length)];
+        } else {
+            return loc;
+        }
+        if (i >= minsteps) {
+            let adjacentLand = getAdjacentLocations(currloc).filter(l => isLegitLocation(l, terrain, false));
+            if (adjacentLand.length) {
+                return adjacentLand[Math.floor(Math.random()*adjacentLand.length)];
+            }
+        }
+    }
+    return loc;
+}
+
+
 export function randomWalk(loc: Location, terrain: Square[][], steps: number, mode: boolean = false): Location {
     let currloc = loc;
     for (let i = 0; i < steps; i++) {

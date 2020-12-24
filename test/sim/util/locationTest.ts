@@ -1,4 +1,4 @@
-import { Location, testfuncs, randomWalk,
+import { Location, testfuncs, randomWalk, oceanCrossing,
         locationToString, getRandomLandLocations } from '../../../src/sim/util/location';
 import { testfuncs as terrain } from '../../../src/map/generateTerrain';
 import { expect } from 'chai';
@@ -14,6 +14,13 @@ const PRECIP = [
     [0.8, 0.4, 0.2],
     [0.5, 0.1, 0.9],
     [0.1, 0.2, 0.3]
+]
+
+const CROSSING_ALT = [
+    [0.1, 0.1, 0.1, 0.1],
+    [0.1, 0.1, 0.1, 0.9],
+    [0.9, 0.1, 0.1, 0.1],
+    [0.1, 0.1, 0.1, 0.1]
 ]
 
 export const TEST_TERRAIN = terrain.genSquareMap(ALTITUDE, PRECIP);
@@ -102,4 +109,21 @@ describe('sim:location', () => {
             }
         }
     })
+
+    it('test oceanCrossing', () => {
+        let precip = Array(4).fill(0).map(e => Array(4).fill(0.1));
+        let map = terrain.genSquareMap(CROSSING_ALT, precip);
+        let start = {x: 0, y: 2};
+        let iteration = 0;
+        while (true) {
+            let destination = oceanCrossing(start, map, 10, 5);
+            if (destination.x == 3 && destination.y == 1) {
+                break;
+            }
+            iteration++;
+            if (iteration > 50) {
+                throw new Error("oceanCrossing is not crossing ocean");
+            }
+        }
+    });
 });
