@@ -6,13 +6,14 @@ import processor from '../repl/processor';
 const TERMINAL_ELEMENT_ID = "console";
 const CARRIAGE_RETURN = "\n\r";
 const TERMINAL_ADDR = "\x1b[33mconsole$ \x1b[37m";
-const CURR_LINE_REFRESH = "\x1b[2K\r";
+const CURR_LINE_REFRESH = "\x1b[2K\x1b[37m\r";
 const XTERM_PARAMS = {
     rows: 40,
     theme: {
         background: '#222'
     }
 };
+
 
 // A terminal to control the simulation
 export class ReplTerminal {
@@ -22,6 +23,7 @@ export class ReplTerminal {
     history: string[];
     pointer: number;
     controller: Controller;
+    paste: string;
 
     constructor(controller: Controller) {
         this.command = "";
@@ -32,6 +34,7 @@ export class ReplTerminal {
         this.terminal.open(document.getElementById(TERMINAL_ELEMENT_ID));
         fitAddon.fit();
         this.setupTerminal();
+        this.paste = "";
     }
 
     execute(): void {
@@ -90,6 +93,11 @@ export class ReplTerminal {
                     this.command = this.history[this.history.length - this.pointer];
                     term.write(CURR_LINE_REFRESH + TERMINAL_ADDR + this.command);
                 }
+            } else if (ev.keyCode == 67 && ev.ctrlKey) {
+                this.paste = term.getSelection();
+            } else if (ev.keyCode == 86 && ev.ctrlKey) {
+                this.command += this.paste;
+                term.write(CURR_LINE_REFRESH + TERMINAL_ADDR + this.command);
             } else {
                 this.command += key;
                 term.write(key);

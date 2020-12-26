@@ -11,6 +11,7 @@ export default function initializeSim(sim: Simulation, population: number): void
     let initialLocations = getRandomLandLocations(sim.terrain, population);
     initialLocations.map(loc => {
         let person = new Person(initialHeritage());
+        person.health = 50;
         sim.people.set(person.id, person);
         person.age = INITIAL_AGE[0] + Math.floor(Math.random()
                 * (INITIAL_AGE[1] - INITIAL_AGE[0]));

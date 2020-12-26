@@ -3,6 +3,7 @@ import { argparse, KeyValue } from '../parser';
 import { Household } from '../../sim/people/household';
 import { Simulation } from '../../sim/sim';
 import { WORK_TYPES } from '../../sim/people/work/workTypes';
+import { roundTo, cmdprint } from '../util';
 
 const HELP = [
     "describe household information",
@@ -47,18 +48,25 @@ function describe(sim: Simulation, household: Household): string[] {
     household.adults.forEach(p => {
         let workstr = WORK_TYPES[p.work.work].name;
         result.push(`${workstr} ${p.getName()}, age: ${p.age}, health: ${Math.floor(p.health)}`);
+        result.push(cmdprint(`pp --id=${p.id}`));
     });
     if (household.dependents.length) {
         result.push('------ CHILDREN ------');
         household.dependents.forEach(p => {
             let workstr = p.age > 10 ? WORK_TYPES[p.work.work].name : "Child";
             result.push(`${workstr} ${p.getName()}, age: ${p.age}, health: ${Math.floor(p.health)}`);
+            result.push(cmdprint(`pp --id=${p.id}`));
         });
     }
     result.push('------ STORAGE ------');
     Object.entries(household.storage.storage).forEach(entry => {
         const [key, val] = entry;
-        result.push(`${key}: ${Math.floor(val * 100)/100}`);
+        result.push(`${key}: ${roundTo(val)}`);
+    });
+    result.push('---- CONSUMPTION ----');
+    Object.entries(household.projectedConsumption).forEach(entry => {
+        const [key, val] = entry;
+        result.push(`${key}: desired: ${roundTo(val)}, actual: ${roundTo(val * household.percentSatisfied[key])}`);
     });
     return result;
 }

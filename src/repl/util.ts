@@ -22,3 +22,13 @@ export function describeWork(people: Person[]): string[] {
         });
     return result;
 }
+
+export function roundTo(num: number, decimals: number = 2): number {
+    let factor = 10**decimals;
+    return Math.floor(num * factor)/factor;
+}
+
+
+export function cmdprint(cmd) {
+    return `\x1b[36;48;2;48;48;48m${cmd}\x1b[0;37m`;
+}

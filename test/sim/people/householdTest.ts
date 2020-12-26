@@ -106,6 +106,7 @@ describe('people:household', () => {
         let willhouse = new Household([], WILL_TURNER, {x: 9, y: 6});
         let pirates = new Household([willhouse, lizhouse]);
         pirates.percentSatisfied["food"] = 1;
+        LIZ_SWANN.health = 100;
         expect(pirates.birthChance(LIZ_SWANN)).to.be.gt(0);
         while (true) {
             let baby = pirates.birth();
@@ -126,6 +127,7 @@ describe('people:household', () => {
         // cleanup
         LIZ_SWANN.heritage.children = [];
         WILL_TURNER.heritage.children = [];
+        LIZ_SWANN.health = 10;
         LIZ_SWANN.setHousehold(undefined);
         WILL_TURNER.setHousehold(undefined);
     });

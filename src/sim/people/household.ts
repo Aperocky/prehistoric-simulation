@@ -129,7 +129,8 @@ export class Household {
                 ? (25 - woman.age)**2 * 0.004
                 : (woman.age - 25) * 0.03;
         let foodEffect = (1 - this.percentSatisfied[ResourceType.Food]) * 2
-        return (0.6 - ageEffect - foodEffect) * 0.8;
+        let healthEffect = woman.health/100 - 0.2;
+        return (0.6 - ageEffect - foodEffect) * healthEffect;
     }
 
     adulthood(sim: Simulation): void {

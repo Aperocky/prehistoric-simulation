@@ -6,6 +6,7 @@ import describeSquare from './mapfuncs/describeSquare';
 import repository from './mapfuncs/repository';
 import runTurn from './simfuncs/runTurn';
 import describeHousehold from './simfuncs/describeHousehold';
+import describePerson from './simfuncs/describePerson';
 import describeSim from './simfuncs/describeSim';
 import displayMode from './viewfuncs/displayMode';
 
@@ -29,6 +30,8 @@ FUNC_MAP.set("run-turn", runTurn);
 FUNC_MAP.set("run", runTurn);
 FUNC_MAP.set("describe-household", describeHousehold);
 FUNC_MAP.set("hh", describeHousehold);
+FUNC_MAP.set("describe-person", describePerson);
+FUNC_MAP.set("pp", describePerson);
 FUNC_MAP.set("describe-sim", describeSim);
 FUNC_MAP.set("sim", describeSim);
 FUNC_MAP.set("display-mode", displayMode);
@@ -44,6 +47,7 @@ HELP_MAP.set("run-turn", ["run-turn", "run"]);
 HELP_MAP.set("describe-household", ["describe-household", "hh"]);
 HELP_MAP.set("describe-sim", ["describe-sim", "sim"]);
 HELP_MAP.set("display-mode", ["display-mode", "mode"]);
+HELP_MAP.set("describe-person", ["describe-person", "pp"]);
 
 
 export default function processor(controller: Controller, command: string): string[] {
@@ -63,6 +67,7 @@ export default function processor(controller: Controller, command: string): stri
 
 function help(): string[] {
     let result: string[] = [];
+    result.push('use ctrl + c/v to copy paste (even on mac)');
     HELP_MAP.forEach((val, key) => {
         let command = val[0];
         if (val.length) {
