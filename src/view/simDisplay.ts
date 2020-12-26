@@ -72,4 +72,10 @@ export class SimDisplay {
             fam.visible = false;
         });
     }
+
+    changeModeToHealth() {
+        this.familySprites.forEach(fam => {
+            fam.visible = false;
+        });
+    }
 }

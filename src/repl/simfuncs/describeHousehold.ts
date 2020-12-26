@@ -3,7 +3,7 @@ import { argparse, KeyValue } from '../parser';
 import { Household } from '../../sim/people/household';
 import { Simulation } from '../../sim/sim';
 import { WORK_TYPES } from '../../sim/people/work/workTypes';
-import { roundTo, cmdprint } from '../util';
+import { roundTo, cmdprint, describeProduction } from '../util';
 
 const HELP = [
     "describe household information",
@@ -68,5 +68,8 @@ function describe(sim: Simulation, household: Household): string[] {
         const [key, val] = entry;
         result.push(`${key}: desired: ${roundTo(val)}, actual: ${roundTo(val * household.percentSatisfied[key])}`);
     });
+    result.push('---- PRODUCTION ----');
+    let fam = [].concat(...[household.adults, household.dependents]);
+    result = result.concat(describeProduction(fam));
     return result;
 }

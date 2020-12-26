@@ -1,7 +1,7 @@
 import { Household } from '../sim/people/household';
 import { Person } from '../sim/people/person';
 
-// Sim data storge in each square
+// Sim data storage in each square
 export type SimSquare = {
     cleared: boolean;
     households: Household[];
@@ -14,4 +14,30 @@ export function initSimInfo(): SimSquare {
         households: [],
         people: []
     };
+}
+
+export function getHealth(sim: SimSquare): number {
+    if (sim.people.length) {
+        let totalHealth = 0;
+        let adults = 0;
+        sim.people.forEach(p => {
+            if (p.age >= 14) {
+                adults++;
+                totalHealth += p.health;
+            }
+        });
+        if (adults) {
+            return totalHealth/adults;
+        }
+    }
+    return 0;
+}
+
+export function getAge(sim: SimSquare): number {
+    if (sim.people.length) {
+        let totalAge = 0;
+        sim.people.forEach(p => { totalAge += p.age; });
+        return totalAge/sim.people.length;
+    }
+    return 0;
 }

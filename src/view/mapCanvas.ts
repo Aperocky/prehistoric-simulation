@@ -3,6 +3,7 @@ import * as displayConstants from '../constant/displayConstants';
 import { MapSprite } from './base/mapSprite';
 import { RiverGraphic } from './base/riverGraphic';
 import { Square } from '../map/square';
+import { getHealth } from '../map/simSquare';
 import { ReplTerminal } from './replTerminal';
 import { SimDisplay } from './simDisplay';
 import { locationToString } from '../sim/util/location';
@@ -35,7 +36,8 @@ export class MapCanvas {
         this.simDisplay = new SimDisplay(this.app, this.mainContainer);
         this.modeMap = {
             "DEFAULT": this.changeModeToDefault,
-            "DENSITY": this.changeModeToPopulationDensity
+            "DENSITY": this.changeModeToPopulationDensity,
+            "HEALTH": this.changeModeToHealth
         }
     }
 
@@ -83,6 +85,9 @@ export class MapCanvas {
         if (this.mode == DisplayMode.PopulationDensity) {
             this.changeModeToPopulationDensity();
         }
+        if (this.mode == DisplayMode.Health) {
+            this.changeModeToHealth();
+        }
     }
 
     changeModeToDefault() {
@@ -98,6 +103,14 @@ export class MapCanvas {
             let square = sprite.square;
             let population = square.simInfo.people.length;
             sprite.tint = sprite.getPopulationDensityColor(population);
+        });
+    }
+
+    changeModeToHealth() {
+        this.simDisplay.changeModeToHealth();
+        this.mapSprites.forEach(sprite => {
+            let square = sprite.square;
+            sprite.tint = sprite.getHealthColor(getHealth(square.simInfo));
         });
     }
 }

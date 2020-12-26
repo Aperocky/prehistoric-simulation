@@ -1,11 +1,12 @@
 import { Controller } from '../../controller';
 import { argparse, KeyValue } from '../parser';
 import { Square, Terrain, TERRAIN_STR } from '../../map/square';
+import { getHealth, getAge } from '../../map/simSquare';
 import { DEFAULT_MAP_SIZE } from '../../constant/displayConstants';
 import { DIRECTIONS_DESCRIPTION } from '../../constant/mapConstants';
 import { locationToString } from '../../sim/util/location';
 import { WORK_TYPES } from '../../sim/people/work/workTypes';
-import { describeWork } from '../util';
+import { describeWork, roundTo } from '../util';
 
 const HELP = [
     "describe selected square",
@@ -73,6 +74,8 @@ function describePopulation(controller: Controller, x: number, y: number): strin
         result.push("------ PEOPLE ------");
         result.push(`${square.simInfo.households.length} households are here`);
         result.push(`${square.simInfo.people.length} persons live here`);
+        result.push(`Average Age: ${roundTo(getAge(square.simInfo))}`)
+        result.push(`Average Adult Health: ${roundTo(getHealth(square.simInfo))}`)
         result.push("------- WORK -------");
         result = result.concat(describeWork(square.simInfo.people));
     }

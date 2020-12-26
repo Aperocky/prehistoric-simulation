@@ -20,6 +20,10 @@ export const POPULATION_DENSITY_COLOR = [255, 0, 0];
 export const POPULATION_DENSITY_FACTOR = 0.01;
 export const POPULATION_DENSITY_ALPHA_MAX = 0.7;
 
+export const HEALTH_ALPHA = 0.5;
+export const HEALTH_LOW = [255, 80, 0];
+export const HEALTH_HIGH = [0, 255, 0];
+
 export const FAMILY_DISPLAY_COLOR = [255, 255, 255];
 export const FAMILY_RADIUS = 8;
 
@@ -40,5 +44,6 @@ BASE_COLOR_MAP.set(7, WOOD_COLOR);
 
 export enum DisplayMode {
     Default = "DEFAULT",
-    PopulationDensity = "DENSITY"
+    PopulationDensity = "DENSITY",
+    Health = "HEALTH"
 }

@@ -5,12 +5,14 @@ import { DisplayMode } from '../../constant/displayConstants';
 const HELP = [
     "change display mode",
     "mode default: default display mode",
-    "mode density: population density"
+    "mode density: population density",
+    "mode health: population health"
 ];
 
 const MODES = {
     default: DisplayMode.Default,
-    density: DisplayMode.PopulationDensity
+    density: DisplayMode.PopulationDensity,
+    health: DisplayMode.Health
 }
 
 export default function displayMode(controller: Controller, ...args: string[]): string[] {
@@ -31,6 +33,6 @@ export default function displayMode(controller: Controller, ...args: string[]): 
         `No display mode '${mode}', the acceptable modes are`,
         'default',
         'density',
-        'see help for more information'
+        'health',
     ]
 }
