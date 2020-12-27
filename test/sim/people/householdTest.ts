@@ -135,7 +135,8 @@ describe('people:household', () => {
     it('test mortality of single household', () => {
         let sim = getSimulationOnTerrain();
         sim.simProduction.globalWorkIteration(sim.people);
-        sim.consume();
+        sim.allDo(hh => hh.getProjectedConsumption());
+        sim.allDo(hh => hh.consume());
         let target = sim.households.values().next().value;
         expect(sim.households.has(target.id)).to.be.true;
         expect(sim.people.has(target.adults[0].id)).to.be.true;
@@ -149,7 +150,8 @@ describe('people:household', () => {
         let sim = getSimulationOnTerrain();
         sim.simProduction.globalWorkIteration(sim.people);
         matchingService(sim);
-        sim.consume();
+        sim.allDo(hh => hh.getProjectedConsumption());
+        sim.allDo(hh => hh.consume());
         let targets = Array.from(sim.households.values()).filter(hh => !hh.isSingle);
         if (!(targets.length)) {
             console.log("not able to get targets, change matching service?");
@@ -169,7 +171,8 @@ describe('people:household', () => {
         let sim = getSimulationOnTerrain();
         sim.simProduction.globalWorkIteration(sim.people);
         matchingService(sim);
-        sim.consume();
+        sim.allDo(hh => hh.getProjectedConsumption());
+        sim.allDo(hh => hh.consume());
         let targets = Array.from(sim.households.values()).filter(hh => !hh.isSingle);
         if (!(targets.length)) {
             console.log("not able to get targets, change matching service?");
@@ -188,7 +191,8 @@ describe('people:household', () => {
     it('ensure sanity in mortality', () => {
         let sim = getSimulationOnTerrain();
         sim.simProduction.globalWorkIteration(sim.people);
-        sim.consume();
+        sim.allDo(hh => hh.getProjectedConsumption());
+        sim.allDo(hh => hh.consume());
         let preSize = sim.households.size;
         let preHealth = 0;
         sim.people.forEach(p => { preHealth += p.health });

@@ -45,7 +45,8 @@ describe('sim:simulation', () => {
         sim.initialize(5);
         sim.simProduction.globalWorkIteration(sim.people);
         expect(sim.households.values().next().value.storage.getResource("food")).to.be.gt(0);
-        sim.consume();
+        sim.allDo(hh => hh.getProjectedConsumption());
+        sim.allDo(hh => hh.consume());
         expect(sim.households.values().next().value.adults[0].consumption["food"]).to.be.gt(0);
     });
 
@@ -61,7 +62,8 @@ describe('sim:simulation', () => {
     it('test large consumption', () => {
         let sim = getSimulationOnTerrain();
         sim.simProduction.globalWorkIteration(sim.people);
-        sim.consume();
+        sim.allDo(hh => hh.getProjectedConsumption());
+        sim.allDo(hh => hh.consume());
         sim.households.forEach(hh => {
             let hasFood = hh.storage.getResource("food") > 0;
             let person = hh.adults[0];
@@ -98,7 +100,8 @@ describe('sim:simulation', () => {
     it('test matchingService', () => {
         let largeSim = getSimulationOnTerrain();
         largeSim.simProduction.globalWorkIteration(largeSim.people);
-        largeSim.consume();
+        largeSim.allDo(hh => hh.getProjectedConsumption());
+        largeSim.allDo(hh => hh.consume());
         let singleCount = largeSim.households.size;
         let matched = matchingService(largeSim);
         expect(largeSim.households.size).to.equal(singleCount - matched);

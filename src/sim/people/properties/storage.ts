@@ -1,6 +1,6 @@
 
 export class Storage {
-    
+
     storage: { [resource: string]: number };
     gold: number;
 

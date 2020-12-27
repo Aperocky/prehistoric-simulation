@@ -63,6 +63,7 @@ function describe(sim: Simulation, household: Household): string[] {
         const [key, val] = entry;
         result.push(`${key}: ${roundTo(val)}`);
     });
+    result.push(`GOLD: ${roundTo(household.storage.gold)}`);
     result.push('---- CONSUMPTION ----');
     Object.entries(household.projectedConsumption).forEach(entry => {
         const [key, val] = entry;

@@ -6,8 +6,10 @@ import { Square, Terrain } from '../../map/square';
 import { childHeritage } from './properties/heritage';
 import { ResourceType } from './properties/resourceTypes';
 import move from './actions/move';
+import shop from './actions/shop';
 import { v4 as uuid } from 'uuid';
 import { SICK_PROBABILITY } from '../../constant/mapConstants';
+import { Order } from '../market/order';
 
 
 export class Household {
@@ -21,6 +23,9 @@ export class Household {
 
     projectedConsumption: { [resourceType: string]: number };
     percentSatisfied: { [resourceType: string]: number };
+
+    // Market orders
+    orders: Order[];
 
     constructor(households: Household[], person?: Person, location?: Location) {
         this.id = uuid();
@@ -45,6 +50,7 @@ export class Household {
         }
         this.projectedConsumption = {};
         this.percentSatisfied = {};
+        this.orders = [];
     }
 
     getProjectedConsumption(): void {
@@ -210,5 +216,24 @@ export class Household {
 
     private allDo(func: (person: Person) => void): void {
         [].concat(...[this.adults, this.dependents]).map(func);
+    }
+
+    createMarketOrder(resourceType: string, quantity: number, amount: number, orderType: boolean): Order {
+        if (orderType) {
+            // buy
+            this.storage.spendGold(amount);
+        } else {
+            if (this.storage.getResource(resourceType) < amount) {
+                throw new Error("Cannot supply more than storage");
+            }
+            this.storage.spendResource(resourceType, quantity);
+        }
+        return new Order(this.id, resourceType, quantity, amount, orderType);
+    }
+
+    shop(): Order[] {
+        // renew orders
+        this.orders = shop(this);
+        return this.orders;
     }
 }

@@ -1,5 +1,4 @@
 import { Household } from '../household';
-import { Person } from '../person';
 import { Location, randomWalk, oceanCrossing } from '../../util/location';
 import { ResourceType } from '../properties/resourceTypes';
 import { Square } from '../../../map/square';

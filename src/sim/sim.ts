@@ -37,7 +37,8 @@ export class Simulation {
         // Match Singles!
         matchingService(this);
         // Consume iteration - consume stuff
-        this.consume();
+        this.allDo(hh => hh.getProjectedConsumption());
+        this.allDo(hh => hh.consume());
         // Run turn for each household.
         this.allDo(hh => hh.runTurn(this));
         this.turn++;
@@ -45,14 +46,7 @@ export class Simulation {
         populateSquareInfo(this);
     }
 
-    consume(): void {
-        this.allDo(hh => {
-            hh.getProjectedConsumption();
-            hh.consume();
-        });
-    }
-
-    private allDo(func: (hh: Household) => void) {
+    allDo(func: (hh: Household) => void) {
         this.households.forEach(func);
     }
 }

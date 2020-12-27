@@ -16,6 +16,7 @@ export default function initializeSim(sim: Simulation, population: number): void
         person.age = INITIAL_AGE[0] + Math.floor(Math.random()
                 * (INITIAL_AGE[1] - INITIAL_AGE[0]));
         let household = new Household([], person, loc);
+        household.storage.addGold(1);
         sim.households.set(household.id, household);
     })
 }
