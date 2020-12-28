@@ -71,6 +71,24 @@ function describe(sim: Simulation, household: Household): string[] {
     });
     result.push('---- PRODUCTION ----');
     let fam = [].concat(...[household.adults, household.dependents]);
-    result = result.concat(describeProduction(fam));
+    result.push(...describeProduction(fam));
+    result.push(...describeOrders(household));
     return result;
+}
+
+function describeOrders(hh: Household): string[] {
+    if (hh.orders.length) {
+        let result = [];
+        hh.orders.forEach(order => {
+            let orderType = order.orderType ? "-BUY" : "SELL";
+            let priceStr = order.delivered
+                    ? `FINAL PRICE: ${roundTo(order.settlePrice * order.quantity, 4)}`
+                    : "";
+            result.push(`---${orderType} ORDER: ${order.resourceType.toUpperCase()} ----`);
+            result.push(`QUANTITY: ${roundTo(order.quantity)}  OFFER: ${roundTo(order.amount, 4)}`)
+            result.push(`DELIVERED: ${order.delivered} ${priceStr}`);
+        });
+        return result;
+    }
+    return [];
 }

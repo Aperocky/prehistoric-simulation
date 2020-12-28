@@ -6,15 +6,29 @@ export class MarketEngine {
     resourceType: string;
     sellOrders: Order[];
     buyOrders: Order[];
-    completedOrder: Order[];
+    completedOrders: Order[];
+
+    // Information
     settlePrice: number;
+    sellOrderCount: number;
+    buyOrderCount: number;
+    sellOrderDelivered: number;
+    buyOrderDelivered: number;
+    sellVolume: number;
+    buyVolume: number;
 
     constructor(resourceType: string) {
         this.resourceType = resourceType;
         this.sellOrders = [];
         this.buyOrders = [];
-        this.completedOrder = [];
+        this.completedOrders = [];
         this.settlePrice = 0;
+        this.sellOrderCount = 0;
+        this.buyOrderCount = 0;
+        this.sellOrderDelivered = 0;
+        this.buyOrderDelivered = 0;
+        this.sellVolume = 0;
+        this.buyVolume = 0;
     }
 
     addOrder(order: Order) {
@@ -30,12 +44,16 @@ export class MarketEngine {
         this.buyOrders.sort((a, b) => a.unitPrice - b.unitPrice);
         // order by unitPrice, expensive -> cheap
         this.sellOrders.sort((a, b) => b.unitPrice - a.unitPrice);
+        this.buyOrderCount = this.buyOrders.length;
+        this.sellOrderCount = this.sellOrders.length;
+        this.buyOrderDelivered = 0;
+        this.sellOrderDelivered = 0;
     }
 
     match(): number {
         let currPrice = 0;
         if (!this.buyOrders.length || !this.sellOrders.length) {
-            return; // Nothing is sold.
+            return 0; // Nothing is sold.
         }
         let currSellOrder = this.sellOrders.pop();
         let currBuyOrder = this.buyOrders.pop();
@@ -50,6 +68,8 @@ export class MarketEngine {
             if (currBuyOrder.unitPrice < currSellOrder.unitPrice) {
                 this.sellOrders.push(currSellOrder);
                 this.buyOrders.push(currBuyOrder);
+                currSold -= currSellOrder.quantity;
+                currBought -= currBuyOrder.quantity;
                 break;
             }
 
@@ -57,19 +77,23 @@ export class MarketEngine {
             // Main loop
             if (currSold > currBought) {
                 // More is sold, bump to the next buy order
-                this.completedOrder.push(currBuyOrder);
+                this.completedOrders.push(currBuyOrder);
+                this.buyOrderDelivered++;
                 if (this.buyOrders.length) {
                     currBuyOrder = this.buyOrders.pop();
                     currBought += currBuyOrder.quantity;
                 } else {
-                    this.sellOrders.push(currSellOrder);
+                    this.completedOrders.push(currSellOrder);
+                    this.sellOrderDelivered++;
                     currPrice = currSellOrder.unitPrice;
                     break;
                 }
             } else if (currSold == currBought) {
                 // edge case
-                this.completedOrder.push(currBuyOrder);
-                this.completedOrder.push(currSellOrder);
+                this.completedOrders.push(currBuyOrder);
+                this.completedOrders.push(currSellOrder);
+                this.buyOrderDelivered++;
+                this.sellOrderDelivered++;
                 if (this.buyOrders.length && this.sellOrders.length) {
                     currBuyOrder = this.buyOrders.pop();
                     currSellOrder = this.sellOrders.pop();
@@ -81,25 +105,28 @@ export class MarketEngine {
                 }
             } else {
                 // More is bought, bump to the next sell order
-                this.completedOrder.push(currSellOrder);
+                this.completedOrders.push(currSellOrder);
+                this.sellOrderDelivered++;
                 if (this.sellOrders.length) {
                     currSellOrder = this.sellOrders.pop();
                     currSold += currSellOrder.quantity;
                 } else {
-                    // Current buy order is unfulfilled, push it back
-                    this.buyOrders.push(currBuyOrder);
+                    this.completedOrders.push(currBuyOrder);
+                    this.buyOrderDelivered++;
                     currPrice = currBuyOrder.unitPrice;
                     break;
                 }
             }
         }
+        this.sellVolume = currSold;
+        this.buyVolume = currBought;
         return currPrice;
     }
 
     run(): void {
         this.sortOrders();
         let price = this.match();
-        this.completedOrder.forEach(order => {
+        this.completedOrders.forEach(order => {
             order.markComplete(price);
         });
         this.settlePrice = price;

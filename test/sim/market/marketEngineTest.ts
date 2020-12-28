@@ -60,8 +60,10 @@ describe('market:engine', () => {
         let price = engine.match();
         expect(engine.sellOrders).to.be.empty;
         expect(engine.buyOrders).to.be.empty;
-        expect(engine.completedOrder.length).to.equal(2);
+        expect(engine.completedOrders.length).to.equal(2);
         expect(price).to.equal(1);
+        expect(engine.buyVolume).to.equal(1);
+        expect(engine.sellVolume).to.equal(1);
     });
 
     it('test 1:1 match price diff', () => {
@@ -72,7 +74,7 @@ describe('market:engine', () => {
         let price = engine.match();
         expect(engine.sellOrders).to.be.empty;
         expect(engine.buyOrders).to.be.empty;
-        expect(engine.completedOrder.length).to.equal(2);
+        expect(engine.completedOrders.length).to.equal(2);
         expect(price).to.equal(1);
     });
 
@@ -85,7 +87,7 @@ describe('market:engine', () => {
         let price = engine.match();
         expect(engine.sellOrders).to.be.empty;
         expect(engine.buyOrders).to.be.empty;
-        expect(engine.completedOrder.length).to.equal(3);
+        expect(engine.completedOrders.length).to.equal(3);
         expect(price).to.equal(0.75);
     });
 
@@ -97,7 +99,7 @@ describe('market:engine', () => {
         let price = engine.match();
         expect(engine.sellOrders.length).to.equal(1);
         expect(engine.buyOrders.length).to.equal(1);
-        expect(engine.completedOrder).to.be.empty;
+        expect(engine.completedOrders).to.be.empty;
         expect(price).to.equal(0);
     })
 
@@ -113,8 +115,12 @@ describe('market:engine', () => {
         let price = engine.match();
         expect(engine.sellOrders.length).to.equal(3);
         expect(engine.buyOrders.length).to.equal(1);
-        expect(engine.completedOrder.length).to.equal(2);
+        expect(engine.completedOrders.length).to.equal(2);
         expect(price).to.be.closeTo(0.66, 0.01);
+        expect(engine.sellOrderCount).to.equal(3);
+        expect(engine.buyOrderCount).to.equal(3);
+        expect(engine.buyOrderDelivered).to.equal(2);
+        expect(engine.sellOrderDelivered).to.equal(0);
     })
 
     it('large scale test', () => {
@@ -125,13 +131,18 @@ describe('market:engine', () => {
         }
         engine.sortOrders();
         let price = engine.match();
-        engine.completedOrder.forEach(order => {
+        expect(engine.sellOrderCount).to.equal(50);
+        expect(engine.buyOrderCount).to.equal(50);
+        expect(engine.buyOrderDelivered + engine.sellOrderDelivered).to.equal(engine.completedOrders.length);
+        engine.completedOrders.forEach(order => {
             if (order.orderType) {
                 expect(order.unitPrice >= price).to.be.true;
             } else {
                 expect(order.unitPrice <= price).to.be.true;
             }
         });
+        expect(Math.abs(engine.sellVolume - engine.buyVolume)).to.be.lt(3);
+        expect(engine.sellVolume).to.be.gt(30);
     });
 
     it('large scale encapsulated test', () => {
@@ -142,7 +153,12 @@ describe('market:engine', () => {
                 engine.addOrder(generateRandomOrder(false));
             }
             engine.run();
-            engine.completedOrder.forEach(order => {
+            expect(engine.sellOrderCount).to.equal(50);
+            expect(engine.buyOrderCount).to.equal(50);
+            expect(engine.buyOrderDelivered + engine.sellOrderDelivered).to.equal(engine.completedOrders.length);
+            expect(Math.abs(engine.sellVolume - engine.buyVolume)).to.be.lt(3);
+            expect(engine.sellVolume).to.be.gt(30);
+            engine.completedOrders.forEach(order => {
                 if (order.orderType) {
                     expect(order.unitPrice >= engine.settlePrice).to.be.true;
                 } else {

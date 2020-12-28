@@ -223,12 +223,35 @@ export class Household {
             // buy
             this.storage.spendGold(amount);
         } else {
-            if (this.storage.getResource(resourceType) < amount) {
+            if (this.storage.getResource(resourceType) < quantity) {
                 throw new Error("Cannot supply more than storage");
             }
             this.storage.spendResource(resourceType, quantity);
         }
         return new Order(this.id, resourceType, quantity, amount, orderType);
+    }
+
+    settleMarketOrders(): void {
+        this.orders.forEach(order => {
+            if (order.delivered) {
+                if (order.orderType) {
+                    // purchase succeeded
+                    this.storage.addResource(order.resourceType, order.quantity);
+                    this.storage.addGold((order.unitPrice - order.settlePrice) * order.quantity);
+                } else {
+                    // successfully sold
+                    this.storage.addGold(order.settlePrice * order.quantity);
+                }
+            } else {
+                if (order.orderType) {
+                    // refund
+                    this.storage.addGold(order.amount);
+                } else {
+                    // return goods
+                    this.storage.addResource(order.resourceType, order.quantity);
+                }
+            }
+        });
     }
 
     shop(): Order[] {
