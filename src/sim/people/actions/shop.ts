@@ -99,5 +99,19 @@ function sell(currentSupplies: {[resourceType: string]: number},
             }
         }
     }
+    for (const [key, val] of Object.entries(hh.storage.storage)) {
+        if (!(key in currentSupplies)) {
+            // Sell everything
+            let quantity = val;
+            let riskFactor = riskAcceptance/200; // Risky type sells for higher prices.
+            let amount = hh.storage.gold * riskFactor
+            if (amount < 0.001) {
+                amount = 0.001; // minimum amount;
+            }
+            if (quantity > 0) {
+                orders.push(hh.createMarketOrder(key, quantity, amount, false));
+            }
+        }
+    }
     return orders;
 }

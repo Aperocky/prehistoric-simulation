@@ -57,11 +57,18 @@ export class Person {
             let percentSatisfied = this.household.percentSatisfied[key];
             this.consumption[key] = val * percentSatisfied;
         }
+        // Populate work consumption
+        this.work.populateWorkConsumption(this.consumption);
     }
 
     isHungry(): boolean {
-        if (ResourceType.Food in this.consumption) {
+        if (this.household === undefined) {
+            // Test stub
             return this.consumption[ResourceType.Food] < this.getBaseFoodConsumption();
+        }
+        if (ResourceType.Food in this.consumption) {
+            return this.household.percentSatisfied[ResourceType.Food] < 0.99
+                    && this.consumption[ResourceType.Food] < this.getBaseFoodConsumption();
         }
         return false; // Not yet initiated
     }

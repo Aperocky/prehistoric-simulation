@@ -30,6 +30,25 @@ export class Work {
         this.work = newWork;
     }
 
+    populateWorkConsumption(consumption: {[resourceType: string]: number}): void {
+        this.workConsumption = {};
+        for (const [key, val] of Object.entries(this.getDesiredWorkConsumption())) {
+            if (key in consumption) {
+                if (key === "food") {
+                    let extras = consumption[key] - this.person.getBaseFoodConsumption()
+                    if (extras <= 0) {
+                        continue;
+                    }
+                    let consumed = extras > val ? val : extras;
+                    this.workConsumption[key] = consumed;
+                } else {
+                    let consumed = consumption[key] > val ? val : consumption[key];
+                    this.workConsumption[key] = consumed;
+                }
+            }
+        }
+    }
+
     doWork(simProduction: SimProduction): void {
         if (this.person.age < 10) {
             return;
@@ -70,7 +89,11 @@ export class Work {
     addProduceToStorage(): void {
         if (this.produce > 0) {
             let resource = WORK_TYPES[this.work].produceType;
-            this.person.household.storage.addResource(resource, this.produce);
+            if (resource == "gold") {
+                this.person.household.storage.addGold(this.produce);
+            } else {
+                this.person.household.storage.addResource(resource, this.produce);
+            }
         }
     }
 

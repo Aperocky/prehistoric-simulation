@@ -39,7 +39,7 @@ export function describeProduction(people: Person[]): string[] {
         .sort(([,a],[,b]) => b-a)
         .forEach(entry => {
             const [key, value] = entry;
-            result.push(`${key}: ${value}`)
+            result.push(`${key}: ${roundTo(value)}`)
         });
     return result;
 }

@@ -6,7 +6,7 @@ import { Square } from '../map/square';
 import initializeSim from './util/initializeSim';
 import matchingService from './util/matchingService';
 import populateSquareInfo from './util/populateSquareInfo';
-import { INITIAL_PERSON_COUNT, BACKGROUND_GOLD } from '../constant/simConstants';
+import { INITIAL_PERSON_COUNT, BACKGROUND_GOLD, INFLATION } from '../constant/simConstants';
 
 
 export class Simulation {
@@ -48,6 +48,8 @@ export class Simulation {
         this.allDo(hh => hh.consume());
         // Run turn for each household.
         this.allDo(hh => hh.runTurn(this));
+        // Inflation
+        this.allDo(hh => hh.storage.spendGold(hh.storage.gold * INFLATION));
         this.turn++;
         // populate readonly square info
         populateSquareInfo(this);

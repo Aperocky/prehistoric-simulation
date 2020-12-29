@@ -6,6 +6,7 @@ import { TEST_SIM } from '../../simTest';
 import { Person } from '../../../../src/sim/people/person';
 import { Household } from '../../../../src/sim/people/household';
 import { SquareProduction } from '../../../../src/sim/util/squareProduction';
+import { WILL_TURNER } from '../personTest';
 
 
 describe('people:work', () => {
@@ -36,5 +37,24 @@ describe('people:work', () => {
         person.work.produce = 0;
         person.household.storage = new Storage();
         TEST_SIM.simProduction.reset();
+    });
+
+    it('test populate work consumption', () => {
+        WILL_TURNER.work.work = "FISH";
+        expect(WILL_TURNER.consumption).to.be.empty;
+        let consumption = {"food": 1, "wood": 1};
+        WILL_TURNER.work.populateWorkConsumption(consumption);
+        expect(WILL_TURNER.work.workConsumption).to.deep.equal({"wood": 1});
+
+        consumption = {"food": 1, "wood": 3};
+        WILL_TURNER.work.populateWorkConsumption(consumption);
+        expect(WILL_TURNER.work.workConsumption).to.deep.equal({"wood": 2});
+
+        let onlyFood = {"food": 1};
+        WILL_TURNER.work.populateWorkConsumption(onlyFood);
+        expect(WILL_TURNER.work.workConsumption).to.be.empty;
+        // Cleanup
+        WILL_TURNER.work.work = "HUNT";
+        WILL_TURNER.work.workConsumption = {};
     });
 });

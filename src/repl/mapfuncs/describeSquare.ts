@@ -7,6 +7,7 @@ import { DIRECTIONS_DESCRIPTION } from '../../constant/mapConstants';
 import { locationToString } from '../../sim/util/location';
 import { WORK_TYPES } from '../../sim/people/work/workTypes';
 import { describeWork, roundTo } from '../util';
+import { describeProduction as describeIncome } from '../util';
 
 const HELP = [
     "describe selected square",
@@ -63,8 +64,13 @@ function describe(controller: Controller, x: number, y: number): string[] {
                 ? "Stream" : "River";
         result.push(`${rdesc} flows ${DIRECTIONS_DESCRIPTION.get(square.flowDirection)}`);
     }
-    result = result.concat(describePopulation(controller, x, y));
-    return result.concat(describeProduction(controller, x, y));
+    result.push(...describePopulation(controller, x, y))
+    result.push(...describeProduction(controller, x, y))
+    if (square.simInfo.people.length) {
+        result.push("------ INCOME ------");
+        result.push(...describeIncome(square.simInfo.people));
+    }
+    return result;
 }
 
 function describePopulation(controller: Controller, x: number, y: number): string[] {

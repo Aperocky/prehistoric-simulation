@@ -8,52 +8,32 @@ function gathererTerrainCapacity(square: Square): number[] {
     // individual and cap
     switch (square.terrain) {
         case 2: // Grass
-            return [4, 6];
-        case 3: // Forest
-            return [2, 8];
-        case 4: // Mountain
-            return [2, 4];
-        case 5: // Desert
             return [1, 2];
-        case 6: // Highland
-            return [2.5, 5];
+        case 3: // Forest
+            return [2, 10];
         case 7: // Woods
-            return [3, 10];
+            return [3, 6];
         default:
             return [0, 0];
     }
 }
 
+
 function changeFunc(person: Person, square: Square): string {
-    if (square.isCoast) {
-        if (person.isHungry()) {
-            if (Math.random() < 0.6) {
-                return "FISH";
-            }
-        } else {
-            if (Math.random() < 0.2) {
-                return "FISH";
-            }
-        }
+    if (![2, 3, 7].includes(square.terrain)) {
+        return "HUNT";
     }
     if (person.isHungry()) {
-        if (square.simInfo.people.length > 20 && Math.random() > 0.2) {
-            return "TRAD";
-        }
-        if (square.simInfo.people.length > 40 && Math.random() > 0.5) {
-            return "TRAD";
-        }
-        if (square.terrain == 3 || square.terrain == 7) {
-            if (Math.random() < 0.5) {
-                return "WOOD";
-            }
+        if (Math.random() < 0.5) {
+            return "HUNT"
         }
     }
-    return "HUNT";
+    return "WOOD";
 }
 
-export const Gatherer: WorkType = {
-    name: "Gatherer",
+
+export const Lumberjack: WorkType = {
+    name: "Lumberjack",
     consume: {},
     strengthMod: (person) => {
         return defaultAgeMod(person);
@@ -67,7 +47,7 @@ export const Gatherer: WorkType = {
         return produce;
     },
     changeFunc: changeFunc,
-    searchdist: 4,
+    searchdist: 0,
     workLocation: WorkLocation.Land,
-    produceType: ResourceType.Food
+    produceType: ResourceType.Wood
 }

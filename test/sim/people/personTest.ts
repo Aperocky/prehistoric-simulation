@@ -2,6 +2,7 @@ import { Person } from '../../../src/sim/people/person';
 import { Heritage, initialHeritage } from '../../../src/sim/people/properties/heritage';
 import { ResourceType } from '../../../src/sim/people/properties/resourceTypes';
 import { ORIGIN_NAME } from '../../../src/constant/simConstants';
+import { WORK_TYPES } from '../../../src/sim/people/work/workTypes';
 import { expect } from 'chai';
 
 export const JACK_SPARROW = (() => {
@@ -68,7 +69,8 @@ describe('people:person', () => {
 
     it('test work consumption', () => {
         WILL_TURNER.work.work = "FISH";
-        expect(WILL_TURNER.getConsumption()[ResourceType.Wood]).to.equal(0.3);
+        expect(WILL_TURNER.getConsumption()[ResourceType.Wood])
+                .to.equal(WORK_TYPES.FISH.consume[ResourceType.Wood]);
         expect(WILL_TURNER.getConsumption()[ResourceType.Food]).to.equal(1);
         // Cleanup
         WILL_TURNER.work.work = "HUNT";

@@ -150,6 +150,27 @@ describe('people:shop', () => {
         WILL_TURNER.setHousehold(undefined);
     });
 
+    it('test selling unneeded resource', () => {
+        let hh = new Household([], WILL_TURNER, {x: 9, y: 6});
+        WILL_TURNER.health = 49; // riskAcceptance: 50, safetyMargin: 2
+        hh.getProjectedConsumption();
+        hh.storage.gold = 1;
+        hh.storage.addResource("food", 2);
+        hh.storage.addResource("wood", 5);
+        let orders = shop(hh);
+        expect(orders.length).to.equal(1);
+        let order = orders[0];
+        expect(order.resourceType).to.equal("wood");
+        expect(order.amount).to.equal(0.25);
+        expect(order.quantity).to.equal(5);
+        expect(order.unitPrice).to.equal(0.05);
+        expect(order.orderType).to.be.false;
+        expect(hh.storage.getResource("wood")).to.equal(0);
+        // Cleanup
+        WILL_TURNER.health = 10;
+        WILL_TURNER.setHousehold(undefined);
+    });
+
     it('test buying and selling', () => {
         let hh = new Household([], WILL_TURNER, {x: 9, y: 6});
         WILL_TURNER.health = 49; // riskAcceptance: 50, safetyMargin: 2
@@ -168,8 +189,8 @@ describe('people:shop', () => {
         let buyOrder = orders[1];
         expect(buyOrder.resourceType).to.equal("wood");
         expect(buyOrder.amount).to.equal(0.5);
-        expect(buyOrder.quantity).to.equal(0.6);
-        expect(buyOrder.unitPrice).to.be.closeTo(0.83, 0.01);
+        expect(buyOrder.quantity).to.equal(4);
+        expect(buyOrder.unitPrice).to.equal(0.125);
         expect(buyOrder.orderType).to.be.true;
         expect(hh.storage.gold).to.equal(0.5);
         expect(hh.storage.getResource("food")).to.equal(2);
@@ -198,8 +219,8 @@ describe('people:shop', () => {
         let buyOrder = orders[1];
         expect(buyOrder.resourceType).to.equal("wood");
         expect(buyOrder.amount).to.equal(0.5);
-        expect(buyOrder.quantity).to.equal(0.6);
-        expect(buyOrder.unitPrice).to.be.closeTo(0.83, 0.01);
+        expect(buyOrder.quantity).to.equal(4);
+        expect(buyOrder.unitPrice).to.equal(0.125);
         expect(buyOrder.orderType).to.be.true;
         expect(hh.storage.gold).to.equal(0.5);
         expect(hh.storage.getResource("food")).to.equal(2);

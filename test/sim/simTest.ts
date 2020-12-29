@@ -94,6 +94,9 @@ describe('sim:simulation', () => {
                     expect(sim.people.has(a.id)).to.be.true;
                 });
             })
+            sim.people.forEach(p => {
+                expect(p.household).to.not.be.undefined;
+            });
         }
     });
 
