@@ -38,7 +38,7 @@ export const Fisher: WorkType = {
         return strength**0.6 * depthMultiplier;
     },
     changeFunc: changeFunc,
-    searchdist: 7,
+    searchdist: 8,
     workLocation: WorkLocation.Water,
     produceType: ResourceType.Food
 }

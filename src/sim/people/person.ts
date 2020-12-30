@@ -48,7 +48,19 @@ export class Person {
                 desiredConsumption[key] = val;
             }
         }
+        let medNeeds = this.getMedicineNeeds();
+        if (medNeeds > 0) {
+            desiredConsumption[ResourceType.Meds] = medNeeds;
+        }
         return desiredConsumption;
+    }
+
+    getMedicineNeeds(): number {
+        return this.health > 30
+                ? 0
+                : this.health < 20
+                ? 2
+                : 1;
     }
 
     consume(): void {
@@ -84,8 +96,15 @@ export class Person {
             sickChance += (this.age - 60) * 0.01;
         }
         let sickEffect = Math.random() < sickChance ? 20 : 0;
+        if (ResourceType.Meds in this.consumption) {
+            if (sickEffect) {
+                sickEffect -= this.consumption[ResourceType.Meds] * 5;
+            } else {
+                this.health += 3 * this.consumption[ResourceType.Meds];
+            }
+        }
         let youth = (60 - this.age)/10;
-        let overall  = youth - sickEffect - hungerEffect;
+        let overall = youth - sickEffect - hungerEffect;
         this.age += 1;
         this.health += overall;
         if (this.health > 100) {

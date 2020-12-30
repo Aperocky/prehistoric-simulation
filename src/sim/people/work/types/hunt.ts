@@ -36,6 +36,11 @@ function changeFunc(person: Person, square: Square): string {
             }
         }
     }
+    if (square.simInfo.people.length > 50) {
+        if (Math.random() < 0.25) {
+            return "MEDS";
+        }
+    }
     if (person.isHungry()) {
         if (square.simInfo.people.length > 20 && Math.random() > 0.2) {
             return "TRAD";

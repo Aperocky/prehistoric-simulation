@@ -36,10 +36,12 @@ import { Gatherer } from './types/hunt';
 import { Fisher } from './types/fish';
 import { Trader } from './types/merchant';
 import { Lumberjack } from './types/lumberjack';
+import { Doctor } from './types/doctor';
 
 export const WORK_TYPES: { [workType: string]: WorkType } = {
     HUNT: Gatherer,
     FISH: Fisher,
     TRAD: Trader,
     WOOD: Lumberjack,
+    MEDS: Doctor,
 }

@@ -62,7 +62,7 @@ describe('people:shop', () => {
         pirates.storage.gold = 8;
         pirates.storage.addResource("food", 2);
         let orders = shop(pirates);
-        expect(orders.length).to.equal(2);
+        expect(orders.length).to.equal(3);
         let firstOrder = orders[0];
         expect(firstOrder.resourceType).to.equal("food");
         expect(firstOrder.amount).to.equal(5);
@@ -75,7 +75,12 @@ describe('people:shop', () => {
         expect(secondOrder.quantity).to.equal(3.75);
         expect(secondOrder.unitPrice).to.equal(0.3);
         expect(secondOrder.orderType).to.be.true;
-        expect(pirates.storage.gold).to.equal(1.875);
+        let thirdOrder = orders[2];
+        expect(thirdOrder.resourceType).to.equal("medicine");
+        expect(thirdOrder.amount).to.equal(0.9375);
+        expect(thirdOrder.quantity).to.equal(5);
+        expect(thirdOrder.orderType).to.be.true;
+        expect(pirates.storage.gold).to.equal(0.9375);
         // Cleanup
         LIZ_SWANN.health = 10;
         WILL_TURNER.health = 10;
