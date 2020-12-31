@@ -3,7 +3,7 @@ import { argparse, KeyValue } from '../parser';
 import { Household } from '../../sim/people/household';
 import { Simulation } from '../../sim/sim';
 import { WORK_TYPES } from '../../sim/people/work/workTypes';
-import { roundTo, cmdprint, describeProduction } from '../util';
+import { roundTo, cmdprint, describeIncome } from '../util';
 
 const HELP = [
     "describe household information",
@@ -43,7 +43,7 @@ function describe(sim: Simulation, household: Household): string[] {
     } else {
         result.push(`Family of ${household.adults[0].heritage.surname}`);
     }
-    result.push(`@ x=${household.location.x} y=${household.location.y}`);
+    result.push(`location: ${cmdprint(`square x=${household.location.x} y=${household.location.y}`)}`);
     result.push('------- ADULTS -------');
     household.adults.forEach(p => {
         let workstr = WORK_TYPES[p.work.work].name;
@@ -69,9 +69,8 @@ function describe(sim: Simulation, household: Household): string[] {
         const [key, val] = entry;
         result.push(`${key}: desired: ${roundTo(val)}, actual: ${roundTo(val * household.percentSatisfied[key])}`);
     });
-    result.push('---- PRODUCTION ----');
     let fam = [].concat(...[household.adults, household.dependents]);
-    result.push(...describeProduction(fam));
+    result.push(...describeIncome(fam));
     result.push(...describeOrders(household));
     return result;
 }

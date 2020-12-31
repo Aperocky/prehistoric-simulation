@@ -2,7 +2,7 @@ import { Controller } from '../../controller';
 import { argparse, KeyValue } from '../parser';
 import { Household } from '../../sim/people/household';
 import { Simulation } from '../../sim/sim';
-import { describeWork } from '../util';
+import { describeWork, describePeople, describeIncome } from '../util';
 
 const HELP = [
     "describe simulation information",
@@ -20,27 +20,9 @@ export default function describeSimulation(controller: Controller, ...args: stri
 
 function describeSim(sim: Simulation): string[] {
     let result = [];
-    let totalAge = 0;
-    let totalHealth = 0;
-    let female = 0;
-    let single = 0;
-    sim.people.forEach(p => {
-        totalAge += p.age;
-        totalHealth += p.health;
-        female += p.heritage.gender ? 0 : 1;
-    });
-    sim.households.forEach(hh => {
-        single += hh.isSingle ? 1 : 0;
-    })
     result.push(`Simulation at year ${sim.turn}`);
-    result.push("------------------------");
-    result.push(`${sim.households.size} households`);
-    result.push(`${sim.people.size} people`);
-    result.push(`Average age: ${Math.floor(totalAge/sim.people.size * 100)/100}`);
-    result.push(`Average health: ${Math.floor(totalHealth/sim.people.size * 100)/100}`);
-    result.push(`Female: ${female} Male: ${sim.people.size - female}`);
-    result.push(`Single households: ${single}`);
-    result.push("--------- WORK ---------");
-    result = result.concat(describeWork(Array.from(sim.people.values())));
+    result.push(...describePeople(Array.from(sim.households.values()), Array.from(sim.people.values())));
+    result.push(...describeWork(Array.from(sim.people.values())));
+    result.push(...describeIncome(Array.from(sim.people.values())));
     return result;
 }

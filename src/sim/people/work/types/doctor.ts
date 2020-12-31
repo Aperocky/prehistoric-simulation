@@ -24,14 +24,12 @@ function strengthMod(person: Person): number {
     if (ResourceType.Wood in consumed) {
         woodMultiplier += consumed[ResourceType.Wood] * 2;
     }
-    return defaultAgeMod(person) * woodMultiplier * 4;
+    return defaultAgeMod(person) * woodMultiplier * 2;
 }
 
 
 function produceFunc(strength: number, square: Square): number {
-    let population = square.simInfo.people.length;
-    let popFactor = population ** 0.5 * 0.1;
-    return strength * popFactor;
+    return strength;
 }
 
 

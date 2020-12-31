@@ -6,20 +6,26 @@ import { DEFAULT_MAP_SIZE } from '../../constant/displayConstants';
 import { DIRECTIONS_DESCRIPTION } from '../../constant/mapConstants';
 import { locationToString } from '../../sim/util/location';
 import { WORK_TYPES } from '../../sim/people/work/workTypes';
-import { describeWork, roundTo } from '../util';
-import { describeProduction as describeIncome } from '../util';
+import { describeWork, roundTo, describePeople, createTable, householdsList } from '../util';
+import { describeIncome } from '../util';
+import { ResourceType } from '../../sim/people/properties/resourceTypes';
+
 
 const HELP = [
     "describe selected square",
     "x: x coordinate of the square",
     "y: y coordinate of the square",
-    "example$ square x=1 y=1"
+    "[--hh] show list of households",
+    "example$ square x=1 y=1",
+    "example$ square x=1 y=1 hh"
 ];
+
 
 export default function describeSquare(controller: Controller, ...args: string[]): string[] {
     let kvps = argparse(args);
     let xstr: string;
     let ystr: string;
+    let hh: boolean = false;
     if (kvps.length) {
         if (kvps[0].key == "help") {
             return HELP;
@@ -36,6 +42,9 @@ export default function describeSquare(controller: Controller, ...args: string[]
                     ystr = kv.value;
                 }
             }
+            if (kv.key == "hh" || kv.key == "households") {
+                hh = true;
+            }
         }
     }
     if (xstr === undefined || ystr === undefined) {
@@ -46,58 +55,59 @@ export default function describeSquare(controller: Controller, ...args: string[]
     if (x < 0 || y < 0 || x >= DEFAULT_MAP_SIZE || y >= DEFAULT_MAP_SIZE) {
         return ["x and y coordinates must be in map"];
     }
+    if (hh) {
+        return householdsList(controller.terrain[y][x].simInfo.households);
+    }
     return describe(controller, x, y);
 }
 
+
 function describe(controller: Controller, x: number, y: number): string[] {
     let square: Square = controller.terrain[y][x];
-    let coastStr: string = square.isCoast ? "Coastal " : "";
-    let result: string[] = [];
-    result.push(`----- SQUARE AT (${x}, ${y}) -----`);
-    result.push(`Terrain: ${coastStr}${TERRAIN_STR.get(square.terrain)}`);
-    result.push(`Altitude: ${square.altitude} m`);
-    result.push(`Precipitation: ${square.precip} mm`);
-    if (square.isRiver()) {
-        let rdesc = square.flowVolume < 10
-                ? "Creek"
-                : square.flowVolume < 20
-                ? "Stream" : "River";
-        result.push(`${rdesc} flows ${DIRECTIONS_DESCRIPTION.get(square.flowDirection)}`);
-    }
-    result.push(...describePopulation(controller, x, y))
-    result.push(...describeProduction(controller, x, y))
-    if (square.simInfo.people.length) {
-        result.push("------ INCOME ------");
+    let result = [];
+    result.push(...describeSquareItself(square));
+    if (square.simInfo.households.length) {
+        result.push(...describePeople(square.simInfo.households, square.simInfo.people));
+        result.push(...describeWork(square.simInfo.people));
         result.push(...describeIncome(square.simInfo.people));
     }
+    result.push(...describeProduction(controller, x, y))
     return result;
 }
 
-function describePopulation(controller: Controller, x: number, y: number): string[] {
-    let square = controller.terrain[y][x];
-    let result = [];
-    if (square.simInfo.households.length) {
-        result.push("------ PEOPLE ------");
-        result.push(`${square.simInfo.households.length} households are here`);
-        result.push(`${square.simInfo.people.length} persons live here`);
-        result.push(`Average Age: ${roundTo(getAge(square.simInfo))}`)
-        result.push(`Average Adult Health: ${roundTo(getHealth(square.simInfo))}`)
-        result.push("------- WORK -------");
-        result = result.concat(describeWork(square.simInfo.people));
+
+function describeSquareItself(square: Square): string[] {
+    let title = "SQUARE";
+    let header = ["ATTRIBUTE", "VALUE"];
+    let rows: string[][] = [];
+    rows.push(["LOCATION", `(${square.x}, ${square.y})`]);
+    rows.push(["ALTITUDE", roundTo(square.altitude).toString()]);
+    rows.push(["TERRAIN", TERRAIN_STR.get(square.terrain)]);
+    rows.push(["PRECIPITATION", `${roundTo(square.precip)} mm`]);
+    if (square.isRiver()) {
+        rows.push(["RIVER", DIRECTIONS_DESCRIPTION.get(square.flowDirection)]);
+        rows.push(["RIVER VOLUME", roundTo(square.flowVolume).toString()]);
     }
-    return result;
+    return createTable(title, header, rows);
 }
+
 
 function describeProduction(controller: Controller, x: number, y: number): string[] {
     let result = [];
     let squareProduction = controller.simulation.simProduction.board[y][x];
+    let rows: string[][] = [];
     Object.entries(squareProduction.productionRegistry).forEach(entry => {
         let [workType, produce] = entry;
         let workforce = Object.values(squareProduction.workRegistry[workType]).length;
         let workName = WORK_TYPES[workType].name;
         let produceType = WORK_TYPES[workType].produceType;
-        produce = Math.floor(produce * 100)/100;
         result.push(`${workforce} ${workName} produces ${produce} unit of ${produceType}`);
+        rows.push([workName, workforce.toString(), produceType, roundTo(produce).toString()]);
     });
-    return result;
+    let title = "PRODUCTION";
+    let header = ["JOB", "PEOPLE", "RESOURCE", "COUNT"]
+    if (rows.length) {
+        return createTable(title, header, rows);
+    }
+    return [];
 }
