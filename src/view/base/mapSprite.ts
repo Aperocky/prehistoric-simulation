@@ -41,7 +41,7 @@ export class MapSprite extends PIXI.Sprite {
         if (population == 0) {
             return this.getBaseColor();
         }
-        let populationAlpha = displayConstants.POPULATION_DENSITY_FACTOR * population;
+        let populationAlpha = displayConstants.POPULATION_DENSITY_FACTOR * population**0.5;
         populationAlpha = populationAlpha > displayConstants.POPULATION_DENSITY_ALPHA_MAX
                 ? displayConstants.POPULATION_DENSITY_ALPHA_MAX
                 : populationAlpha;

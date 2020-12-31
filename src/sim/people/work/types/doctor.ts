@@ -6,7 +6,7 @@ import { Person } from '../../person';
 
 function changeFunc(person: Person, square: Square): string {
     if (square.simInfo.people.length < 30) {
-        if (Math.random() < 0.05) {
+        if (Math.random() < 0.25) {
             if (square.isCoast) {
                 return "FISH";
             } else {
@@ -29,7 +29,9 @@ function strengthMod(person: Person): number {
 
 
 function produceFunc(strength: number, square: Square): number {
-    return strength;
+    let population = square.simInfo.people.length;
+    let popFactor = population ** 0.5 * 0.1;
+    return strength * popFactor;
 }
 
 

@@ -60,7 +60,8 @@ export class Square {
     isWater(): boolean {
         return this.flowDirection == 4
             && this.flowVolume > mapConstants.RIVER_THRESHOLD
-            || this.altitude < 0;
+            || this.altitude < 0
+            || this.flowVolume > 50;
     }
 
     private getRealHeight(rawHeight: number): number {

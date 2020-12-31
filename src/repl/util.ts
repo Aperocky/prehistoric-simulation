@@ -96,7 +96,7 @@ export function householdsList(households: Household[]): string[] {
     let result = [];
     let title = "HOUSEHOLDS";
     households.sort((ha, hb) => Math.max(...hb.adults.map(p => p.age)) - Math.max(...ha.adults.map(p => p.age)));
-    let header = ["INDEX", "SURNAME", "OLDEST", "ADULTS", "DEPENDENTS", "WEALTH"];
+    let header = ["INDEX", "SURNAME", "OLDEST", "MEMBERS", "WEALTH"];
     let rows: string[][] = [];
     let cmds: string[] = [];
     households.forEach((hh, i) => {
@@ -104,8 +104,7 @@ export function householdsList(households: Household[]): string[] {
             (i+1).toString(),
             hh.adults[0].heritage.surname,
             Math.max(...hh.adults.map(p => p.age)).toString(),
-            hh.adults.length.toString(),
-            hh.dependents.length.toString(),
+            (hh.adults.length + hh.dependents.length).toString(),
             roundTo(hh.storage.gold).toString()
         ]);
         cmds.push(`${i+1}: ${cmdprint(`hh --id=${hh.id}`)}`);
@@ -129,7 +128,7 @@ export function cmdprint(cmd) {
 export function createTable(title: string, header: string[], rows: string[][], width: number = 0): string[] {
     let result = [];
     let barPush = (bar, toper = false) => {
-        let ender = toper ? ' ' : '|';
+        let ender = toper ? '-' : '|';
         result.push(ender + bar + ender);
     };
     let varLengths: number[];
@@ -138,14 +137,13 @@ export function createTable(title: string, header: string[], rows: string[][], w
     } else {
         varLengths = getVariableLength(header, rows);
     }
-    let titleString = `\x1b[1;36;48;2;100;100;100mTABLE: ${title.toUpperCase()} \x1b[0;37m`;
     let fullLength = varLengths.reduce((sum, e) => sum + e, 0) + varLengths.length - 1;
-    let titleBar = titleString + '-'.repeat(fullLength - title.length - 8);
+    let titleBar = `\x1b[1;36;48;2;100;100;100m   ${title.toUpperCase()}${' '.repeat(fullLength - title.length - 3)}\x1b[0;37m`;
     let headerBar = header.map((e, i) => createElement(e, varLengths[i])).join('|');
     let breakBar = header.map((e, i) => '-'.repeat(varLengths[i])).join('|');
     let rowBars = rows.map(row => row.map((e, i) => createElement(e, varLengths[i])).join('|'));
     let finalBar = '-'.repeat(fullLength);
-    barPush(titleBar, true);
+    barPush(titleBar);
     barPush(headerBar);
     barPush(breakBar);
     rowBars.forEach(bar => barPush(bar));

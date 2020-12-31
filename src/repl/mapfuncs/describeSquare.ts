@@ -81,7 +81,7 @@ function describeSquareItself(square: Square): string[] {
     let header = ["ATTRIBUTE", "VALUE"];
     let rows: string[][] = [];
     rows.push(["LOCATION", `(${square.x}, ${square.y})`]);
-    rows.push(["ALTITUDE", roundTo(square.altitude).toString()]);
+    rows.push(["ALTITUDE", `${roundTo(square.altitude)} m`]);
     rows.push(["TERRAIN", TERRAIN_STR.get(square.terrain)]);
     rows.push(["PRECIPITATION", `${roundTo(square.precip)} mm`]);
     if (square.isRiver()) {

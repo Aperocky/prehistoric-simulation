@@ -33,7 +33,7 @@ export const Trader: WorkType = {
         return defaultAgeMod(person) * ageMultiplier;
     },
     produceFunc: (strength, square) => {
-        return strength ** 1.25;
+        return strength ** 1.4;
     },
     changeFunc: changeFunc,
     searchdist: 0,

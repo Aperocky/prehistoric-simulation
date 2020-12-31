@@ -1,7 +1,7 @@
 import { Controller } from '../../controller';
 import { argparse, KeyValue } from '../parser';
 import { SimMarket, MarketReport } from '../../sim/market/simMarket';
-import { roundTo } from '../util';
+import { roundTo, createTable } from '../util';
 
 const HELP = [
     "describe current market",
@@ -18,19 +18,69 @@ export default function describeMarket(controller: Controller, ...args: string[]
 }
 
 function describe(market: SimMarket): string[] {
-    let result = ["MARKET REPORT:"];
+    let result = [];
+    result.push(...orderTable(market));
+    result.push(...marketTable(market));
+    return result;
+}
+
+function orderTable(market: SimMarket): string[] {
+    let title = "ORDERS";
+    let header = ["RESOURCE", "BUYS", "DELIVERED", "SELL", "SOLD"];
+    let rows: string[][] = [];
+    let totalBuyOrders = 0;
+    let totalSellOrders = 0;
+    let totalBuyOrderDelivered = 0;
+    let totalSellOrderDelivered = 0;
+    market.report.forEach((report, resourceType) => {
+        rows.push([
+            resourceType.toUpperCase(),
+            report.buyOrders.toString(),
+            report.buyOrderDelivered.toString(),
+            report.sellOrders.toString(),
+            report.sellOrderDelivered.toString(),
+        ]);
+        totalBuyOrders += report.buyOrders; 
+        totalSellOrders += report.sellOrders; 
+        totalBuyOrderDelivered += report.buyOrderDelivered; 
+        totalSellOrderDelivered += report.sellOrderDelivered; 
+    });
+    rows.push([
+        "TOTAL",
+        totalBuyOrders.toString(),
+        totalBuyOrderDelivered.toString(),
+        totalSellOrders.toString(),
+        totalSellOrderDelivered.toString()
+    ]);
+    return createTable(title, header, rows);
+}
+
+function marketTable(market: SimMarket): string[] {
+    let title = "MARKET";
+    let header = ["RESOURCE", "QUANTITY", "PRICE", "TOTAL"];
+    let rows: string[][] = [];
+    let totalQuantity = 0;
+    let totalVolume = 0;
     market.report.forEach((report, resourceType) => {
         let decimals = report.settlePrice < 0.001
                 ? 5
                 : report.settlePrice < 0.1
                 ? 3
                 : 2;
-        result.push(`------- ${resourceType.toUpperCase()} ------- `);
-        result.push(`Orders: BUY: ${report.buyOrders}, SELL: ${report.sellOrders}`);
-        result.push(`Delivered: BUY: ${report.buyOrderDelivered}, SELL: ${report.sellOrderDelivered}`);
-        result.push(`Market Volume: ${roundTo(report.buyVolume)}`);
-        result.push(`Current Price: ${roundTo(report.settlePrice, decimals)}`);
-        result.push(`Total Market: ${roundTo(report.buyVolume * report.settlePrice, decimals)}`);
+        rows.push([
+            resourceType.toUpperCase(),
+            roundTo(report.buyVolume).toString(),
+            roundTo(report.settlePrice, decimals).toString(),
+            roundTo(report.buyVolume * report.settlePrice, decimals).toString()
+        ]);
+        totalQuantity += report.buyVolume;
+        totalVolume += report.buyVolume * report.settlePrice;
     });
-    return result;
+    rows.push([
+        "TOTAL",
+        roundTo(totalQuantity).toString(),
+        "-",
+        roundTo(totalVolume).toString()
+    ]);
+    return createTable(title, header, rows);
 }
