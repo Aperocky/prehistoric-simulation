@@ -15,6 +15,9 @@ function changeFunc(person: Person, square: Square): string {
         if (square.simInfo.people.length > 40 && Math.random() > 0.5) {
             return "TRAD";
         }
+        if (Math.random() < 0.2) {
+            return "HUNT";
+        }
     }
     return "FISH";
 }

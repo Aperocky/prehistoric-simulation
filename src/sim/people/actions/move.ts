@@ -4,11 +4,12 @@ import { ResourceType } from '../properties/resourceTypes';
 import { Square } from '../../../map/square';
 import { SAIL_CHANCE } from '../../../constant/simConstants';
 
+
 export default function move(household: Household, terrain: Square[][]): void {
     // If hungry in current location, move.
     let foodSecurity = household.percentSatisfied[ResourceType.Food];
     let distance = 0;
-    if (Math.random() > foodSecurity) {
+    if (Math.random() > foodSecurity + 0.1) {
         distance = household.dependents.length ? 8 : 10;
         if (sail(household, terrain)) {
             return;
@@ -21,6 +22,7 @@ export default function move(household: Household, terrain: Square[][]): void {
         household.location = randomWalk(household.location, terrain, distance);
     }
 }
+
 
 function sail(household: Household, terrain: Square[][]): boolean {
     let loc = household.location;

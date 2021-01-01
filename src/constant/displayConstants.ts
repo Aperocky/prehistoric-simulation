@@ -33,7 +33,7 @@ export type ColorScale = {
     steps: number;
 }
 
-export const BASE_COLOR_MAP: Map<number, number[]> = new Map(); 
+export const BASE_COLOR_MAP: Map<number, number[]> = new Map();
 BASE_COLOR_MAP.set(1, WATER_COLOR);
 BASE_COLOR_MAP.set(2, GRASS_COLOR);
 BASE_COLOR_MAP.set(3, FOREST_COLOR);

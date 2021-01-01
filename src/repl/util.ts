@@ -4,6 +4,9 @@ import { ResourceType } from '../sim/people/properties/resourceTypes';
 import { WORK_TYPES } from '../sim/people/work/workTypes';
 
 
+export const HELP_COLUMNS = ["COMMAND", "ALIAS", "EXAMPLE", "USAGE"];
+
+
 export function describePeople(households: Household[], people: Person[]): string[] {
     let result = [];
     let totalWealth = households.reduce((sum, hh) => sum + hh.storage.gold, 0);
@@ -138,7 +141,7 @@ export function createTable(title: string, header: string[], rows: string[][], w
         varLengths = getVariableLength(header, rows);
     }
     let fullLength = varLengths.reduce((sum, e) => sum + e, 0) + varLengths.length - 1;
-    let titleBar = `\x1b[1;36;48;2;100;100;100m   ${title.toUpperCase()}${' '.repeat(fullLength - title.length - 3)}\x1b[0;37m`;
+    let titleBar = `\x1b[1;36;48;2;100;100;100m   ${title}${' '.repeat(fullLength - title.length - 3)}\x1b[0;37m`;
     let headerBar = header.map((e, i) => createElement(e, varLengths[i])).join('|');
     let breakBar = header.map((e, i) => '-'.repeat(varLengths[i])).join('|');
     let rowBars = rows.map(row => row.map((e, i) => createElement(e, varLengths[i])).join('|'));

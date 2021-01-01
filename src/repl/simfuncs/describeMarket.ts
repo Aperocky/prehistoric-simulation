@@ -40,10 +40,10 @@ function orderTable(market: SimMarket): string[] {
             report.sellOrders.toString(),
             report.sellOrderDelivered.toString(),
         ]);
-        totalBuyOrders += report.buyOrders; 
-        totalSellOrders += report.sellOrders; 
-        totalBuyOrderDelivered += report.buyOrderDelivered; 
-        totalSellOrderDelivered += report.sellOrderDelivered; 
+        totalBuyOrders += report.buyOrders;
+        totalSellOrders += report.sellOrders;
+        totalBuyOrderDelivered += report.buyOrderDelivered;
+        totalSellOrderDelivered += report.sellOrderDelivered;
     });
     rows.push([
         "TOTAL",

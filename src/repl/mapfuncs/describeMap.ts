@@ -1,6 +1,7 @@
 import { Controller } from '../../controller';
 import { argparse, KeyValue } from '../parser';
 import { Square, Terrain, TERRAIN_STR } from '../../map/square';
+import { createTable, HELP_COLUMNS } from '../util';
 
 const HELP = [
     "describe the current map"
@@ -29,8 +30,11 @@ function readTerrainTypes(terrainMap: Square[][]): string[] {
             mapCounter.set(square.terrain, 1);
         }
     })
+    let title = "TERRAIN";
+    let header = ["TERRAIN", "COUNT"];
+    let rows: string[][] = [];
     mapCounter.forEach((val, key) => {
-        result.push(`Terrain: ${TERRAIN_STR.get(key)}, Count: ${val}`);
+        rows.push([TERRAIN_STR.get(key), val.toString()]);
     });
-    return result;
+    return createTable(title, header, rows);
 }

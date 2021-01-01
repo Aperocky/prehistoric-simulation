@@ -1,6 +1,7 @@
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { Controller } from '../controller';
+import { createTable } from '../repl/util';
 import processor from '../repl/processor';
 
 const TERMINAL_ELEMENT_ID = "console";
@@ -14,6 +15,16 @@ const XTERM_PARAMS = {
     }
 };
 
+const HELP_DESC = [
+    ["help", "more detailed help, more commands available"],
+    ["run", "go to next turn"],
+    ["run 10", "run 10 turns"],
+    ["sim", "describe current simulation"],
+    ["mode", "change display mode"],
+    ["market", "describe current market"],
+    ["click", "map is interactive"]
+];
+const HELP_TABLE = createTable("HELP", ["COMMAND", "EFFECT"], HELP_DESC);
 
 // A terminal to control the simulation
 export class ReplTerminal {
@@ -64,8 +75,10 @@ export class ReplTerminal {
         this.pointer = 0;
         this.history = [];
         let term = this.terminal;
-        term.write("Welcome to prehistoric-involution!" + CARRIAGE_RETURN);
-        term.write("Type 'help' for help");
+        term.write("Welcome to prehistoric simulation");
+        HELP_TABLE.forEach(str => {
+            term.write(CARRIAGE_RETURN + str);
+        })
         this.execute();
         term.onKey((event) => {
             let key = event.key;
