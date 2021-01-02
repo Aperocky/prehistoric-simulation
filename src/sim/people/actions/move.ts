@@ -20,6 +20,9 @@ export default function move(household: Household, terrain: Square[][]): void {
     }
     if (distance) {
         household.location = randomWalk(household.location, terrain, distance);
+        household.stay = 0;
+    } else {
+        household.stay++;
     }
 }
 

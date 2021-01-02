@@ -78,7 +78,7 @@ describe('people:shop', () => {
         let thirdOrder = orders[2];
         expect(thirdOrder.resourceType).to.equal("medicine");
         expect(thirdOrder.amount).to.equal(0.9375);
-        expect(thirdOrder.quantity).to.equal(5);
+        expect(thirdOrder.quantity).to.equal(10);
         expect(thirdOrder.orderType).to.be.true;
         expect(pirates.storage.gold).to.equal(0.9375);
         // Cleanup

@@ -68,6 +68,9 @@ describe('people:household', () => {
         expect(TEST_SIM.terrain[1][1].isCoast).to.be.true;
         for (let i = 0; i < 100; i++) {
             house.changeWork(TEST_SIM);
+            if (house.adults[0].work.work == "FISH") {
+                break;
+            }
         }
         expect(WILL_TURNER.work.work).to.equal("FISH");
         // cleanup

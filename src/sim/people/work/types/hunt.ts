@@ -37,7 +37,7 @@ function changeFunc(person: Person, square: Square): string {
         }
     }
     if (square.simInfo.people.length > 50) {
-        if (Math.random() < 0.25) {
+        if (Math.random() < 0.1) {
             return "MEDS";
         }
     }

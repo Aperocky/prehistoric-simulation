@@ -99,16 +99,18 @@ export function householdsList(households: Household[]): string[] {
     let result = [];
     let title = "HOUSEHOLDS";
     households.sort((ha, hb) => Math.max(...hb.adults.map(p => p.age)) - Math.max(...ha.adults.map(p => p.age)));
-    let header = ["INDEX", "SURNAME", "OLDEST", "MEMBERS", "WEALTH"];
+    let header = ["INDEX", "SURNAME", "OLDEST", "MEMBERS", "WEALTH", "STAY"];
     let rows: string[][] = [];
     let cmds: string[] = [];
     households.forEach((hh, i) => {
+        let stay = hh.stay > 10 ? "LOCAL" : hh.stay.toString();
         rows.push([
             (i+1).toString(),
             hh.adults[0].heritage.surname,
             Math.max(...hh.adults.map(p => p.age)).toString(),
             (hh.adults.length + hh.dependents.length).toString(),
-            roundTo(hh.storage.gold).toString()
+            roundTo(hh.storage.gold).toString(),
+            stay
         ]);
         cmds.push(`${i+1}: ${cmdprint(`hh --id=${hh.id}`)}`);
     });
@@ -141,7 +143,7 @@ export function createTable(title: string, header: string[], rows: string[][], w
         varLengths = getVariableLength(header, rows);
     }
     let fullLength = varLengths.reduce((sum, e) => sum + e, 0) + varLengths.length - 1;
-    let titleBar = `\x1b[1;36;48;2;100;100;100m   ${title}${' '.repeat(fullLength - title.length - 3)}\x1b[0;37m`;
+    let titleBar = `\x1b[1;97;48;2;100;120;120m   ${title}${' '.repeat(fullLength - title.length - 3)}\x1b[0;37m`;
     let headerBar = header.map((e, i) => createElement(e, varLengths[i])).join('|');
     let breakBar = header.map((e, i) => '-'.repeat(varLengths[i])).join('|');
     let rowBars = rows.map(row => row.map((e, i) => createElement(e, varLengths[i])).join('|'));

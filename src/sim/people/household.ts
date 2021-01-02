@@ -27,6 +27,9 @@ export class Household {
     // Market orders
     orders: Order[];
 
+    // stay time in one location
+    stay: number;
+
     constructor(households: Household[], person?: Person, location?: Location) {
         this.id = uuid();
         this.storage = new Storage();
@@ -51,6 +54,7 @@ export class Household {
         this.projectedConsumption = {};
         this.percentSatisfied = {};
         this.orders = [];
+        this.stay = 0;
     }
 
     getProjectedConsumption(): void {

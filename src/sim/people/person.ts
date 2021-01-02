@@ -56,10 +56,10 @@ export class Person {
     }
 
     getMedicineNeeds(): number {
-        return this.health > 30
+        return this.health > 40
                 ? 0
                 : this.health < 20
-                ? 2
+                ? 4
                 : 1;
     }
 

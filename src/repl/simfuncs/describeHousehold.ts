@@ -1,15 +1,17 @@
 import { Controller } from '../../controller';
 import { argparse, KeyValue } from '../parser';
 import { Household } from '../../sim/people/household';
+import { Person } from '../../sim/people/person';
 import { Simulation } from '../../sim/sim';
 import { WORK_TYPES } from '../../sim/people/work/workTypes';
-import { roundTo, cmdprint, describeIncome } from '../util';
+import { roundTo, cmdprint, describeIncome, createTable } from '../util';
 
 const HELP = [
     "describe household information",
     "hh id=HOUSEHOLD_ID",
     "hover over household to activate",
 ];
+
 
 export default function describeHousehold(controller: Controller, ...args: string[]): string[] {
     let kvps = argparse(args);
@@ -32,6 +34,7 @@ export default function describeHousehold(controller: Controller, ...args: strin
     }
 }
 
+
 function describe(sim: Simulation, household: Household): string[] {
     let result = [];
     if (household.isSingle) {
@@ -44,50 +47,81 @@ function describe(sim: Simulation, household: Household): string[] {
         result.push(`Family of ${household.adults[0].heritage.surname}`);
     }
     result.push(`location: ${cmdprint(`square x=${household.location.x} y=${household.location.y}`)}`);
-    result.push('------- ADULTS -------');
-    household.adults.forEach(p => {
-        let workstr = WORK_TYPES[p.work.work].name;
-        result.push(`${workstr} ${p.getName()}, age: ${p.age}, health: ${Math.floor(p.health)}`);
-        result.push(cmdprint(`pp --id=${p.id}`));
-    });
-    if (household.dependents.length) {
-        result.push('------ CHILDREN ------');
-        household.dependents.forEach(p => {
-            let workstr = p.age > 10 ? WORK_TYPES[p.work.work].name : "Child";
-            result.push(`${workstr} ${p.getName()}, age: ${p.age}, health: ${Math.floor(p.health)}`);
-            result.push(cmdprint(`pp --id=${p.id}`));
-        });
-    }
-    result.push('------ STORAGE ------');
-    Object.entries(household.storage.storage).forEach(entry => {
-        const [key, val] = entry;
-        result.push(`${key}: ${roundTo(val)}`);
-    });
-    result.push(`GOLD: ${roundTo(household.storage.gold)}`);
-    result.push('---- CONSUMPTION ----');
-    Object.entries(household.projectedConsumption).forEach(entry => {
-        const [key, val] = entry;
-        result.push(`${key}: desired: ${roundTo(val)}, actual: ${roundTo(val * household.percentSatisfied[key])}`);
-    });
     let fam = [].concat(...[household.adults, household.dependents]);
+    result.push(...describeFamilyMember(fam));
+    result.push(...describeStorage(household));
+    result.push(...describeConsumption(household));
     result.push(...describeIncome(fam));
     result.push(...describeOrders(household));
     return result;
 }
 
+
+function describeFamilyMember(members: Person[]): string[] {
+    let title = "MEMBERS"
+    let header = ["INDEX", "NAME", "GENDER", "AGE", "HEALTH", "WORK"]
+    let rows: string[][] = [];
+    let cmds = [];
+    members.forEach((p, i) => {
+        rows.push([
+            (i + 1).toString(),
+            p.getName(),
+            p.heritage.gender == 0 ? "FEMALE" : "MALE",
+            p.age.toString(),
+            roundTo(p.health, 0).toString(),
+            p.age > 10 ? WORK_TYPES[p.work.work].name : "Child",
+        ]);
+        cmds.push(`${i}: ${cmdprint(`pp --id=${p.id}`)}`);
+    });
+    return createTable(title, header, rows).concat(cmds);
+}
+
+
+function describeStorage(hh: Household): string[] {
+    let title = "STORAGE"
+    let header = ["RESOURCE", "QUANTITY"]
+    let rows: string[][] = [];
+    Object.entries(hh.storage.storage).forEach(entry => {
+        const [key, val] = entry;
+        rows.push([key.toUpperCase().toString(), roundTo(val).toString()]);
+    });
+    rows.push(["GOLD", roundTo(hh.storage.gold).toString()]);
+    return createTable(title, header, rows);
+}
+
+
+function describeConsumption(hh: Household): string[] {
+    let title = "CONSUMPTION"
+    let header = ["RESOURCE", "DESIRED", "ACTUAL"]
+    let rows: string[][] = [];
+    Object.entries(hh.projectedConsumption).forEach(entry => {
+        const [key, val] = entry;
+        rows.push([
+            key.toUpperCase(),
+            roundTo(val).toString(),
+            roundTo(val * hh.percentSatisfied[key]).toString()
+        ]);
+    });
+    return createTable(title, header, rows);
+}
+
+
 function describeOrders(hh: Household): string[] {
+    let title = "ORDERS"
+    let header = ["TYPE", "RESOURCE", "QUANTITY", "OFFER", "DELIVERD", "ACTUAL"]
+    let rows: string[][] = [];
     if (hh.orders.length) {
-        let result = [];
         hh.orders.forEach(order => {
-            let orderType = order.orderType ? "-BUY" : "SELL";
-            let priceStr = order.delivered
-                    ? `FINAL PRICE: ${roundTo(order.settlePrice * order.quantity, 4)}`
-                    : "";
-            result.push(`---${orderType} ORDER: ${order.resourceType.toUpperCase()} ----`);
-            result.push(`QUANTITY: ${roundTo(order.quantity)}  OFFER: ${roundTo(order.amount, 4)}`)
-            result.push(`DELIVERED: ${order.delivered} ${priceStr}`);
+            rows.push([
+                order.orderType ? "BUY": "SELL",
+                order.resourceType.toUpperCase(),
+                roundTo(order.quantity).toString(),
+                roundTo(order.amount, 4).toString(),
+                order.delivered.toString(),
+                order.delivered ? `${roundTo(order.settlePrice * order.quantity, 4)}` : "-"
+            ]);
         });
-        return result;
+        return createTable(title, header, rows);
     }
     return [];
 }
