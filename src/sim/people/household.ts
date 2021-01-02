@@ -122,6 +122,7 @@ export class Household {
             baby.setHousehold(this);
             man.heritage.children.push(baby.id);
             woman.heritage.children.push(baby.id);
+            baby.work.inheritWork(man, woman);
             return baby;
         }
         return null;
@@ -172,7 +173,12 @@ export class Household {
     populateSquareInfo(sim: Simulation): void {
         let square = sim.terrain[this.location.y][this.location.x];
         square.simInfo.households.push(this);
-        this.allDo(p => square.simInfo.people.push(p));
+        this.allDo(p => {
+            square.simInfo.people.push(p);
+            if (p.work.work == "FARM") {
+                square.simInfo.farmerCount++;
+            }
+        });
     }
 
     private mortality(sim: Simulation): void {

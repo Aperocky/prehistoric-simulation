@@ -14,9 +14,14 @@ export default function move(household: Household, terrain: Square[][]): void {
         if (sail(household, terrain)) {
             return;
         }
-    } else if (household.isSingle && household.adults[0].work.work == "HUNT") {
-        // Hunter spread
-        distance = 7;
+    } else if (household.isSingle) {
+        if (household.adults[0].work.work == "HUNT") {
+            // Hunter spread
+            distance = 9;
+        } else if (household.adults[0].work.work == "FARM") {
+            // Farm spread
+            distance = 1;
+        }
     }
     if (distance) {
         household.location = randomWalk(household.location, terrain, distance);

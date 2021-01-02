@@ -8,6 +8,7 @@ export default function populateSquareInfo(sim: Simulation): void {
             let square = sim.terrain[y][x];
             square.simInfo.households = [];
             square.simInfo.people = [];
+            square.simInfo.farmerCount = 0;
         }
     }
     sim.households.forEach(hh => hh.populateSquareInfo(sim));

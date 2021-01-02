@@ -32,11 +32,13 @@ export function defaultAgeMod(person: Person): number {
     return 1;
 }
 
-import { Gatherer } from './types/hunt';
-import { Fisher } from './types/fish';
+import { Gatherer } from './types/hunter';
+import { Fisher } from './types/fisher';
 import { Trader } from './types/merchant';
 import { Lumberjack } from './types/lumberjack';
 import { Doctor } from './types/doctor';
+import { Farmer } from './types/farmer';
+import { Smith } from './types/smith';
 
 export const WORK_TYPES: { [workType: string]: WorkType } = {
     HUNT: Gatherer,
@@ -44,4 +46,6 @@ export const WORK_TYPES: { [workType: string]: WorkType } = {
     TRAD: Trader,
     WOOD: Lumberjack,
     MEDS: Doctor,
+    FARM: Farmer,
+    TOOL: Smith,
 }

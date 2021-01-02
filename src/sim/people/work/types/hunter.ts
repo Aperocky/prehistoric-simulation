@@ -24,28 +24,33 @@ function gathererTerrainCapacity(square: Square): number[] {
     }
 }
 
+
 function changeFunc(person: Person, square: Square): string {
+    let population = square.simInfo.people.length;
     if (square.isCoast) {
         if (person.isHungry()) {
             if (Math.random() < 0.6) {
                 return "FISH";
             }
         } else {
-            if (Math.random() < 0.2) {
+            if (Math.random() < 0.1) {
                 return "FISH";
             }
         }
     }
-    if (square.simInfo.people.length > 50) {
+    if (population > 50) {
         if (Math.random() < 0.1) {
             return "MEDS";
         }
+        if (Math.random() < 0.1) {
+            return "TOOL";
+        }
     }
     if (person.isHungry()) {
-        if (square.simInfo.people.length > 20 && Math.random() > 0.2) {
+        if (population > 30 && Math.random() > 0.2) {
             return "TRAD";
         }
-        if (square.simInfo.people.length > 40 && Math.random() > 0.5) {
+        if (population > 50 && Math.random() > 0.5) {
             return "TRAD";
         }
         if (square.terrain == 3 || square.terrain == 7) {
@@ -54,8 +59,34 @@ function changeFunc(person: Person, square: Square): string {
             }
         }
     }
+    if (person.household.stay > 10 && population < 25) {
+        if (Math.random() < 0.05) {
+            return "FARM";
+        }
+    }
+    if (square.terrain == 3 && Math.random() < 0.1) {
+        return "WOOD";
+    }
     return "HUNT";
 }
+
+
+function produceFunc(strength: number, square: Square): number {
+    // Farmers don't like nomads
+    let farmerCount = square.simInfo.farmerCount;
+    let farmFactor = 1;
+    if (farmerCount > 0) {
+        farmFactor -= farmerCount * 0.2;
+        farmFactor = farmFactor < 0.1 ? 0.1 : farmFactor;
+    }
+    let capacity: number[] = gathererTerrainCapacity(square);
+    let produce = strength * capacity[0] * farmFactor;
+    if (produce > capacity[1]) {
+        return capacity[1];
+    }
+    return produce;
+}
+
 
 export const Gatherer: WorkType = {
     name: "Gatherer",
@@ -63,14 +94,7 @@ export const Gatherer: WorkType = {
     strengthMod: (person) => {
         return defaultAgeMod(person);
     },
-    produceFunc: (strength, square) => {
-        let capacity: number[] = gathererTerrainCapacity(square);
-        let produce = strength * capacity[0];
-        if (produce > capacity[1]) {
-            return capacity[1];
-        }
-        return produce;
-    },
+    produceFunc: produceFunc,
     changeFunc: changeFunc,
     searchdist: 4,
     workLocation: WorkLocation.Land,

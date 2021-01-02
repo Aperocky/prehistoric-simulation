@@ -100,4 +100,15 @@ export class Work {
     getDesiredWorkConsumption(): { [resourceType: string]: number } {
         return WORK_TYPES[this.work].consume;
     }
+
+    inheritWork(father: Person, mother: Person): void {
+        if (father.work.work == mother.work.work) {
+            this.work = mother.work.work;
+        } else if (father.work.work == "FARM" && mother.work.work == "HUNT"
+                || father.work.work == "HUNT" && mother.work.work == "FARM") {
+            this.work = "FARM";
+        } else {
+            this.work = "HUNT";
+        }
+    }
 }

@@ -4,15 +4,15 @@ import { ResourceType } from '../../properties/resourceTypes';
 import { Person } from '../../person';
 
 
-function gathererTerrainCapacity(square: Square): number[] {
+function woodTerrainCapacity(square: Square): number[] {
     // individual and cap
     switch (square.terrain) {
         case 2: // Grass
-            return [1, 2];
+            return [2, 4];
         case 3: // Forest
-            return [2, 10];
+            return [5, 30];
         case 7: // Woods
-            return [3, 6];
+            return [4, 12];
         default:
             return [0, 0];
     }
@@ -32,14 +32,22 @@ function changeFunc(person: Person, square: Square): string {
 }
 
 
+function strengthMod(person: Person): number {
+    let toolMultiplier = 1
+    let consumed = person.work.workConsumption;
+    if (ResourceType.Tool in consumed) {
+        toolMultiplier += consumed[ResourceType.Tool] * 2;
+    }
+    return defaultAgeMod(person) * toolMultiplier;
+}
+
+
 export const Lumberjack: WorkType = {
     name: "Lumberjack",
-    consume: {},
-    strengthMod: (person) => {
-        return defaultAgeMod(person);
-    },
+    consume: {"tool": 2},
+    strengthMod: strengthMod,
     produceFunc: (strength, square) => {
-        let capacity: number[] = gathererTerrainCapacity(square);
+        let capacity: number[] = woodTerrainCapacity(square);
         let produce = strength * capacity[0];
         if (produce > capacity[1]) {
             return capacity[1];

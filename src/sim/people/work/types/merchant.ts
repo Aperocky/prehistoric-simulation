@@ -13,7 +13,7 @@ function changeFunc(person: Person, square: Square): string {
             return "HUNT";
         }
     }
-    if (square.simInfo.people.length < 20 && Math.random() > 0.8) {
+    if (square.simInfo.people.length < 30 && Math.random() > 0.8) {
         // Cities only
         if (square.isCoast) {
             return "FISH";

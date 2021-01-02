@@ -58,11 +58,11 @@ export function describeWork(people: Person[]): string[] {
             if (key == "child") {
                 children = value;
             } else {
-                rows.push([key.toUpperCase(), value.toString()]);
+                rows.push([key, value.toString()]);
             }
         });
     if (children) {
-        rows.push(["CHILDREN", children.toString()]);
+        rows.push(["Child", children.toString()]);
     }
     let title = "WORK";
     let header = ["TYPE", "COUNT"];

@@ -135,6 +135,50 @@ describe('people:household', () => {
         WILL_TURNER.setHousehold(undefined);
     });
 
+    it('test work inheritance', () => {
+        let lizhouse = new Household([], LIZ_SWANN, {x: 6, y: 9});
+        let willhouse = new Household([], WILL_TURNER, {x: 9, y: 6});
+        let pirates = new Household([willhouse, lizhouse]);
+        pirates.percentSatisfied["food"] = 1;
+        LIZ_SWANN.health = 100;
+        LIZ_SWANN.work.work = "FISH";
+        WILL_TURNER.work.work = "FISH";
+        expect(pirates.birthChance(LIZ_SWANN)).to.be.gt(0);
+        while (true) {
+            let baby = pirates.birth();
+            if (baby != null) {
+               expect(baby.work.work).to.equal("FISH");
+               break;
+            }
+        }
+        LIZ_SWANN.work.work = "HUNT";
+        WILL_TURNER.work.work = "FARM";
+        while (true) {
+            let baby = pirates.birth();
+            if (baby != null) {
+               expect(baby.work.work).to.equal("FARM");
+               break;
+            }
+        }
+        LIZ_SWANN.work.work = "FISH";
+        WILL_TURNER.work.work = "FARM";
+        while (true) {
+            let baby = pirates.birth();
+            if (baby != null) {
+               expect(baby.work.work).to.equal("HUNT");
+               break;
+            }
+        }
+        // cleanup
+        LIZ_SWANN.heritage.children = [];
+        WILL_TURNER.heritage.children = [];
+        LIZ_SWANN.work.work = "HUNT";
+        WILL_TURNER.work.work = "HUNT";
+        LIZ_SWANN.health = 10;
+        LIZ_SWANN.setHousehold(undefined);
+        WILL_TURNER.setHousehold(undefined);
+    });
+
     it('test mortality of single household', () => {
         let sim = getSimulationOnTerrain();
         sim.simProduction.globalWorkIteration(sim.people);
