@@ -95,6 +95,29 @@ export function describeIncome(people: Person[]): string[] {
 }
 
 
+export function describeStorage(households: Household[]): string[] {
+    let title = "STORAGE"
+    let header = ["RESOURCE", "QUANTITY"]
+    let rows: string[][] = [];
+    let quantityMap: {[resource: string]: number} = {};
+    households.forEach(hh => {
+        Object.entries(hh.storage.storage).forEach(entry => {
+            const [key, val] = entry;
+            if (key in quantityMap) {
+                quantityMap[key] += val;
+            } else {
+                quantityMap[key] = val;
+            }
+        });
+    });
+    Object.entries(quantityMap).forEach(entry => {
+        const [key, val] = entry;
+        rows.push([key.toUpperCase().toString(), roundTo(val).toString()]);
+    });
+    return createTable(title, header, rows);
+}
+
+
 export function householdsList(households: Household[]): string[] {
     let result = [];
     let title = "HOUSEHOLDS";

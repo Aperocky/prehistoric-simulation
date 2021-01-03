@@ -36,7 +36,12 @@ function changeFunc(person: Person, square: Square): string {
 
 function produceFunc(strength: number, square: Square): number {
     let tradingBlock = square.simInfo.traderCount;
-    return strength * (tradingBlock ** 0.3);
+    let tradingBoost = 1;
+    if (tradingBlock) {
+        tradingBoost = tradingBlock ** 0.3
+        tradingBoost = tradingBoost > 4 ? 4 : tradingBoost;
+    }
+    return strength * tradingBoost;
 }
 
 

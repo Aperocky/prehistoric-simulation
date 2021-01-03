@@ -35,12 +35,7 @@ function strengthMod(person: Person): number {
 
 
 function produceFunc(strength: number, square: Square): number {
-    let population = square.simInfo.people.length;
-    let popFactor = 1;
-    if (population > 50) {
-        let popFactor = (population/50) ** 0.2;
-    }
-    return strength * popFactor;
+    return strength;
 }
 
 

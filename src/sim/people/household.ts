@@ -143,7 +143,6 @@ export class Household {
         return (0.6 - ageEffect - foodEffect) * healthEffect;
     }
 
-
     runHealth(sim: Simulation): void {
         let terrain = getTerrainFromLocation(sim.terrain, this.location);
         let sickProbability = SICK_PROBABILITY.get(terrain);

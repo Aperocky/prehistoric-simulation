@@ -49,9 +49,20 @@ function changeFunc(person: Person, square: Square): string {
             return "SERV";
         }
     }
-    if (person.household.stay > 10 && population < 25) {
-        if (Math.random() < 0.05) {
-            return "FARM";
+    if (population < 25) {
+        if (person.household.stay > 10) {
+            if (Math.random() < 0.02) {
+                return "FARM";
+            }
+        }
+        let farmerCount = square.simInfo.farmerCount;
+        if (farmerCount > 0 && farmerCount < 10) {
+            if (person.isHungry() && Math.random() < 0.5) {
+                return "FARM";
+            }
+            if (Math.random() < 0.05) {
+                return "FARM";
+            }
         }
     }
     if (square.terrain == 3 && Math.random() < 0.1) {

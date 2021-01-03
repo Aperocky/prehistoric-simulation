@@ -11,10 +11,12 @@ export default function move(household: Household, terrain: Square[][]): void {
     let distance = 0;
     let housing = household.storage.getResource[ResourceType.Haus];
     let housingEffect = housing/10;
-    if (Math.random() > foodSecurity + housingEffect) {
+    if (Math.random() > foodSecurity) {
         if (sail(household, terrain)) {
             return;
         }
+    }
+    if (Math.random() > foodSecurity + housingEffect) {
         distance = household.dependents.length ? 1 : 5;
         distance += Math.floor(Math.random() * 3);
     } else if (household.isSingle) {

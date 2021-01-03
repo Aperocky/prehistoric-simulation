@@ -4,7 +4,7 @@ import { Household } from '../../sim/people/household';
 import { Person } from '../../sim/people/person';
 import { Simulation } from '../../sim/sim';
 import { WORK_TYPES } from '../../sim/people/work/workTypes';
-import { roundTo, cmdprint, describeIncome, createTable } from '../util';
+import { roundTo, cmdprint, describeIncome, createTable, describeStorage } from '../util';
 
 const HELP = [
     "describe household information",
@@ -49,7 +49,7 @@ function describe(sim: Simulation, household: Household): string[] {
     result.push(`location: ${cmdprint(`square x=${household.location.x} y=${household.location.y}`)}`);
     let fam = [].concat(...[household.adults, household.dependents]);
     result.push(...describeFamilyMember(fam));
-    result.push(...describeStorage(household));
+    result.push(...describeStorage([household]));
     result.push(...describeConsumption(household));
     result.push(...describeIncome(fam));
     result.push(...describeOrders(household));
@@ -74,19 +74,6 @@ function describeFamilyMember(members: Person[]): string[] {
         cmds.push(`${i}: ${cmdprint(`pp --id=${p.id}`)}`);
     });
     return createTable(title, header, rows).concat(cmds);
-}
-
-
-function describeStorage(hh: Household): string[] {
-    let title = "STORAGE"
-    let header = ["RESOURCE", "QUANTITY"]
-    let rows: string[][] = [];
-    Object.entries(hh.storage.storage).forEach(entry => {
-        const [key, val] = entry;
-        rows.push([key.toUpperCase().toString(), roundTo(val).toString()]);
-    });
-    rows.push(["GOLD", roundTo(hh.storage.gold).toString()]);
-    return createTable(title, header, rows);
 }
 
 
