@@ -9,14 +9,18 @@ export default function move(household: Household, terrain: Square[][]): void {
     // If hungry in current location, move.
     let foodSecurity = household.percentSatisfied[ResourceType.Food];
     let distance = 0;
-    if (Math.random() > foodSecurity + 0.1) {
+    let housing = household.storage.getResource[ResourceType.Haus];
+    let housingEffect = housing/10;
+    if (Math.random() > foodSecurity + housingEffect) {
         if (sail(household, terrain)) {
             return;
         }
         distance = household.dependents.length ? 1 : 5;
         distance += Math.floor(Math.random() * 3);
     } else if (household.isSingle) {
-        if (household.adults[0].work.work == "HUNT") {
+        if (Math.random() < housingEffect) {
+            distance = 0;
+        } else if (household.adults[0].work.work == "HUNT") {
             // Hunter spread
             distance = Math.floor(Math.random() * 5) + 5;
         } else if (household.adults[0].work.work == "FARM") {
@@ -27,6 +31,9 @@ export default function move(household: Household, terrain: Square[][]): void {
     if (distance) {
         household.location = randomWalk(household.location, terrain, distance);
         household.stay = 0;
+        if (ResourceType.Haus in household.storage.storage) {
+            household.storage.storage[ResourceType.Haus] = 0;
+        }
     } else {
         household.stay++;
     }

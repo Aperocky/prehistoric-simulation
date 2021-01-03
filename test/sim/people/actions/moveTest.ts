@@ -13,8 +13,41 @@ describe('people:move', () => {
         let household = testSim.households.values().next().value;
         household.percentSatisfied["food"] = 1;
         let oldLocation = household.location;
-        move(household, testSim.terrain);
-        expect(household.location).to.not.equal(oldLocation);
+        let iteration = 0;
+        while (true) {
+            move(household, testSim.terrain);
+            if (household.location != oldLocation) {
+                break;
+            }
+            iteration++;
+            if (iteration > 5) {
+                throw new Error("Should move");
+            }
+        }
+        // cleanup
+        household.stay = 0;
+        household.percentSatisfied = {}
+    });
+
+    it('moving leaves house', () => {
+        let household = testSim.households.values().next().value;
+        household.percentSatisfied["food"] = 1;
+        household.storage.storage["housing"] = 5;
+        let oldLocation = household.location;
+        let iteration = 0;
+        while (true) {
+            move(household, testSim.terrain);
+            if (household.location != oldLocation) {
+                expect(household.storage.getResource("housing")).to.equal(0);
+                break;
+            } else {
+                expect(household.storage.getResource("housing")).to.equal(5);
+            }
+            iteration++;
+            if (iteration > 100) {
+                throw new Error("Should move");
+            }
+        }
         // cleanup
         household.stay = 0;
         household.percentSatisfied = {}
