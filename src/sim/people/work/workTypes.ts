@@ -39,6 +39,7 @@ import { Lumberjack } from './types/lumberjack';
 import { Doctor } from './types/doctor';
 import { Farmer } from './types/farmer';
 import { Smith } from './types/smith';
+import { Builder } from './types/builder';
 
 export const WORK_TYPES: { [workType: string]: WorkType } = {
     HUNT: Gatherer,
@@ -48,4 +49,5 @@ export const WORK_TYPES: { [workType: string]: WorkType } = {
     MEDS: Doctor,
     FARM: Farmer,
     TOOL: Smith,
+    HAUS: Builder,
 }

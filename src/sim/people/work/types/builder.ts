@@ -6,15 +6,15 @@ import { Person } from '../../person';
 
 function strengthMod(person: Person): number {
     let woodMultiplier = 1;
-    let ironMultiplier = 1;
+    let toolMultiplier = 1;
     let consumed = person.work.workConsumption;
     if (ResourceType.Wood in consumed) {
-        woodMultiplier += consumed[ResourceType.Wood] * 2;
+        woodMultiplier += consumed[ResourceType.Wood];
     }
     if (ResourceType.Iron in consumed) {
-        ironMultiplier += consumed[ResourceType.Iron] * 2;
+        toolMultiplier += consumed[ResourceType.Iron] * 2;
     }
-    return defaultAgeMod(person) * woodMultiplier * ironMultiplier * 2;
+    return defaultAgeMod(person) * woodMultiplier * toolMultiplier * 2;
 }
 
 
@@ -46,17 +46,17 @@ function changeFunc(person: Person, square: Square): string {
             return "TRAD";
         }
     }
-    return "TOOL";
+    return "HAUS";
 }
 
 
-export const Smith: WorkType = {
-    name: "Smith",
-    consume: {"wood": 1, "iron": 1},
+export const Builder: WorkType = {
+    name: "Builder",
+    consume: {"wood": 2, "tool": 1},
     strengthMod: strengthMod,
     produceFunc: produceFunc,
     changeFunc: changeFunc,
-    searchdist: 4,
+    searchdist: 0,
     workLocation: WorkLocation.Private,
-    produceType: ResourceType.Tool
+    produceType: ResourceType.Haus
 }

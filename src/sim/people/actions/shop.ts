@@ -2,6 +2,7 @@ import { Household } from '../household';
 import { Order } from '../../market/order';
 import { ResourceType } from '../properties/resourceTypes';
 
+
 export default function shop(hh: Household): Order[] {
     // This function is expected to be ran when
     // 1. Projected consumption is populated.
@@ -12,6 +13,11 @@ export default function shop(hh: Household): Order[] {
     let currentSupplies: {[resourceType: string]: number} = {};
     for (const [key, val] of Object.entries(hh.projectedConsumption)) {
         if (val === 0) {
+            continue;
+        }
+        if (key == ResourceType.Haus) {
+            // Bypass storage for housing as it's non-consumable
+            currentSupplies[key] = 0;
             continue;
         }
         let currentAmount = hh.storage.getResource(key);
@@ -26,6 +32,7 @@ export default function shop(hh: Household): Order[] {
     orders.push(...buy(currentSupplies, hh, riskAcceptance, safetyMargin));
     return orders;
 }
+
 
 function buy(currentSupplies: {[resourceType: string]: number},
              hh: Household,
@@ -81,6 +88,7 @@ function buy(currentSupplies: {[resourceType: string]: number},
     return orders;
 }
 
+
 function sell(currentSupplies: {[resourceType: string]: number},
              hh: Household,
              riskAcceptance: number,
@@ -88,6 +96,9 @@ function sell(currentSupplies: {[resourceType: string]: number},
     let orders = [];
     for (const [key, val] of Object.entries(currentSupplies)) {
         if (currentSupplies[key] > safetyMargin) {
+            if (key == ResourceType.Haus) {
+                continue;
+            }
             let quantity = (currentSupplies[key] - safetyMargin) * hh.projectedConsumption[key];
             let riskFactor = riskAcceptance/200; // Risky type sells for higher prices.
             let amount = hh.storage.gold * riskFactor * (currentSupplies[key] - safetyMargin);
@@ -99,9 +110,15 @@ function sell(currentSupplies: {[resourceType: string]: number},
             }
         }
     }
+
     for (const [key, val] of Object.entries(hh.storage.storage)) {
         if (!(key in currentSupplies)) {
-            // Sell everything
+            // Sell everything except house, and house too if too hungry
+            if (key == ResourceType.Haus
+                    && !(ResourceType.Food in hh.percentSatisfied
+                    && hh.percentSatisfied[ResourceType.Food] < 0.5)) {
+                continue;
+            }
             let quantity = val;
             let riskFactor = riskAcceptance/200; // Risky type sells for higher prices.
             let amount = hh.storage.gold * riskFactor

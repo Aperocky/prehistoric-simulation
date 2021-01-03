@@ -59,6 +59,24 @@ describe('people:household', () => {
         WILL_TURNER.consumption = {};
     });
 
+    it('test housing effect on food consumption', () => {
+        let house = new Household([], WILL_TURNER, {x: 9, y: 6});
+        house.getProjectedConsumption();
+        expect(house.projectedConsumption["food"]).to.equal(1);
+        house.storage.addResource("housing", 5);
+        house.getProjectedConsumption();
+        expect(house.projectedConsumption["food"]).to.equal(0.8);
+        house.storage.addResource("housing", 5);
+        house.getProjectedConsumption();
+        expect(house.projectedConsumption["food"]).to.equal(0.6);
+        house.storage.addResource("housing", 5);
+        house.getProjectedConsumption();
+        expect(house.projectedConsumption["food"]).to.equal(0.6);
+        // cleanup
+        WILL_TURNER.setHousehold(undefined);
+        WILL_TURNER.consumption = {};
+    });
+
     it('test changeWork', () => {
         let house = new Household([], WILL_TURNER, {x: 1, y: 1});
         house.getProjectedConsumption();

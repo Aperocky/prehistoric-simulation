@@ -1,3 +1,5 @@
+import { SPOIL_RATE } from './resourceTypes';
+
 
 export class Storage {
 
@@ -11,8 +13,10 @@ export class Storage {
 
     // Food spoils
     spoils(): void {
-        if (this.getResource("food")) {
-            this.spendResource("food", this.getResource("food") * 0.2);
+        for (const [key, val] of Object.entries(SPOIL_RATE)) {
+            if (this.getResource(key)) {
+                this.spendResource(key, this.getResource(key) * val);
+            }
         }
     }
 

@@ -34,7 +34,12 @@ export class Person {
         if (this.age < 15) {
             return 0.5 + (this.age)/30;
         }
-        return 1;
+        let housingEffect = 1;
+        if (this.household) {
+            let housing = this.household.storage.getResource(ResourceType.Haus);
+            housingEffect = housing > 10 ? 0.6 : 1 - 0.04 * housing;
+        }
+        return housingEffect * 1;
     }
 
     getConsumption(): { [resourceType: string]: number } {

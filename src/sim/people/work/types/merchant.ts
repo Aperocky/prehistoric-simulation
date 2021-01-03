@@ -5,6 +5,7 @@ import { Person } from '../../person';
 
 
 function changeFunc(person: Person, square: Square): string {
+    let population = square.simInfo.people.length;
     if (person.isHungry()) {
         if (Math.random() < 0.2 && square.isCoast) {
             return "FISH";
@@ -13,12 +14,25 @@ function changeFunc(person: Person, square: Square): string {
             return "HUNT";
         }
     }
-    if (square.simInfo.people.length < 30 && Math.random() > 0.8) {
+    if (population < 30) {
         // Cities only
         if (square.isCoast) {
             return "FISH";
         } else {
             return "HUNT";
+        }
+    }
+    if (person.household.stay > 5) {
+        if (Math.random() < 0.1) {
+            if (Math.random() < 0.5) {
+                return "TOOL";
+            } else {
+                if (Math.random() < 0.5) {
+                    return "HAUS";
+                } else {
+                    return "MEDS";
+                }
+            }
         }
     }
     return "TRAD";

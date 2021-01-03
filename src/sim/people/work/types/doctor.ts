@@ -5,14 +5,20 @@ import { Person } from '../../person';
 
 
 function changeFunc(person: Person, square: Square): string {
-    if (square.simInfo.people.length < 30) {
+    let population = square.simInfo.people.length;
+    if (population < 30) {
         if (Math.random() < 0.25) {
             if (square.isCoast) {
                 return "FISH";
+            } else if (square.simInfo.farmerCount > 5) {
+                return "FARM";
             } else {
                 return "HUNT";
             }
         }
+    }
+    if (person.isHungry() && Math.random() < 0.25) {
+        return "TRAD";
     }
     return "MEDS";
 }

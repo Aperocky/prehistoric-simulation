@@ -17,7 +17,7 @@ const XTERM_PARAMS = {
 
 const HELP_DESC = [
     ["help", "more detailed help, more commands available"],
-    ["reg", "regenerate map (and reset sim)"]
+    ["reg", "regenerate map (and reset sim)"],
     ["run", "go to next turn"],
     ["run 10", "run 10 turns"],
     ["sim", "describe current simulation"],

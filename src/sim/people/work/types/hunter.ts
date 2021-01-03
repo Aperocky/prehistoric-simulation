@@ -38,25 +38,9 @@ function changeFunc(person: Person, square: Square): string {
             }
         }
     }
-    if (population > 50) {
-        if (Math.random() < 0.1) {
-            return "MEDS";
-        }
-        if (Math.random() < 0.1) {
-            return "TOOL";
-        }
-    }
-    if (person.isHungry()) {
-        if (population > 30 && Math.random() > 0.2) {
+    if (population > 30) {
+        if (Math.random() < 0.2) {
             return "TRAD";
-        }
-        if (population > 50 && Math.random() > 0.5) {
-            return "TRAD";
-        }
-        if (square.terrain == 3 || square.terrain == 7) {
-            if (Math.random() < 0.5) {
-                return "WOOD";
-            }
         }
     }
     if (person.household.stay > 10 && population < 25) {

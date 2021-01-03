@@ -4,6 +4,7 @@ import { Order } from '../../../../src/sim/market/order';
 import { WILL_TURNER, LIZ_SWANN, getRandomOriginPerson } from '../personTest';
 import { expect } from 'chai';
 
+
 describe('people:shop', () => {
     it('test hunger buying', () => {
         let hh = new Household([], WILL_TURNER, {x: 9, y: 6});
@@ -171,6 +172,36 @@ describe('people:shop', () => {
         expect(order.unitPrice).to.equal(0.05);
         expect(order.orderType).to.be.false;
         expect(hh.storage.getResource("wood")).to.equal(0);
+        // Cleanup
+        WILL_TURNER.health = 10;
+        WILL_TURNER.setHousehold(undefined);
+    });
+
+    it('test not selling house', () => {
+        let hh = new Household([], WILL_TURNER, {x: 9, y: 6});
+        WILL_TURNER.health = 49; // riskAcceptance: 50, safetyMargin: 2
+        hh.getProjectedConsumption();
+        hh.storage.gold = 1;
+        hh.storage.addResource("food", 2);
+        hh.storage.addResource("wood", 5);
+        hh.storage.addResource("housing", 10);
+        let orders = shop(hh);
+        expect(orders.every(o => o.resourceType != "housing")).to.be.true;
+        // Cleanup
+        WILL_TURNER.health = 10;
+        WILL_TURNER.setHousehold(undefined);
+    });
+
+    it('test sell house when too hungry', () => {
+        let hh = new Household([], WILL_TURNER, {x: 9, y: 6});
+        WILL_TURNER.health = 49; // riskAcceptance: 50, safetyMargin: 2
+        hh.percentSatisfied["food"] = 0.3;
+        hh.getProjectedConsumption();
+        hh.storage.gold = 1;
+        hh.storage.addResource("housing", 10);
+        let orders = shop(hh);
+        let sellHouse = orders.filter(o => o.resourceType == "housing")[0];
+        expect(sellHouse.quantity).to.equal(10);
         // Cleanup
         WILL_TURNER.health = 10;
         WILL_TURNER.setHousehold(undefined);

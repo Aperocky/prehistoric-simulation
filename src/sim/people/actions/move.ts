@@ -10,14 +10,15 @@ export default function move(household: Household, terrain: Square[][]): void {
     let foodSecurity = household.percentSatisfied[ResourceType.Food];
     let distance = 0;
     if (Math.random() > foodSecurity + 0.1) {
-        distance = household.dependents.length ? 8 : 10;
         if (sail(household, terrain)) {
             return;
         }
+        distance = household.dependents.length ? 1 : 5;
+        distance += Math.floor(Math.random() * 3);
     } else if (household.isSingle) {
         if (household.adults[0].work.work == "HUNT") {
             // Hunter spread
-            distance = 9;
+            distance = Math.floor(Math.random() * 5) + 5;
         } else if (household.adults[0].work.work == "FARM") {
             // Farm spread
             distance = 1;

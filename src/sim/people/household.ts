@@ -7,6 +7,7 @@ import { childHeritage } from './properties/heritage';
 import { ResourceType } from './properties/resourceTypes';
 import move from './actions/move';
 import shop from './actions/shop';
+import getHouseholdSpending from './actions/getHouseholdSpending';
 import { v4 as uuid } from 'uuid';
 import { SICK_PROBABILITY } from '../../constant/mapConstants';
 import { Order } from '../market/order';
@@ -70,11 +71,16 @@ export class Household {
             }
         });
         this.projectedConsumption = consumption;
+        getHouseholdSpending(this);
     }
 
     consume(): void {
         this.percentSatisfied = {};
         for (const [key, val] of Object.entries(this.projectedConsumption)) {
+            if (key == ResourceType.Haus) {
+                this.percentSatisfied[key] = this.storage.getResource(ResourceType.Haus)/this.projectedConsumption[ResourceType.Haus];
+                continue;
+            }
             let actual = this.storage.spendResource(key, val);
             this.percentSatisfied[key] = actual/val;
         }
@@ -128,13 +134,6 @@ export class Household {
         return null;
     }
 
-    runHealth(sim: Simulation): void {
-        let terrain = getTerrainFromLocation(sim.terrain, this.location);
-        let sickProbability = SICK_PROBABILITY.get(terrain);
-        this.allDo(p => p.runHealth(sickProbability));
-        this.mortality(sim);
-    }
-
     birthChance(woman: Person): number {
         let ageEffect = woman.age < 25
                 ? (25 - woman.age)**2 * 0.004
@@ -142,6 +141,14 @@ export class Household {
         let foodEffect = (1 - this.percentSatisfied[ResourceType.Food]) * 2
         let healthEffect = woman.health/100 - 0.2;
         return (0.6 - ageEffect - foodEffect) * healthEffect;
+    }
+
+
+    runHealth(sim: Simulation): void {
+        let terrain = getTerrainFromLocation(sim.terrain, this.location);
+        let sickProbability = SICK_PROBABILITY.get(terrain);
+        this.allDo(p => p.runHealth(sickProbability));
+        this.mortality(sim);
     }
 
     adulthood(sim: Simulation): void {
@@ -228,6 +235,8 @@ export class Household {
         [].concat(...[this.adults, this.dependents]).map(func);
     }
 
+    // Market dynamics
+
     createMarketOrder(resourceType: string, quantity: number, amount: number, orderType: boolean): Order {
         if (orderType) {
             // buy
@@ -245,7 +254,6 @@ export class Household {
         this.orders.forEach(order => {
             if (order.delivered) {
                 if (order.orderType) {
-                    // purchase succeeded
                     this.storage.addResource(order.resourceType, order.quantity);
                     this.storage.addGold((order.unitPrice - order.settlePrice) * order.quantity);
                 } else {
