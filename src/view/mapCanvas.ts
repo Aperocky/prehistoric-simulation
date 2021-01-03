@@ -3,14 +3,14 @@ import * as displayConstants from '../constant/displayConstants';
 import { MapSprite } from './base/mapSprite';
 import { RiverGraphic } from './base/riverGraphic';
 import { Square } from '../map/square';
-import { getHealth } from '../map/simSquare';
 import { ReplTerminal } from './replTerminal';
 import { SimDisplay } from './simDisplay';
 import { locationToString } from '../sim/util/location';
-import { DisplayMode } from '../constant/displayConstants';
+import { DISPLAY_MODES, DisplayMode } from './mode/displayMode';
 
 
 const APP_DIV_ID = "canvas";
+const DEFAULT_DISPLAY_MODE = "DEFAULT";
 
 // A logical aggregation of all canvas operations
 export class MapCanvas {
@@ -20,25 +20,19 @@ export class MapCanvas {
     mapSprites: MapSprite[];
     riverGraphics: RiverGraphic[];
     simDisplay: SimDisplay;
-    mode: DisplayMode;
-    modeMap: { [funcName: string]: Function };
+    mode: string;
 
     constructor() {
         this.app = new PIXI.Application({
                 width: displayConstants.DEFAULT_DISPLAY_WIDTH,
                 height: displayConstants.DEFAULT_DISPLAY_HEIGHT
         });
-        this.mode = DisplayMode.Default;
+        this.mode = DEFAULT_DISPLAY_MODE;
         this.mainContainer = new PIXI.Container();
         this.mainContainer.interactive = true;
         this.app.stage.addChild(this.mainContainer);
         this.mapSprites = [];
         this.simDisplay = new SimDisplay(this.app, this.mainContainer);
-        this.modeMap = {
-            "DEFAULT": this.changeModeToDefault,
-            "DENSITY": this.changeModeToPopulationDensity,
-            "HEALTH": this.changeModeToHealth
-        }
     }
 
     createMapSprites(terrain: Square[][]) {
@@ -73,44 +67,15 @@ export class MapCanvas {
         });
     }
 
-    changeMode(mode: DisplayMode) {
+    changeMode(mode: string) {
         if (this.mode == mode) {
             return;
         }
-        this.modeMap[mode].bind(this)();
+        DISPLAY_MODES[mode].changefunc(this);
         this.mode = mode;
     }
 
     maintainMode(): void {
-        if (this.mode == DisplayMode.PopulationDensity) {
-            this.changeModeToPopulationDensity();
-        }
-        if (this.mode == DisplayMode.Health) {
-            this.changeModeToHealth();
-        }
-    }
-
-    changeModeToDefault() {
-        this.simDisplay.changeModeToDefault();
-        this.mapSprites.forEach(sprite => {
-            sprite.tint = sprite.getBaseColor();
-        });
-    }
-
-    changeModeToPopulationDensity() {
-        this.simDisplay.changeModeToPopulationDensity();
-        this.mapSprites.forEach(sprite => {
-            let square = sprite.square;
-            let population = square.simInfo.people.length;
-            sprite.tint = sprite.getPopulationDensityColor(population);
-        });
-    }
-
-    changeModeToHealth() {
-        this.simDisplay.changeModeToHealth();
-        this.mapSprites.forEach(sprite => {
-            let square = sprite.square;
-            sprite.tint = sprite.getHealthColor(getHealth(square.simInfo));
-        });
+        DISPLAY_MODES[this.mode].maintainfunc(this);
     }
 }

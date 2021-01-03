@@ -60,22 +60,4 @@ export class SimDisplay {
             }
         });
     }
-
-    changeModeToDefault() {
-        this.familySprites.forEach(fam => {
-            fam.visible = true;
-        });
-    }
-
-    changeModeToPopulationDensity() {
-        this.familySprites.forEach(fam => {
-            fam.visible = false;
-        });
-    }
-
-    changeModeToHealth() {
-        this.familySprites.forEach(fam => {
-            fam.visible = false;
-        });
-    }
 }

@@ -1,6 +1,5 @@
 import { Controller } from '../../controller';
 import { argparse, KeyValue } from '../parser';
-import { DisplayMode } from '../../constant/displayConstants';
 
 const HELP = [
     "change display mode",
@@ -10,9 +9,9 @@ const HELP = [
 ];
 
 const MODES = {
-    default: DisplayMode.Default,
-    density: DisplayMode.PopulationDensity,
-    health: DisplayMode.Health
+    default: "DEFAULT",
+    density: "DENSITY",
+    health: "HEALTH",
 }
 
 export default function displayMode(controller: Controller, ...args: string[]): string[] {

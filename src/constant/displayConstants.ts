@@ -42,9 +42,3 @@ BASE_COLOR_MAP.set(4, MOUNTAIN_COLOR);
 BASE_COLOR_MAP.set(5, DESERT_COLOR);
 BASE_COLOR_MAP.set(6, MOUNTAIN_GREEN);
 BASE_COLOR_MAP.set(7, WOOD_COLOR);
-
-export enum DisplayMode {
-    Default = "DEFAULT",
-    PopulationDensity = "DENSITY",
-    Health = "HEALTH"
-}
