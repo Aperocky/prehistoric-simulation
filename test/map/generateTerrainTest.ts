@@ -73,4 +73,20 @@ describe('map:generateTerrain', () => {
             }
         });
     });
+
+    it('test generating mines', () => {
+        let iteration = 0;
+        while (true) {
+            let terrain: Square[][] = generateTerrain(50);
+            let mines = [].concat(...terrain).filter(s => s.isMine)
+            if (mines.length) {
+                expect(mines.length).to.be.lt(100);
+                break;
+            }
+            iteration++;
+            if (iteration > 5) {
+                throw new Error("no mines");
+            }
+        }
+    });
 })

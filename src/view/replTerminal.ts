@@ -18,12 +18,12 @@ const XTERM_PARAMS = {
 const HELP_DESC = [
     ["help", "more detailed help, more commands available"],
     ["reg", "regenerate map (and reset sim)"],
-    ["run", "go to next turn"],
-    ["run 10", "run 10 turns"],
+    ["run 10", "run 10 years"],
     ["sim", "describe current simulation"],
     ["mode", "change display mode"],
     ["market", "describe current market"],
-    ["click", "map is interactive"]
+    ["click", "map is interactive"],
+    ["repo", "go to source (github)"],
 ];
 const HELP_TABLE = createTable("HELP", ["COMMAND", "EFFECT"], HELP_DESC);
 

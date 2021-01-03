@@ -44,7 +44,7 @@ function sail(household: Household, terrain: Square[][]): boolean {
     let loc = household.location;
     let square = terrain[loc.y][loc.x];
     if (square.isCoast && Math.random() < SAIL_CHANCE) {
-        household.location = oceanCrossing(loc, terrain, 20, 5);
+        household.location = oceanCrossing(loc, terrain, 40, 5);
         return true;
     }
     return false;

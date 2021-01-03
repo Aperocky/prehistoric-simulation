@@ -33,6 +33,9 @@ export class Square {
     y: number;
     isCoast: boolean;
 
+    // is a mine
+    isMine: boolean;
+
     // Sim related information
     simInfo: SimSquare;
 
@@ -47,6 +50,7 @@ export class Square {
         this.terrain = this.getTerrain();
         this.isCoast = false;
         this.simInfo = initSimInfo();
+        this.deterMine();
     }
 
     setCoast(): void {
@@ -88,5 +92,19 @@ export class Square {
         }
         return effectivePrecip > mapConstants.MOUNTAIN_BIOME_PRECIP_CUTOFF
                 ? Terrain.MountainGrass : Terrain.MountainRock;
+    }
+
+    private deterMine(): void {
+        if (this.terrain == Terrain.Desert && Math.random() < 0.01) {
+            this.isMine = true;
+        } else if (this.terrain == Terrain.MountainRock && Math.random() < 0.05) {
+            this.isMine = true;
+        } else if (this.terrain == Terrain.MountainGrass && Math.random() < 0.02) {
+            this.isMine = true;
+        } else if (this.terrain == Terrain.Grass && Math.random() < 0.005) {
+            this.isMine = true;
+        } else {
+            this.isMine = false;
+        }
     }
 }

@@ -185,6 +185,9 @@ export class Household {
             if (p.work.work == "FARM") {
                 square.simInfo.farmerCount++;
             }
+            if (p.work.work == "TRAD") {
+                square.simInfo.traderCount++;
+            }
         });
     }
 

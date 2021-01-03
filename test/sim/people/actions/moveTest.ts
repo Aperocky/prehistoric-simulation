@@ -6,16 +6,14 @@ import { expect } from 'chai';
 
 describe('people:move', () => {
 
-    let testSim = getSimulationOnTerrain();
-    testSim.runTurn();
-
     it('test moving', () => {
-        let household = testSim.households.values().next().value;
-        household.percentSatisfied["food"] = 1;
-        let oldLocation = household.location;
         let iteration = 0;
         while (true) {
-            move(household, testSim.terrain);
+            let sim = getSimulationOnTerrain();
+            let household = sim.households.values().next().value;
+            household.percentSatisfied["food"] = 1;
+            let oldLocation = household.location;
+            move(household, sim.terrain);
             if (household.location != oldLocation) {
                 break;
             }
@@ -24,19 +22,17 @@ describe('people:move', () => {
                 throw new Error("Should move");
             }
         }
-        // cleanup
-        household.stay = 0;
-        household.percentSatisfied = {}
     });
 
     it('moving leaves house', () => {
-        let household = testSim.households.values().next().value;
-        household.percentSatisfied["food"] = 1;
-        household.storage.storage["housing"] = 5;
-        let oldLocation = household.location;
         let iteration = 0;
         while (true) {
-            move(household, testSim.terrain);
+            let sim = getSimulationOnTerrain();
+            let household = sim.households.values().next().value;
+            household.percentSatisfied["food"] = 1;
+            household.storage.storage["housing"] = 5;
+            let oldLocation = household.location;
+            move(household, sim.terrain);
             if (household.location != oldLocation) {
                 expect(household.storage.getResource("housing")).to.equal(0);
                 break;
@@ -48,18 +44,16 @@ describe('people:move', () => {
                 throw new Error("Should move");
             }
         }
-        // cleanup
-        household.stay = 0;
-        household.percentSatisfied = {}
     });
 
     it('test not moving', () => {
-        let household = testSim.households.values().next().value;
+        let sim = getSimulationOnTerrain();
+        let household = sim.households.values().next().value;
         expect(household.stay).to.equal(0);
         household.percentSatisfied["food"] = 1;
         household.adults[0].work.work = "WOOD";
         let oldLocation = household.location;
-        move(household, testSim.terrain);
+        move(household, sim.terrain);
         expect(household.location).to.equal(oldLocation);
         expect(household.stay).to.equal(1);
         // cleanup

@@ -82,6 +82,9 @@ function describeSquareItself(square: Square): string[] {
     rows.push(["ALTITUDE", `${roundTo(square.altitude)} m`]);
     rows.push(["TERRAIN", TERRAIN_STR.get(square.terrain)]);
     rows.push(["PRECIPITATION", `${roundTo(square.precip)} mm`]);
+    if (square.isMine) {
+        rows.push(["MINE", "IRON MINE"]);
+    }
     if (square.isRiver()) {
         rows.push(["RIVER", DIRECTIONS_DESCRIPTION.get(square.flowDirection)]);
         rows.push(["RIVER VOLUME", roundTo(square.flowVolume).toString()]);

@@ -24,15 +24,23 @@ export class MapSprite extends PIXI.Sprite {
         this.interactive = true;
     }
 
-    getBaseColor(): number {
+    getBaseColorTrio(): number[] {
         let terrainColor = displayConstants.BASE_COLOR_MAP.get(this.square.terrain);
+        if (this.square.isMine) {
+            terrainColor = displayConstants.MINE_COLOR;
+        }
+        return terrainColor;
+    }
+
+    getBaseColor(): number {
+        let terrainColor = this.getBaseColorTrio();
         return util.getColorFromRgb(terrainColor[0], terrainColor[1], terrainColor[2])
     }
 
     getHighlightColor(): number {
         return util.getAlphaBlend(
             displayConstants.HIGHLIGHT_COLOR,
-            displayConstants.BASE_COLOR_MAP.get(this.square.terrain),
+            this.getBaseColorTrio(),
             displayConstants.HIGHLIGHT_ALPHA
         )
     }
@@ -41,13 +49,13 @@ export class MapSprite extends PIXI.Sprite {
         if (population == 0) {
             return this.getBaseColor();
         }
-        let populationAlpha = displayConstants.POPULATION_DENSITY_FACTOR * population**0.5;
+        let populationAlpha = displayConstants.POPULATION_DENSITY_FACTOR * population**0.4;
         populationAlpha = populationAlpha > displayConstants.POPULATION_DENSITY_ALPHA_MAX
                 ? displayConstants.POPULATION_DENSITY_ALPHA_MAX
                 : populationAlpha;
         return util.getAlphaBlend(
             displayConstants.POPULATION_DENSITY_COLOR,
-            displayConstants.BASE_COLOR_MAP.get(this.square.terrain),
+            this.getBaseColorTrio(),
             populationAlpha);
     }
 
@@ -61,7 +69,7 @@ export class MapSprite extends PIXI.Sprite {
             health/100);
         return util.getAlphaBlend(
             healthColor,
-            displayConstants.BASE_COLOR_MAP.get(this.square.terrain),
+            this.getBaseColorTrio(),
             displayConstants.HEALTH_ALPHA);
     }
 

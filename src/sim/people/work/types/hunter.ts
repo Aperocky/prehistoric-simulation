@@ -27,6 +27,9 @@ function gathererTerrainCapacity(square: Square): number[] {
 
 function changeFunc(person: Person, square: Square): string {
     let population = square.simInfo.people.length;
+    if (square.isMine && Math.random() < 0.5) {
+        return "MINE";
+    }
     if (square.isCoast) {
         if (person.isHungry()) {
             if (Math.random() < 0.6) {

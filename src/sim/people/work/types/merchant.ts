@@ -6,18 +6,6 @@ import { Person } from '../../person';
 
 function changeFunc(person: Person, square: Square): string {
     let population = square.simInfo.people.length;
-    if (person.isHungry()) {
-        if (population < 30) {
-            if (Math.random() < 0.2 && square.isCoast) {
-                return "FISH";
-            }
-            if (Math.random() < 0.4) {
-                return "HUNT";
-            }
-        } else {
-            return "SERV";
-        }
-    }
     if (population < 30) {
         // Cities only
         if (square.isCoast) {
@@ -25,6 +13,9 @@ function changeFunc(person: Person, square: Square): string {
         } else {
             return "HUNT";
         }
+    }
+    if (person.isHungry() && Math.random() < 0.5) {
+        return "SERV";
     }
     if (person.household.stay > 5) {
         if (Math.random() < 0.1) {
@@ -43,6 +34,12 @@ function changeFunc(person: Person, square: Square): string {
 }
 
 
+function produceFunc(strength: number, square: Square): number {
+    let tradingBlock = square.simInfo.traderCount;
+    return strength * (tradingBlock ** 0.3);
+}
+
+
 export const Trader: WorkType = {
     name: "Merchant",
     consume: {},
@@ -50,11 +47,9 @@ export const Trader: WorkType = {
         let ageMultiplier = person.age < 40 ? person.age/10 : 4;
         return defaultAgeMod(person) * ageMultiplier;
     },
-    produceFunc: (strength, square) => {
-        return strength ** 1.3;
-    },
+    produceFunc: produceFunc,
     changeFunc: changeFunc,
     searchdist: 0,
-    workLocation: WorkLocation.Land,
+    workLocation: WorkLocation.Private,
     produceType: ResourceType.Gold
 }
