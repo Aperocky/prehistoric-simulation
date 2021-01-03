@@ -8,8 +8,8 @@ function strengthMod(person: Person): number {
     let woodMultiplier = 1;
     let ironMultiplier = 1;
     let consumed = person.work.workConsumption;
-    if (ResourceType.Tool in consumed) {
-        woodMultiplier += consumed[ResourceType.Tool] * 2;
+    if (ResourceType.Wood in consumed) {
+        woodMultiplier += consumed[ResourceType.Wood] * 2;
     }
     if (ResourceType.Iron in consumed) {
         ironMultiplier += consumed[ResourceType.Iron] * 2;
