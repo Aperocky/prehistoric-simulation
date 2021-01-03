@@ -7,11 +7,15 @@ import { Person } from '../../person';
 function changeFunc(person: Person, square: Square): string {
     let population = square.simInfo.people.length;
     if (person.isHungry()) {
-        if (Math.random() < 0.2 && square.isCoast) {
-            return "FISH";
-        }
-        if (Math.random() < 0.4) {
-            return "HUNT";
+        if (population < 30) {
+            if (Math.random() < 0.2 && square.isCoast) {
+                return "FISH";
+            }
+            if (Math.random() < 0.4) {
+                return "HUNT";
+            }
+        } else {
+            return "SERV";
         }
     }
     if (population < 30) {
@@ -47,7 +51,7 @@ export const Trader: WorkType = {
         return defaultAgeMod(person) * ageMultiplier;
     },
     produceFunc: (strength, square) => {
-        return strength ** 1.4;
+        return strength ** 1.3;
     },
     changeFunc: changeFunc,
     searchdist: 0,

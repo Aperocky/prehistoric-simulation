@@ -102,7 +102,7 @@ function describeProduction(controller: Controller, x: number, y: number): strin
         result.push(`${workforce} ${workName} produces ${produce} unit of ${produceType}`);
         rows.push([workName, workforce.toString(), produceType, roundTo(produce).toString()]);
     });
-    let title = "PRODUCTION";
+    let title = "PUBLIC PRODUCTION";
     let header = ["JOB", "PEOPLE", "RESOURCE", "COUNT"]
     if (rows.length) {
         return createTable(title, header, rows);

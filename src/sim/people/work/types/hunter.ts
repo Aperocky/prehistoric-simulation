@@ -39,8 +39,11 @@ function changeFunc(person: Person, square: Square): string {
         }
     }
     if (population > 30) {
-        if (Math.random() < 0.2) {
+        if (Math.random() < 0.3) {
             return "TRAD";
+        }
+        if (Math.random() < 0.1) {
+            return "SERV";
         }
     }
     if (person.household.stay > 10 && population < 25) {
