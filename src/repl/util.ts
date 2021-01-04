@@ -100,6 +100,7 @@ export function describeStorage(households: Household[]): string[] {
     let header = ["RESOURCE", "QUANTITY"]
     let rows: string[][] = [];
     let quantityMap: {[resource: string]: number} = {};
+    let gold = 0;
     households.forEach(hh => {
         Object.entries(hh.storage.storage).forEach(entry => {
             const [key, val] = entry;
@@ -109,11 +110,13 @@ export function describeStorage(households: Household[]): string[] {
                 quantityMap[key] = val;
             }
         });
+        gold += hh.storage.gold;
     });
     Object.entries(quantityMap).forEach(entry => {
         const [key, val] = entry;
         rows.push([key.toUpperCase().toString(), roundTo(val).toString()]);
     });
+    rows.push(["GOLD", roundTo(gold).toString()]);
     return createTable(title, header, rows);
 }
 

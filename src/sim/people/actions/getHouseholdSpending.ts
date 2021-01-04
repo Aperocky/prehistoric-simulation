@@ -14,11 +14,15 @@ export default function getHouseholdSpending(hh: Household): void {
         if (hh.storage.getResource(ResourceType.Haus) < 10) {
             hh.projectedConsumption[ResourceType.Haus] = 2;
         } else {
-            hh.projectedConsumption[ResourceType.Haus] = 0.1 * hh.storage.getResource(ResourceType.Haus);
+            let demand = 0.1 * hh.storage.getResource(ResourceType.Haus);
+            demand = demand > 20 ? 20 : demand; // 200 haus is good enough for family.
+            hh.projectedConsumption[ResourceType.Haus] = demand;
         }
     }
     if (hh.storage.getResource(ResourceType.Haus) > 5) {
-        hh.projectedConsumption[ResourceType.Serv] = hh.storage.getResource(ResourceType.Haus) * 0.2;
+        let demand = hh.storage.getResource(ResourceType.Haus) * 0.2;
+        demand = demand > 30 ? 30 : demand;
+        hh.projectedConsumption[ResourceType.Serv] = demand;
     }
 }
 

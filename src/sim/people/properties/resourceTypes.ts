@@ -14,5 +14,5 @@ export const SPOIL_RATE = {
     meds: 0.2,
     wood: 0.1,
     tool: 0.1,
-    haus: 0.1,
+    housing: 0.02,
 }
