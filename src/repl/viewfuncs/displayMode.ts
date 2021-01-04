@@ -12,6 +12,7 @@ const MODES = {
     default: "DEFAULT",
     density: "DENSITY",
     health: "HEALTH",
+    age: "AGE",
 }
 
 export default function displayMode(controller: Controller, ...args: string[]): string[] {
@@ -33,5 +34,6 @@ export default function displayMode(controller: Controller, ...args: string[]): 
         'default',
         'density',
         'health',
+        'age',
     ]
 }

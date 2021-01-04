@@ -10,10 +10,15 @@ export default function getHouseholdSpending(hh: Household): void {
         return;
     }
     // Housing and Service is nice to have.
-    if (hh.storage.getResource(ResourceType.Haus) < 10 && !hh.isSingle) {
-        hh.projectedConsumption[ResourceType.Haus] = 2;
-    } else {
-        hh.projectedConsumption[ResourceType.Serv] = hh.totalPersons();
+    if (!hh.isSingle) {
+        if (hh.storage.getResource(ResourceType.Haus) < 10) {
+            hh.projectedConsumption[ResourceType.Haus] = 2;
+        } else {
+            hh.projectedConsumption[ResourceType.Haus] = 0.1 * hh.storage.getResource(ResourceType.Haus);
+        }
+    }
+    if (hh.storage.getResource(ResourceType.Haus) > 5) {
+        hh.projectedConsumption[ResourceType.Serv] = hh.storage.getResource(ResourceType.Haus) * 0.2;
     }
 }
 

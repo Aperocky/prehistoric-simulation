@@ -6,11 +6,11 @@ import { expect } from 'chai';
 
 
 describe('people:household', () => {
-    it('test single household service demand', () => {
+    it('test single household none demand', () => {
         let house = new Household([], WILL_TURNER, {x: 9, y: 6});
         house.storage.addResource("food", 10);
         house.getProjectedConsumption();
-        expect(house.projectedConsumption["service"]).to.equal(1);
+        expect("service" in house.projectedConsumption).to.be.false;
         expect("housing" in house.projectedConsumption).to.be.false;
         // cleanup
         WILL_TURNER.setHousehold(undefined);

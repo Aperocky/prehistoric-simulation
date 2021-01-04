@@ -32,11 +32,3 @@ export function getHealth(simSquare: SimSquare): number {
     }
     return 0;
 }
-
-
-export function getAge(simSquare: SimSquare): number {
-    if (simSquare.people.length) {
-        return simSquare.people.reduce((sum, p) => sum + p.health, 0) / simSquare.people.length;
-    }
-    return 0;
-}

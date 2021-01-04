@@ -42,7 +42,7 @@ function changeFunc(person: Person, square: Square): string {
         }
     }
     if (population > 30) {
-        if (Math.random() < 0.3) {
+        if (Math.random() < 0.2) {
             return "TRAD";
         }
         if (Math.random() < 0.1) {

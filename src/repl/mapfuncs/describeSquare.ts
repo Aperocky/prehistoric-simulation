@@ -5,7 +5,7 @@ import { DEFAULT_MAP_SIZE } from '../../constant/displayConstants';
 import { DIRECTIONS_DESCRIPTION } from '../../constant/mapConstants';
 import { locationToString } from '../../sim/util/location';
 import { WORK_TYPES } from '../../sim/people/work/workTypes';
-import { describeWork, roundTo, describePeople, createTable, householdsList } from '../util';
+import { describeWork, roundTo, describePeople, createTable, householdsList, describeStorage } from '../util';
 import { describeIncome } from '../util';
 import { ResourceType } from '../../sim/people/properties/resourceTypes';
 
@@ -15,8 +15,10 @@ const HELP = [
     "x: x coordinate of the square",
     "y: y coordinate of the square",
     "[--hh] show list of households",
+    "[--store] show all storage",
     "example$ square x=1 y=1",
-    "example$ square x=1 y=1 hh"
+    "example$ square x=1 y=1 hh",
+    "example$ square x=1 y=1 store",
 ];
 
 export default function describeSquare(controller: Controller, ...args: string[]): string[] {
@@ -24,6 +26,7 @@ export default function describeSquare(controller: Controller, ...args: string[]
     let xstr: string;
     let ystr: string;
     let hh: boolean = false;
+    let store: boolean = false;
     if (kvps.length) {
         if (kvps[0].key == "help") {
             return HELP;
@@ -43,6 +46,9 @@ export default function describeSquare(controller: Controller, ...args: string[]
             if (kv.key == "hh" || kv.key == "households") {
                 hh = true;
             }
+            if (kv.key == "store" || kv.key == "storage") {
+                store = true;
+            }
         }
     }
     if (xstr === undefined || ystr === undefined) {
@@ -55,6 +61,9 @@ export default function describeSquare(controller: Controller, ...args: string[]
     }
     if (hh) {
         return householdsList(controller.terrain[y][x].simInfo.households);
+    }
+    if (store) {
+        return describeStorage(controller.terrain[y][x].simInfo.households);
     }
     return describe(controller, x, y);
 }

@@ -65,7 +65,8 @@ export class ReplTerminal {
     }
 
     processCommand(): void {
-        let result: string[] = processor(this.controller, this.command);
+        let command = this.command.trim();
+        let result: string[] = processor(this.controller, command);
         result.forEach(str => {
             this.terminal.write(CARRIAGE_RETURN + str);
         })

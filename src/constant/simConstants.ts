@@ -3,7 +3,7 @@ export const INITIAL_PERSON_COUNT = 20;
 export const INITIAL_AGE = [13, 26];
 
 export const REPO_LOCATION = "https://github.com/Aperocky/prehistoric-simulation";
-export const SAIL_CHANCE = 0.2;
+export const SAIL_CHANCE = 0.6;
 
 export const BACKGROUND_GOLD = 0.05;
 export const INFLATION = 0.05;

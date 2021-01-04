@@ -25,6 +25,10 @@ export const HEALTH_ALPHA = 0.5;
 export const HEALTH_LOW = [255, 80, 0];
 export const HEALTH_HIGH = [0, 255, 0];
 
+export const AGE_ALPHA = 0.5;
+export const AGE_LOW = [130, 255, 130]; // Green
+export const AGE_HIGH = [80, 80, 200]; // Blue
+
 export const FAMILY_DISPLAY_COLOR = [255, 255, 255];
 export const FAMILY_RADIUS = 8;
 

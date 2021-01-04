@@ -28,12 +28,14 @@ export const defaultMouseoutHook = (sprite: MapSprite) => {
 import { DefaultDisplay } from './displayModes/default';
 import { DensityDisplay } from './displayModes/density';
 import { HealthDisplay } from './displayModes/health';
+import { AgeDisplay } from './displayModes/age';
 
 
 export enum DisplayModeName {
     Default = "DEFAULT",
     Density = "DENSITY",
     Health = "HEALTH",
+    Age = "AGE",
 }
 
 
@@ -41,4 +43,5 @@ export const DISPLAY_MODES: { [mode: string]: DisplayMode } = {
     "DEFAULT": DefaultDisplay,
     "DENSITY": DensityDisplay,
     "HEALTH": HealthDisplay,
+    "AGE": AgeDisplay,
 }

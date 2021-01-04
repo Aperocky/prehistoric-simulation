@@ -18,16 +18,15 @@ function changeFunc(person: Person, square: Square): string {
         return "SERV";
     }
     if (person.household.stay > 5) {
-        if (Math.random() < 0.1) {
+        if (Math.random() < 0.1 && population > 50) {
             if (Math.random() < 0.5) {
                 return "TOOL";
             } else {
-                if (Math.random() < 0.5) {
-                    return "HAUS";
-                } else {
-                    return "MEDS";
-                }
+                return "HAUS";
             }
+        }
+        if (population > 100 && Math.random() < 0.05) {
+            return "MEDS";
         }
     }
     return "TRAD";
@@ -39,7 +38,7 @@ function produceFunc(strength: number, square: Square): number {
     let tradingBoost = 1;
     if (tradingBlock) {
         tradingBoost = tradingBlock ** 0.3
-        tradingBoost = tradingBoost > 4 ? 4 : tradingBoost;
+        tradingBoost = tradingBoost > 5 ? 5 : tradingBoost;
     }
     return strength * tradingBoost;
 }

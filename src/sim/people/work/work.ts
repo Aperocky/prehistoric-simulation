@@ -5,6 +5,7 @@ import { Person } from '../person';
 import { Square } from '../../../map/square';
 
 const INITIAL_WORK_TYPE = "HUNT";
+const GUILD_WORK_TYPES = ["TOOL", "HAUS", "MEDS"];
 
 export class Work {
 
@@ -107,6 +108,10 @@ export class Work {
         } else if (father.work.work == "FARM" && mother.work.work == "HUNT"
                 || father.work.work == "HUNT" && mother.work.work == "FARM") {
             this.work = "FARM";
+        } else if (GUILD_WORK_TYPES.includes(mother.work.work)) {
+            this.work = mother.work.work
+        } else if (GUILD_WORK_TYPES.includes(father.work.work)) {
+            this.work = father.work.work
         } else {
             this.work = "HUNT";
         }
