@@ -3,9 +3,14 @@ export function getColorFromRgb(r: number, g: number, b: number): number {
 }
 
 
+export function getColorFromTrio(trio: number[]): number {
+    return getColorFromRgb(trio[0], trio[1], trio[2]);
+}
+
+
 export function getAlphaBlend(alphaColor: number[], baseColor: number[], alpha: number): number {
     let newColor: number[] = baseColor.map((n, i) => (1-alpha)*n + alpha*alphaColor[i]);
-    return getColorFromRgb(newColor[0], newColor[1], newColor[2]);
+    return getColorFromTrio(newColor);
 }
 
 

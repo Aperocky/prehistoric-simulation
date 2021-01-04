@@ -2,14 +2,15 @@ import { Household } from '../sim/people/household';
 import { Simulation } from '../sim/sim';
 import { FamilySprite } from './base/familySprite';
 import { Location } from '../sim/util/location';
-import { getColorFromRgb } from './base/util';
+import { getColorFromTrio } from './base/util';
 import { ReplTerminal } from './replTerminal';
 import * as PIXI from 'pixi.js';
 import * as displayConstants from '../constant/displayConstants';
 
 
 const RADIUS = displayConstants.FAMILY_RADIUS;
-const COLOR = displayConstants.FAMILY_DISPLAY_COLOR
+const LINE_COLOR = 0xedcc9f;
+const FILL_COLOR = displayConstants.FAMILY_DISPLAY_COLOR
 
 
 export class SimDisplay {
@@ -31,10 +32,11 @@ export class SimDisplay {
         this.sim = sim;
     }
 
-    getRoundTexture(app: PIXI.Application): PIXI.Texture {
+    getRoundTexture(app: PIXI.Application,
+                    fillColor: number[] = FILL_COLOR): PIXI.Texture {
         let graphics = new PIXI.Graphics;
-        graphics.beginFill(getColorFromRgb(COLOR[0], COLOR[1], COLOR[2]), 0.8);
-        graphics.lineStyle(1, 0xedcc9f, 0.8);
+        graphics.beginFill(getColorFromTrio(fillColor), 0.7);
+        graphics.lineStyle(1, LINE_COLOR, 0.8);
         graphics.drawCircle(RADIUS, RADIUS, RADIUS);
         graphics.endFill();
         return app.renderer.generateTexture(graphics, PIXI.SCALE_MODES.LINEAR, 1);

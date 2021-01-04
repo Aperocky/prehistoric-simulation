@@ -3,6 +3,7 @@ import { Person } from './people/person';
 import { SimProduction } from './util/simProduction';
 import { SimMarket } from './market/simMarket';
 import { Square } from '../map/square';
+import { PerformanceTracker } from '../performance/tracker';
 import initializeSim from './util/initializeSim';
 import matchingService from './util/matchingService';
 import populateSquareInfo from './util/populateSquareInfo';
@@ -17,7 +18,6 @@ export class Simulation {
     simProduction: SimProduction;
     simMarket: SimMarket;
     readonly terrain: Square[][];
-
 
     constructor(terrain: Square[][]) {
         this.turn = 0;
@@ -50,9 +50,9 @@ export class Simulation {
         this.allDo(hh => hh.runTurn(this));
         // Inflation
         this.allDo(hh => hh.storage.spendGold(hh.storage.gold * INFLATION));
-        this.turn++;
         // populate readonly square info
         populateSquareInfo(this);
+        this.turn++;
     }
 
     allDo(func: (hh: Household) => void) {

@@ -4,6 +4,7 @@ import * as mapConstants from './constant/displayConstants';
 import { MapCanvas } from './view/mapCanvas';
 import { ReplTerminal } from './view/replTerminal';
 import { Simulation } from './sim/sim';
+import { PerformanceTracker } from './performance/tracker';
 import initializeSim from './sim/util/initializeSim';
 
 
@@ -14,11 +15,14 @@ export class Controller {
     mapCanvas: MapCanvas;
     replTerminal: ReplTerminal;
     simulation: Simulation;
+    perftrac: PerformanceTracker;
 
     constructor() {
         this.mapCanvas = new MapCanvas();
         this.replTerminal = new ReplTerminal(this);
         this.generateTerrain()
+        this.perftrac = new PerformanceTracker();
+        this.perftracActivate = false;
     }
 
     generateTerrain() {
@@ -32,7 +36,7 @@ export class Controller {
     }
 
     runTurn() {
-        this.simulation.runTurn();
+        this.perftrac.timer("turn")(this.simulation.runTurn, this.simulation)();
         this.mapCanvas.simDisplay.syncSim(this.replTerminal);
         this.mapCanvas.maintainMode();
         this.mapCanvas.app.renderer.render(this.mapCanvas.mainContainer);

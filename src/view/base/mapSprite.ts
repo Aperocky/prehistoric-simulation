@@ -35,7 +35,7 @@ export class MapSprite extends PIXI.Sprite {
 
     getBaseColor(): number {
         let terrainColor = this.getBaseColorTrio();
-        return util.getColorFromRgb(terrainColor[0], terrainColor[1], terrainColor[2])
+        return util.getColorFromTrio(terrainColor)
     }
 
     getHighlightColor(): number {
