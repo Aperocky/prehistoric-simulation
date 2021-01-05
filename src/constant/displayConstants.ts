@@ -21,7 +21,7 @@ export const POPULATION_DENSITY_COLOR = [255, 0, 0];
 export const POPULATION_DENSITY_FACTOR = 0.06;
 export const POPULATION_DENSITY_ALPHA_MAX = 0.75; // ~550 person would have max alpha
 
-export const HEALTH_ALPHA = 0.5;
+export const HEALTH_ALPHA = 0.4;
 export const HEALTH_LOW = [255, 80, 0];
 export const HEALTH_HIGH = [0, 255, 0];
 
@@ -31,6 +31,9 @@ export const AGE_HIGH = [80, 80, 200]; // Blue
 
 export const FAMILY_DISPLAY_COLOR = [255, 255, 255];
 export const FAMILY_RADIUS = 8;
+
+export const CITY_DISPLAY_COLOR = [200, 50, 50];
+export const CITY_HIGHLIGHT_COLOR = [255, 0, 0];
 
 export type ColorScale = {
     baseColor: number[];

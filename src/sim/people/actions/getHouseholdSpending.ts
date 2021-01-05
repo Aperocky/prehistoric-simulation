@@ -6,20 +6,17 @@ import { ResourceType } from '../properties/resourceTypes';
 
 
 export default function getHouseholdSpending(hh: Household): void {
-    if (!meetsCriteria(hh)) {
-        return;
-    }
+    let spare = meetsCriteria(hh);
     // Housing and Service is nice to have.
     if (!hh.isSingle) {
         if (hh.storage.getResource(ResourceType.Haus) < 10) {
-            hh.projectedConsumption[ResourceType.Haus] = 2;
+            hh.projectedConsumption[ResourceType.Haus] = spare ? 3 : 1;
         } else {
-            let demand = 0.1 * hh.storage.getResource(ResourceType.Haus);
-            demand = demand > 20 ? 20 : demand; // 200 haus is good enough for family.
+            let demand = spare ? 0.1 * hh.storage.getResource(ResourceType.Haus): 0;
             hh.projectedConsumption[ResourceType.Haus] = demand;
         }
     }
-    if (hh.storage.getResource(ResourceType.Haus) > 5) {
+    if (hh.storage.getResource(ResourceType.Haus) > 5 && spare) {
         let demand = hh.storage.getResource(ResourceType.Haus) * 0.2;
         demand = demand > 30 ? 30 : demand;
         hh.projectedConsumption[ResourceType.Serv] = demand;

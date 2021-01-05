@@ -96,10 +96,16 @@ function sell(currentSupplies: {[resourceType: string]: number},
     let orders = [];
     for (const [key, val] of Object.entries(currentSupplies)) {
         if (currentSupplies[key] > safetyMargin) {
-            if (key == ResourceType.Haus) {
-                continue;
-            }
             let quantity = (currentSupplies[key] - safetyMargin) * hh.projectedConsumption[key];
+            if (key == ResourceType.Haus) {
+                if (hh.adults[0].isHungry()) {
+                    quantity = val * 0.5;
+                } else if (currentSupplies[ResourceType.Food] < 1) {
+                    quantity = val * 0.2;
+                } else {
+                    continue;
+                }
+            }
             let riskFactor = riskAcceptance/200; // Risky type sells for higher prices.
             let amount = hh.storage.gold * riskFactor * (currentSupplies[key] - safetyMargin);
             if (amount < 0.001) {
@@ -114,14 +120,18 @@ function sell(currentSupplies: {[resourceType: string]: number},
     for (const [key, val] of Object.entries(hh.storage.storage)) {
         if (!(key in currentSupplies)) {
             // Sell everything except house, and house too if too hungry
-            if (key == ResourceType.Haus
-                    && !(ResourceType.Food in hh.percentSatisfied
-                    && hh.percentSatisfied[ResourceType.Food] < 0.5)) {
-                continue;
-            }
             let quantity = val;
-            let riskFactor = riskAcceptance/200; // Risky type sells for higher prices.
+            let riskFactor = riskAcceptance/200;
             let amount = hh.storage.gold * riskFactor
+            if (key == ResourceType.Haus) {
+                if (hh.adults[0].isHungry()) {
+                    quantity = val * 0.5;
+                } else if (currentSupplies[ResourceType.Food] < 1) {
+                    quantity = val * 0.2;
+                } else {
+                    continue;
+                }
+            }
             if (amount < 0.001) {
                 amount = 0.001; // minimum amount;
             }

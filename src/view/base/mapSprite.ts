@@ -12,7 +12,6 @@ export class MapSprite extends PIXI.Sprite {
 
     // Link to the square it represents
     square: Square;
-    clicked: boolean;
 
     constructor(square: Square) {
         super(PIXI.Texture.WHITE);

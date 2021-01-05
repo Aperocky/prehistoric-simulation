@@ -1,12 +1,11 @@
 import { DisplayMode } from '../displayMode';
 import { MapCanvas } from '../../mapCanvas';
 import { SimDisplay } from '../../simDisplay';
-import { MapSprite } from '../../base/mapSprite';
 import { defaultMouseoverHook, defaultMouseoutHook } from '../displayMode';
 
 
 function maintainfunc(canvas: MapCanvas) {
-    return;
+    changefunc(canvas);
 }
 
 
@@ -20,10 +19,10 @@ function changefunc(canvas: MapCanvas) {
 
 function displayfunc(simDisplay: SimDisplay) {
     simDisplay.familySprites.forEach(fam => {
-        fam.visible = true;
+        fam.visible = false;
     });
     simDisplay.citySprites.forEach(city => {
-        city.visible = false;
+        city.visible = true;
     });
 }
 
@@ -34,8 +33,8 @@ const spritehook = {
 }
 
 
-export const DefaultDisplay: DisplayMode = {
-    name: "DEFAULT",
+export const CityDisplay: DisplayMode = {
+    name: "CITY",
     changefunc: changefunc,
     displayfunc: displayfunc,
     maintainfunc: maintainfunc,

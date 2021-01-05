@@ -5,7 +5,9 @@ const HELP = [
     "change display mode",
     "mode default: default display mode",
     "mode density: population density",
-    "mode health: population health"
+    "mode health: population health",
+    "mode city: display cities",
+    "mode age: display average age"
 ];
 
 const MODES = {
@@ -13,6 +15,7 @@ const MODES = {
     density: "DENSITY",
     health: "HEALTH",
     age: "AGE",
+    city: "CITY",
 }
 
 export default function displayMode(controller: Controller, ...args: string[]): string[] {
@@ -35,5 +38,6 @@ export default function displayMode(controller: Controller, ...args: string[]): 
         'density',
         'health',
         'age',
+        'city',
     ]
 }

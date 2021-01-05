@@ -22,7 +22,6 @@ export class Controller {
         this.replTerminal = new ReplTerminal(this);
         this.generateTerrain()
         this.perftrac = new PerformanceTracker();
-        this.perftracActivate = false;
     }
 
     generateTerrain() {

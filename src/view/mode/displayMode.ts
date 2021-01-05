@@ -29,6 +29,7 @@ import { DefaultDisplay } from './displayModes/default';
 import { DensityDisplay } from './displayModes/density';
 import { HealthDisplay } from './displayModes/health';
 import { AgeDisplay } from './displayModes/age';
+import { CityDisplay } from './displayModes/city';
 
 
 export enum DisplayModeName {
@@ -36,6 +37,7 @@ export enum DisplayModeName {
     Density = "DENSITY",
     Health = "HEALTH",
     Age = "AGE",
+    City = "CITY",
 }
 
 
@@ -44,4 +46,5 @@ export const DISPLAY_MODES: { [mode: string]: DisplayMode } = {
     "DENSITY": DensityDisplay,
     "HEALTH": HealthDisplay,
     "AGE": AgeDisplay,
+    "CITY": CityDisplay,
 }

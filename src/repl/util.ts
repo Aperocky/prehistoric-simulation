@@ -1,6 +1,6 @@
 import { Person } from '../sim/people/person';
 import { Household } from '../sim/people/household';
-import { ResourceType } from '../sim/people/properties/resourceTypes';
+import { ResourceType, houseToStr } from '../sim/people/properties/resourceTypes';
 import { WORK_TYPES } from '../sim/people/work/workTypes';
 
 
@@ -17,6 +17,7 @@ export function describePeople(households: Household[], people: Person[]): strin
         return false;
     });
     let singles = households.filter(hh => hh.isSingle)
+    let totalHousing = households.reduce((sum, hh) => sum + hh.storage.getResource("housing"), 0);
     let avgAge = people.reduce((sum, p) => sum + p.age, 0)/people.length;
     let adults = people.filter(p => p.age >= 14);
     let title = "PEOPLE";
@@ -26,6 +27,7 @@ export function describePeople(households: Household[], people: Person[]): strin
     rows.push(["HOUSEHOLDS", households.length.toString()]);
     rows.push(["SINGLES", singles.length.toString()]);
     rows.push(["WEALTH", roundTo(totalWealth).toString()]);
+    rows.push(["HOUSING", roundTo(totalHousing).toString()]);
     rows.push(["AVG AGE", roundTo(avgAge).toString()]);
     if (adults.length) {
         let avgAdultHealth = adults.reduce((sum, p) => sum + p.health, 0)/adults.length;
@@ -124,8 +126,8 @@ export function describeStorage(households: Household[]): string[] {
 export function householdsList(households: Household[]): string[] {
     let result = [];
     let title = "HOUSEHOLDS";
-    households.sort((ha, hb) => Math.max(...hb.adults.map(p => p.age)) - Math.max(...ha.adults.map(p => p.age)));
-    let header = ["INDEX", "SURNAME", "OLDEST", "MEMBERS", "WEALTH", "STAY"];
+    households.sort((ha, hb) => hb.storage.getResource("housing") - ha.storage.getResource("housing"));
+    let header = ["INDEX", "SURNAME", "OLDEST", "MEMBERS", "WEALTH", "STAY", "DWELLING"];
     let rows: string[][] = [];
     let cmds: string[] = [];
     households.forEach((hh, i) => {
@@ -136,12 +138,56 @@ export function householdsList(households: Household[]): string[] {
             Math.max(...hh.adults.map(p => p.age)).toString(),
             (hh.adults.length + hh.dependents.length).toString(),
             roundTo(hh.storage.gold).toString(),
-            stay
+            stay,
+            houseToStr(hh.storage.getResource("housing"))
         ]);
         cmds.push(`${i+1}: ${cmdprint(`hh --id=${hh.id}`)}`);
     });
     let table = createTable(title, header, rows);
     return table.concat(cmds);
+}
+
+
+export function classList(households: Household[]): string[] {
+    let result = [];
+    let title = "CLASS DISTRIBUTION";
+    let header = ["DWELLING", "HOUSEHOLDS", "PEOPLE", "HUNGRY", "SPACE", "TOTAL"];
+    let rows: string[][] = [];
+    let dist: {[clazz: string]: Household[]} = {};
+    households.sort((ha, hb) => hb.storage.getResource(ResourceType.Haus) - ha.storage.getResource(ResourceType.Haus));
+    households.forEach(hh => {
+        let dwelling = houseToStr(hh.storage.getResource(ResourceType.Haus))
+        if (dwelling in dist) {
+            dist[dwelling].push(hh);
+        } else {
+            dist[dwelling] = [hh];
+        }
+    });
+    for (const [key, val] of Object.entries(dist)) {
+        let totalSpace = val.reduce((sum, hh) => sum + hh.storage.getResource(ResourceType.Haus), 0);
+        let averageSpace = totalSpace/val.length;
+        let hunperc = val.filter(hh => hh.adults[0].isHungry()).length/val.length;
+        rows.push([
+            key,
+            val.length.toString(),
+            val.reduce((sum, hh) => sum + hh.totalPersons(), 0).toString(),
+            roundTo(hunperc * 100, 1).toString() + "%",
+            roundTo(averageSpace).toString(),
+            roundTo(totalSpace).toString()
+        ]);
+    }
+    let totalSpace = households.reduce((sum, hh) => sum + hh.storage.getResource(ResourceType.Haus), 0);
+    let averageSpace = totalSpace/households.length;
+    let hunperc = households.filter(hh => hh.adults[0].isHungry()).length/households.length;
+    rows.push([
+        "TOTAL",
+        households.length.toString(),
+        households.reduce((sum, hh) => sum + hh.totalPersons(), 0).toString(),
+        roundTo(hunperc * 100, 1).toString() + "%",
+        roundTo(averageSpace).toString(),
+        roundTo(totalSpace).toString()
+    ]);
+    return createTable(title, header, rows);
 }
 
 

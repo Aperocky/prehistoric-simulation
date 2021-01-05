@@ -12,7 +12,8 @@ const XTERM_PARAMS = {
     rows: 40,
     theme: {
         background: '#222'
-    }
+    },
+    scrollback: 2000
 };
 
 const HELP_DESC = [

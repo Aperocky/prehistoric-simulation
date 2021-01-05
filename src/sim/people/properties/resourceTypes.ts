@@ -9,10 +9,29 @@ export enum ResourceType {
     Serv = "service",
 }
 
+
 export const SPOIL_RATE = {
     food: 0.2,
     meds: 0.2,
     wood: 0.1,
     tool: 0.1,
     housing: 0.02,
+}
+
+
+export function houseToStr(house: number): string {
+    let houseStr = house < 2
+            ? "SHED"
+            : house < 10
+            ? "HUT"
+            : house < 25
+            ? "TOWNHOUSE"
+            : house < 60
+            ? "HOUSE"
+            : house < 150
+            ? "MANSION"
+            : house < 400
+            ? "ESTATE"
+            : "CASTLE";
+    return houseStr;
 }

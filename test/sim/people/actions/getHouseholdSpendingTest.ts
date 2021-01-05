@@ -22,7 +22,7 @@ describe('people:household', () => {
         let pirates = new Household([willhouse, lizhouse]);
         pirates.storage.addResource("food", 20);
         pirates.getProjectedConsumption();
-        expect(pirates.projectedConsumption["housing"]).to.equal(2);
+        expect(pirates.projectedConsumption["housing"]).to.equal(3);
         expect("service" in pirates.projectedConsumption).to.be.false;
         // cleanup
         LIZ_SWANN.setHousehold(undefined);

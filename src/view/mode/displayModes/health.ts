@@ -41,6 +41,9 @@ function displayfunc(simDisplay: SimDisplay) {
     simDisplay.familySprites.forEach(fam => {
         fam.visible = false;
     });
+    simDisplay.citySprites.forEach(city => {
+        city.visible = false;
+    });
 }
 
 
