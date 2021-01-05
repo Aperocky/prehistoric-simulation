@@ -9,8 +9,13 @@ export function getColorFromTrio(trio: number[]): number {
 
 
 export function getAlphaBlend(alphaColor: number[], baseColor: number[], alpha: number): number {
+    return getColorFromTrio(getAlphaBlendTrio(alphaColor, baseColor, alpha));
+}
+
+
+export function getAlphaBlendTrio(alphaColor: number[], baseColor: number[], alpha: number): number[] {
     let newColor: number[] = baseColor.map((n, i) => (1-alpha)*n + alpha*alphaColor[i]);
-    return getColorFromTrio(newColor);
+    return newColor;
 }
 
 

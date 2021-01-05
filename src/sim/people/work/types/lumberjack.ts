@@ -52,6 +52,9 @@ export const Lumberjack: WorkType = {
         if (produce > capacity[1]) {
             return capacity[1];
         }
+        if (square.simInfo.isFarm) {
+            produce *= 0.5;
+        }
         return produce;
     },
     changeFunc: changeFunc,

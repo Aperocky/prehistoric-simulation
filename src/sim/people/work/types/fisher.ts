@@ -10,7 +10,7 @@ function changeFunc(person: Person, square: Square): string {
         return "HUNT";
     }
     if (person.isHungry()) {
-        if (population > 30 && Math.random() < 0.5) {
+        if (population > 50 && Math.random() < 0.5) {
             return "TRAD";
         }
         if (Math.random() < 0.2) {

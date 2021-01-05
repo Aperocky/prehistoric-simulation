@@ -95,9 +95,10 @@ function describeSquareItself(square: Square): string[] {
     let title = "SQUARE";
     let header = ["ATTRIBUTE", "VALUE"];
     let rows: string[][] = [];
+    let terrain = square.simInfo.isFarm ? "FARM" : TERRAIN_STR.get(square.terrain);
     rows.push(["LOCATION", `(${square.x}, ${square.y})`]);
     rows.push(["ALTITUDE", `${roundTo(square.altitude)} m`]);
-    rows.push(["TERRAIN", TERRAIN_STR.get(square.terrain)]);
+    rows.push(["TERRAIN", terrain]);
     rows.push(["PRECIPITATION", `${roundTo(square.precip)} mm`]);
     if (square.isMine) {
         rows.push(["MINE", "IRON MINE"]);
@@ -136,6 +137,7 @@ function describeCity(square: Square): string[] {
     let households = square.simInfo.households;
     let result = [];
     result.push(...classList(households));
+    result.push(...describeWork(people));
     result.push(...describeStorage(households));
     return result;
 }

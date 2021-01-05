@@ -32,7 +32,7 @@ function changeFunc(person: Person, square: Square): string {
             return "HUNT";
         }
     }
-    if (person.household.stay > 5 && Math.random() < 0.2) {
+    if (person.isHungry() && Math.random() < 0.2) {
         return "TRAD";
     }
     return "SERV";

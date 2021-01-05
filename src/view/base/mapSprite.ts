@@ -34,6 +34,13 @@ export class MapSprite extends PIXI.Sprite {
 
     getBaseColor(): number {
         let terrainColor = this.getBaseColorTrio();
+        if (this.square.simInfo.isFarm) {
+            terrainColor = util.getAlphaBlendTrio(
+                displayConstants.FARM_COLOR,
+                terrainColor,
+                displayConstants.FARM_ALPHA
+            );
+        }
         return util.getColorFromTrio(terrainColor)
     }
 

@@ -76,6 +76,9 @@ export class MapCanvas {
     }
 
     maintainMode(): void {
+        this.mapSprites.forEach((sprite) => {
+            sprite.tint = sprite.getBaseColor();
+        });
         DISPLAY_MODES[this.mode].maintainfunc(this);
     }
 }

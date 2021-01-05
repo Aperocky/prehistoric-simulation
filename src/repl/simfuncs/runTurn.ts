@@ -1,5 +1,6 @@
 import { Controller } from '../../controller';
 import { argparse, KeyValue } from '../parser';
+import { cmdprint } from '../util';
 
 const HELP = [
     "next turn for simulation",
@@ -36,5 +37,9 @@ function basicReporting(controller: Controller): string[] {
     result.push(`TURN ${sim.turn}`);
     result.push(`${sim.households.size} households`);
     result.push(`${sim.people.size} people`);
+    if (sim.people.size > 3500 && controller.mapCanvas.mode == "DEFAULT") {
+        result.push(`tip: this amount of people might be hard to see, try:`);
+        result.push(`${cmdprint("mode city")} or ${cmdprint("mode density")}`);
+    }
     return result;
 }

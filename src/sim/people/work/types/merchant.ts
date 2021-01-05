@@ -6,7 +6,7 @@ import { Person } from '../../person';
 
 function changeFunc(person: Person, square: Square): string {
     let population = square.simInfo.people.length;
-    if (population < 30) {
+    if (population < 50) {
         // Cities only
         if (square.isCoast) {
             return "FISH";
@@ -34,13 +34,7 @@ function changeFunc(person: Person, square: Square): string {
 
 
 function produceFunc(strength: number, square: Square): number {
-    let tradingBlock = square.simInfo.traderCount;
-    let tradingBoost = 1;
-    if (tradingBlock) {
-        tradingBoost = tradingBlock ** 0.3
-        tradingBoost = tradingBoost > 5 ? 5 : tradingBoost;
-    }
-    return strength * tradingBoost;
+    return strength * 1.3;
 }
 
 
@@ -54,6 +48,6 @@ export const Trader: WorkType = {
     produceFunc: produceFunc,
     changeFunc: changeFunc,
     searchdist: 0,
-    workLocation: WorkLocation.Private,
+    workLocation: WorkLocation.Land,
     produceType: ResourceType.Gold
 }

@@ -8,7 +8,7 @@ export type SimSquare = {
     households: Household[];
     people: Person[];
     farmerCount: number;
-    traderCount: number;
+    isFarm: boolean;
 }
 
 
@@ -18,7 +18,7 @@ export function initSimInfo(): SimSquare {
         households: [],
         people: [],
         farmerCount: 0,
-        traderCount: 0
+        isFarm: false
     };
 }
 

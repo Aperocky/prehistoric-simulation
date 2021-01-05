@@ -5,13 +5,16 @@ import { Square } from '../../../map/square';
 import { SAIL_CHANCE } from '../../../constant/simConstants';
 
 
+const SHALL_NOT_FARM = ["HUNT", "SERV", "MINE", "TRAD"];
+
+
 export default function move(household: Household, terrain: Square[][]): void {
     // If hungry in current location, move.
     let foodSecurity = household.percentSatisfied[ResourceType.Food];
     let distance = 0;
-    let housing = household.storage.getResource[ResourceType.Haus];
+    let housing = household.storage.getResource(ResourceType.Haus);
     let housingEffect = housing/10;
-    if (Math.random() > foodSecurity + housingEffect) {
+    if (Math.random() > foodSecurity + housingEffect + 0.2) {
         if (sail(household, terrain)) {
             return;
         }
@@ -28,8 +31,15 @@ export default function move(household: Household, terrain: Square[][]): void {
             distance = 1;
         }
     }
+
     if (distance) {
-        household.location = randomWalk(household.location, terrain, distance);
+        let newLoc = randomWalk(household.location, terrain, distance);
+        if (terrain[newLoc.y][newLoc.x].simInfo.isFarm
+                && household.adults.some(p => SHALL_NOT_FARM.includes(p.work.work))) {
+            household.stay++;
+            return;
+        }
+        household.location = newLoc;
         household.stay = 0;
         if (ResourceType.Haus in household.storage.storage) {
             household.storage.storage[ResourceType.Haus] = 0;
@@ -38,7 +48,6 @@ export default function move(household: Household, terrain: Square[][]): void {
         household.stay++;
     }
 }
-
 
 function sail(household: Household, terrain: Square[][]): boolean {
     let loc = household.location;

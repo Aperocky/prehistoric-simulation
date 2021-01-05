@@ -25,7 +25,9 @@ function produceFunc(strength: number, square: Square): number {
     if (population > 50) {
         let popFactor = (population/50) ** 0.5;
     }
-    return strength ** farmTerrainCapacity(square)[1] / popFactor * farmTerrainCapacity(square)[0];
+    let result = strength ** farmTerrainCapacity(square)[1] / popFactor * farmTerrainCapacity(square)[0];
+    result *= square.simInfo.isFarm ? 1.2 : 1;
+    return result;
 }
 
 

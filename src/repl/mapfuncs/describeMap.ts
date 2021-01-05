@@ -24,6 +24,7 @@ function readTerrainTypes(terrainMap: Square[][]): string[] {
     result.push('-----TERRAIN TYPES-----');
     let mapCounter: Map<Terrain, number> = new Map();
     let mines = 0;
+    let farms = 0;
     [].concat(...terrainMap).forEach(square => {
         if (mapCounter.has(square.terrain)) {
             mapCounter.set(square.terrain, mapCounter.get(square.terrain)+1);
@@ -31,6 +32,7 @@ function readTerrainTypes(terrainMap: Square[][]): string[] {
             mapCounter.set(square.terrain, 1);
         }
         if (square.isMine) mines++;
+        if (square.simInfo.isFarm) farms++;
     })
     let title = "TERRAIN";
     let header = ["TERRAIN", "COUNT"];
@@ -39,5 +41,6 @@ function readTerrainTypes(terrainMap: Square[][]): string[] {
         rows.push([TERRAIN_STR.get(key), val.toString()]);
     });
     rows.push(["*MINES", mines.toString()]);
+    rows.push(["*FARMS", farms.toString()]);
     return createTable(title, header, rows);
 }
