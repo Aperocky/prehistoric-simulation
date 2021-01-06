@@ -7,6 +7,7 @@ import { childHeritage } from './properties/heritage';
 import { ResourceType } from './properties/resourceTypes';
 import move from './actions/move';
 import shop from './actions/shop';
+import inherit from './actions/inherit';
 import getHouseholdSpending from './actions/getHouseholdSpending';
 import { v4 as uuid } from 'uuid';
 import { SICK_PROBABILITY } from '../../constant/mapConstants';
@@ -208,6 +209,7 @@ export class Household {
                     let oldest = this.dependents.shift();
                     this.adults = [oldest];
                 } else {
+                    inherit(this, sim);
                     sim.households.delete(this.id);
                 }
             } else {

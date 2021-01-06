@@ -56,8 +56,11 @@ function changeFunc(person: Person, square: Square): string {
         if (Math.random() < 0.05) {
             return "HUNT";
         }
+        if (population > 50 && Math.random() < 0.05) {
+            return "TRAD";
+        }
     }
-    if (population > 50) {
+    if (population > 100) {
         if (Math.random() < 0.2) {
             return "TRAD";
         }

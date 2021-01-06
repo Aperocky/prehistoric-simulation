@@ -15,7 +15,7 @@ export const MOUNTAIN_GREEN = [180, 240, 180];
 
 export const MINE_COLOR = [170, 170, 180];
 export const FARM_COLOR = [220, 170, 90];
-export const FARM_ALPHA = 0.4;
+export const FARM_ALPHA = 0.3;
 
 export const HIGHLIGHT_COLOR = [255, 255, 0];
 export const HIGHLIGHT_ALPHA = 0.3;

@@ -17,7 +17,7 @@ export default function populateSquareInfo(sim: Simulation): void {
         for (let x = 0; x < size; x++) {
             let square = sim.terrain[y][x];
             if (square.simInfo.farmerCount > 10
-                && square.simInfo.people.length < 50) {
+                && square.simInfo.people.length < 100) {
                 square.simInfo.isFarm = true;
             }
         }

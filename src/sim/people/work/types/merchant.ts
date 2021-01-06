@@ -10,12 +10,18 @@ function changeFunc(person: Person, square: Square): string {
         // Cities only
         if (square.isCoast) {
             return "FISH";
+        } else if (square.simInfo.farmerCount > 5) {
+            return "FARM";
         } else {
             return "HUNT";
         }
     }
     if (person.isHungry() && Math.random() < 0.5) {
-        return "SERV";
+        if (square.simInfo.farmerCount > 10 && population < 100) {
+            return "FARM";
+        } else {
+            return "SERV";
+        }
     }
     if (person.household.stay > 5) {
         if (Math.random() < 0.1 && population > 50) {
@@ -34,7 +40,7 @@ function changeFunc(person: Person, square: Square): string {
 
 
 function produceFunc(strength: number, square: Square): number {
-    return strength * 1.3;
+    return strength ** 1.3;
 }
 
 

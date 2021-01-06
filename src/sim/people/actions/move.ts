@@ -18,8 +18,13 @@ export default function move(household: Household, terrain: Square[][]): void {
         if (sail(household, terrain)) {
             return;
         }
-        distance = household.dependents.length ? 1 : 5;
-        distance += Math.floor(Math.random() * 3);
+        let currLoc = household.location;
+        if (terrain[currLoc.y][currLoc.x].simInfo.people.length > 100){
+            distance = 1; // City folks don't go very far;
+        } else {
+            distance = household.dependents.length ? 1 : 5;
+            distance += Math.floor(Math.random() * 3);
+        }
     } else if (household.isSingle) {
         if (Math.random() < housingEffect) {
             distance = 0;
@@ -48,6 +53,7 @@ export default function move(household: Household, terrain: Square[][]): void {
         household.stay++;
     }
 }
+
 
 function sail(household: Household, terrain: Square[][]): boolean {
     let loc = household.location;

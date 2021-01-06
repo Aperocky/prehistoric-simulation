@@ -33,7 +33,13 @@ function changeFunc(person: Person, square: Square): string {
         }
     }
     if (person.isHungry() && Math.random() < 0.2) {
-        return "TRAD";
+        if (square.isCoast) {
+            return "FISH";
+        } else if (square.simInfo.farmerCount > 5) {
+            return "FARM";
+        } else {
+            return "TRAD";
+        }
     }
     return "SERV";
 }

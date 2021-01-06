@@ -41,7 +41,7 @@ function changeFunc(person: Person, square: Square): string {
             }
         }
     }
-    if (population > 30) {
+    if (population > 50) {
         if (Math.random() < 0.2) {
             return "TRAD";
         }
@@ -56,11 +56,11 @@ function changeFunc(person: Person, square: Square): string {
             }
         }
         let farmerCount = square.simInfo.farmerCount;
-        if (farmerCount > 0 && farmerCount < 10) {
-            if (person.isHungry() && Math.random() < 0.5) {
+        if (farmerCount > 5) {
+            if (person.isHungry()) {
                 return "FARM";
             }
-            if (Math.random() < 0.05) {
+            if (Math.random() < 0.2) {
                 return "FARM";
             }
         }
