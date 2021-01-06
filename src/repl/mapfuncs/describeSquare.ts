@@ -22,6 +22,7 @@ const HELP = [
     "example$ square x=1 y=1 store",
 ];
 
+
 export default function describeSquare(controller: Controller, ...args: string[]): string[] {
     let kvps = argparse(args);
     let xstr: string;

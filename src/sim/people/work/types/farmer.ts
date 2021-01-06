@@ -8,11 +8,11 @@ function farmTerrainCapacity(square: Square): number[] {
     // individual and exponent
     switch (square.terrain) {
         case 2: // Grass
-            return [4, 0.6];
+            return [2, 0.6];
         case 6: // Highland
-            return [3, 0.6];
+            return [1.5, 0.6];
         case 7: // Woods
-            return [3, 0.7];
+            return [1.5, 0.7];
         default:
             return [0, 0];
     }
@@ -23,10 +23,11 @@ function produceFunc(strength: number, square: Square): number {
     let population = square.simInfo.people.length;
     let popFactor = 1;
     if (population > 50) {
-        let popFactor = (population/50) ** 0.5;
+        let popFactor = (population/50);
     }
     let result = strength ** farmTerrainCapacity(square)[1] / popFactor * farmTerrainCapacity(square)[0];
     result *= square.simInfo.isFarm ? 1.2 : 1;
+    result *= square.isRiver() ? 1.25 : 1;
     return result;
 }
 
@@ -37,7 +38,8 @@ function strengthMod(person: Person): number {
     if (ResourceType.Tool in consumed) {
         toolMultiplier += consumed[ResourceType.Tool] * 2;
     }
-    return defaultAgeMod(person) * toolMultiplier;
+    let experience = person.work.experience["FARM"]/20;
+    return defaultAgeMod(person) * toolMultiplier + experience;
 }
 
 

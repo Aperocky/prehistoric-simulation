@@ -142,9 +142,8 @@ describe('people:shop', () => {
         expect(orders.length).to.equal(1);
         let order = orders[0];
         expect(order.resourceType).to.equal("food");
-        expect(order.amount).to.equal(0.75);
+        expect(order.amount).to.equal(0.375);
         expect(order.quantity).to.equal(3);
-        expect(order.unitPrice).to.equal(0.25);
         expect(order.orderType).to.be.false;
         expect(hh.storage.getResource("food")).to.equal(2);
         // Cleanup
@@ -163,9 +162,8 @@ describe('people:shop', () => {
         expect(orders.length).to.equal(1);
         let order = orders[0];
         expect(order.resourceType).to.equal("wood");
-        expect(order.amount).to.equal(0.25);
+        expect(order.amount).to.equal(0.125);
         expect(order.quantity).to.equal(5);
-        expect(order.unitPrice).to.equal(0.05);
         expect(order.orderType).to.be.false;
         expect(hh.storage.getResource("wood")).to.equal(0);
         // Cleanup
@@ -214,9 +212,8 @@ describe('people:shop', () => {
         expect(orders.length).to.equal(2);
         let sellOrder = orders[0];
         expect(sellOrder.resourceType).to.equal("food");
-        expect(sellOrder.amount).to.equal(0.75);
+        expect(sellOrder.amount).to.equal(0.375);
         expect(sellOrder.quantity).to.equal(3);
-        expect(sellOrder.unitPrice).to.equal(0.25);
         expect(sellOrder.orderType).to.be.false;
         let buyOrder = orders[1];
         expect(buyOrder.resourceType).to.equal("wood");
@@ -244,9 +241,8 @@ describe('people:shop', () => {
         expect(orders.length).to.equal(2);
         let sellOrder = orders[0];
         expect(sellOrder.resourceType).to.equal("food");
-        expect(sellOrder.amount).to.equal(0.75);
+        expect(sellOrder.amount).to.equal(0.375);
         expect(sellOrder.quantity).to.equal(3);
-        expect(sellOrder.unitPrice).to.equal(0.25);
         expect(sellOrder.orderType).to.be.false;
         let buyOrder = orders[1];
         expect(buyOrder.resourceType).to.equal("wood");

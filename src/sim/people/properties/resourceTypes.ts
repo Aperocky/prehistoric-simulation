@@ -20,18 +20,16 @@ export const SPOIL_RATE = {
 
 
 export function houseToStr(house: number): string {
-    let houseStr = house < 2
+    let houseStr = house < 12
             ? "SHED"
-            : house < 10
-            ? "HUT"
-            : house < 25
+            : house < 40
+            ? "FLAT"
+            : house < 120
             ? "TOWNHOUSE"
-            : house < 60
+            : house < 300
             ? "HOUSE"
-            : house < 150
+            : house < 1000
             ? "MANSION"
-            : house < 400
-            ? "ESTATE"
             : "CASTLE";
     return houseStr;
 }

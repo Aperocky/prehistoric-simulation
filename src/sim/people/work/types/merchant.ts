@@ -23,15 +23,15 @@ function changeFunc(person: Person, square: Square): string {
             return "SERV";
         }
     }
-    if (person.household.stay > 5) {
-        if (Math.random() < 0.1 && population > 50) {
+    if (person.household.stay > 10) {
+        if (Math.random() < 0.04) {
             if (Math.random() < 0.5) {
                 return "TOOL";
             } else {
                 return "HAUS";
             }
         }
-        if (population > 100 && Math.random() < 0.05) {
+        if (population > 100 && Math.random() < 0.02) {
             return "MEDS";
         }
     }
@@ -40,7 +40,16 @@ function changeFunc(person: Person, square: Square): string {
 
 
 function produceFunc(strength: number, square: Square): number {
-    return strength ** 1.3;
+    let exponent = 1.2;
+    exponent += square.isCoast ? 0.05 : 0;
+    exponent += square.isRiver() ? 0.1 : 0;
+    return strength ** exponent;
+}
+
+
+function strengthMod(person: Person): number {
+    let experience = 2 + person.work.experience["TRAD"]/10;
+    return defaultAgeMod(person) * experience;
 }
 
 

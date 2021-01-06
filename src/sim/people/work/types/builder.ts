@@ -5,16 +5,17 @@ import { Person } from '../../person';
 
 
 function strengthMod(person: Person): number {
-    let woodMultiplier = 1;
+    let woodMultiplier = 2;
     let toolMultiplier = 1;
     let consumed = person.work.workConsumption;
     if (ResourceType.Wood in consumed) {
-        woodMultiplier += consumed[ResourceType.Wood];
+        woodMultiplier += consumed[ResourceType.Wood] * 2;
     }
-    if (ResourceType.Iron in consumed) {
-        toolMultiplier += consumed[ResourceType.Iron] * 2;
+    if (ResourceType.Tool in consumed) {
+        toolMultiplier += consumed[ResourceType.Tool];
     }
-    return defaultAgeMod(person) * woodMultiplier * toolMultiplier * 2;
+    let experience = 1 + person.work.experience["HAUS"]/10;
+    return defaultAgeMod(person) * woodMultiplier * toolMultiplier * experience;
 }
 
 

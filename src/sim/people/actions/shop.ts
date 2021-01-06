@@ -26,8 +26,8 @@ export default function shop(hh: Household): Order[] {
     let avgHealth = hh.adults.reduce((sum, person) => person.health + sum, 0)/hh.adults.length;
     let riskAcceptance = 1 + avgHealth/(1 + hh.dependents.length);
     let safetyMargin = 100/riskAcceptance;
-    safetyMargin = safetyMargin < 1 ? 1 : safetyMargin; // Edge case
-    safetyMargin = safetyMargin > 3 ? 3 : safetyMargin; // Cap.
+    safetyMargin = safetyMargin < 1.5 ? 1.5 : safetyMargin; // Edge case
+    safetyMargin = safetyMargin > 4 ? 4 : safetyMargin; // Cap.
     let orders = sell(currentSupplies, hh, riskAcceptance, safetyMargin);
     orders.push(...buy(currentSupplies, hh, riskAcceptance, safetyMargin));
     return orders;
@@ -106,7 +106,7 @@ function sell(currentSupplies: {[resourceType: string]: number},
                     continue;
                 }
             }
-            let riskFactor = riskAcceptance/200; // Risky type sells for higher prices.
+            let riskFactor = riskAcceptance/400; // Risky type sells for higher prices.
             let amount = hh.storage.gold * riskFactor * (currentSupplies[key] - safetyMargin);
             if (amount < 0.001) {
                 amount = 0.001; // minimum amount;
@@ -121,7 +121,7 @@ function sell(currentSupplies: {[resourceType: string]: number},
         if (!(key in currentSupplies)) {
             // Sell everything except house, and house too if too hungry
             let quantity = val;
-            let riskFactor = riskAcceptance/200;
+            let riskFactor = riskAcceptance/400;
             let amount = hh.storage.gold * riskFactor
             if (key == ResourceType.Haus) {
                 if (hh.adults[0].isHungry()) {

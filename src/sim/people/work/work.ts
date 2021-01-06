@@ -4,8 +4,10 @@ import { SimProduction } from '../../util/simProduction';
 import { Person } from '../person';
 import { Square } from '../../../map/square';
 
+
 const INITIAL_WORK_TYPE = "HUNT";
 const GUILD_WORK_TYPES = ["TOOL", "HAUS", "MEDS"];
+
 
 export class Work {
 
@@ -53,6 +55,15 @@ export class Work {
     doWork(simProduction: SimProduction): void {
         if (this.person.age < 10) {
             return;
+        }
+        if (this.work in this.experience) {
+            this.experience[this.work]++;
+        } else {
+            this.experience[this.work] = 1;
+        }
+        for (let work in Object.keys(this.experience)) {
+            if (work == this.work) continue;
+            if (this.experience[work] > 0) this.experience[work]--;
         }
         let location = this.person.household.location;
         let workType = WORK_TYPES[this.work];

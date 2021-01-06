@@ -30,7 +30,8 @@ function strengthMod(person: Person): number {
     if (ResourceType.Wood in consumed) {
         woodMultiplier += consumed[ResourceType.Wood] * 2;
     }
-    return defaultAgeMod(person) * woodMultiplier * 2;
+    let experience = 1 + person.work.experience["MEDS"]/10;
+    return defaultAgeMod(person) * woodMultiplier;
 }
 
 

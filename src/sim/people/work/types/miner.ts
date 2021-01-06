@@ -10,7 +10,8 @@ function strengthMod(person: Person): number {
     if (ResourceType.Tool in consumed) {
         toolMultiplier += consumed[ResourceType.Tool] * 2;
     }
-    return defaultAgeMod(person) * toolMultiplier;
+    let experience = 1 + person.work.experience["MINE"]/20;
+    return defaultAgeMod(person) * toolMultiplier * experience;
 }
 
 
