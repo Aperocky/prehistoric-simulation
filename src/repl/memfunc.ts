@@ -14,8 +14,11 @@ export default function memfunc(controller: Controller, ...args: string[]): stri
     let index = -1;
     if (kvps.length) {
         if (kvps[0].key == "help") {
-            let currStored = controller.replTerminal.memcmds.length;
-            return HELP.concat([`${currStored} commands currently stored`]);
+            if (controller) {
+                let currStored = controller.replTerminal.memcmds.length;
+                return HELP.concat([`${currStored} commands currently stored`]);
+            }
+            return HELP;
         }
         index = parseInt(kvps[0].key);
     }
