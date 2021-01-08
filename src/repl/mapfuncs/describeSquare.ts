@@ -5,8 +5,7 @@ import { DEFAULT_MAP_SIZE } from '../../constant/displayConstants';
 import { DIRECTIONS_DESCRIPTION } from '../../constant/mapConstants';
 import { locationToString } from '../../sim/util/location';
 import { WORK_TYPES } from '../../sim/people/work/workTypes';
-import { describeWork, roundTo, describePeople, createTable, householdsList, describeStorage, classList } from '../util';
-import { describeIncome } from '../util';
+import { roundTo, describePeople, createTable, householdsList, describeStorage, classList, describeIncome } from '../util';
 import { ResourceType } from '../../sim/people/properties/resourceTypes';
 
 
@@ -136,7 +135,7 @@ function describeCity(square: Square): string[] {
     let households = square.simInfo.households;
     let result = [];
     result.push(...classList(households));
-    result.push(...describeWork(people));
+    result.push(...describeIncome(people));
     result.push(...describeStorage(households));
     return result;
 }

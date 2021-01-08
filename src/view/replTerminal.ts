@@ -129,4 +129,11 @@ export class ReplTerminal {
         this.command = command;
         this.terminal.write(CURR_LINE_REFRESH + TERMINAL_ADDR + this.command);
     }
+
+    identifyMobile(): void {
+        let mobileWarn = "\x1b[36mWARN: It seems that you're viewing from mobile, "
+            + "simulation is in headless mode"
+        this.terminal.write(CURR_LINE_REFRESH + mobileWarn);
+        this.terminal.write(CARRIAGE_RETURN + TERMINAL_ADDR);
+    }
 }

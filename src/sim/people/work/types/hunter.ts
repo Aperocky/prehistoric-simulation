@@ -68,6 +68,9 @@ function changeFunc(person: Person, square: Square): string {
     if (square.terrain == 3 && Math.random() < 0.1) {
         return "WOOD";
     }
+    if (square.terrain == 7 && Math.random() < 0.05) {
+        return "WOOD";
+    }
     return "HUNT";
 }
 

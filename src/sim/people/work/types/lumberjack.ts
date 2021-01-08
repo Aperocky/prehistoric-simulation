@@ -58,7 +58,7 @@ export const Lumberjack: WorkType = {
         return produce;
     },
     changeFunc: changeFunc,
-    searchdist: 0,
+    searchdist: 2,
     workLocation: WorkLocation.Land,
     produceType: ResourceType.Wood
 }

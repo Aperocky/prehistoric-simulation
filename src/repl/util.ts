@@ -75,25 +75,46 @@ export function describeWork(people: Person[]): string[] {
 
 export function describeIncome(people: Person[]): string[] {
     let result = [];
-    let prodHash: {[work: string]: number} = {};
+    type Record = {
+        people: number;
+        total: number;
+        max: number;
+    }
+    let prodHash: {[work: string]: Record} = {};
     people.forEach(p => {
+        let work = p.work.work;
         let produce = p.work.produce;
         let produceType = WORK_TYPES[p.work.work].produceType;
-        if (produceType in prodHash) {
-            prodHash[produceType] += produce;
+        if (work in prodHash) {
+            prodHash[work].total += produce;
+            prodHash[work].people++;
+            if (produce > prodHash[work].max) {
+                prodHash[work].max = produce;
+            }
         } else {
-            prodHash[produceType] = produce;
+            prodHash[work] = {
+                people: 1,
+                total: produce,
+                max: produce,
+            };
         }
     });
     let rows: string[][] = [];
     Object.entries(prodHash)
-        .sort(([,a],[,b]) => b-a)
+        .sort(([,a],[,b]) => b.total - a.total)
         .forEach(entry => {
             const [key, value] = entry;
-            rows.push([key.toUpperCase(), roundTo(value).toString()]);
+            rows.push([
+                WORK_TYPES[key].name,
+                value.people.toString(),
+                WORK_TYPES[key].produceType,
+                roundTo(value.total).toString(),
+                roundTo(value.max).toString(),
+                roundTo(value.total/value.people).toString()
+            ]);
         });
     let title = "INCOME";
-    let header = ["RESOURCE", "COUNT"];
+    let header = ["WORK", "PEOPLE", "RESOURCE", "TOTAL", "MAX", "AVG"];
     return createTable(title, header, rows);
 }
 
