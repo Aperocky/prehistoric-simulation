@@ -1,5 +1,6 @@
 import { Person } from '../sim/people/person';
 import { Household } from '../sim/people/household';
+import { Controller } from '../controller';
 import { ResourceType, houseToStr } from '../sim/people/properties/resourceTypes';
 import { WORK_TYPES } from '../sim/people/work/workTypes';
 
@@ -123,27 +124,28 @@ export function describeStorage(households: Household[]): string[] {
 }
 
 
-export function householdsList(households: Household[]): string[] {
+export function householdsList(households: Household[], controller: Controller): string[] {
     let result = [];
     let title = "HOUSEHOLDS";
     households.sort((ha, hb) => hb.storage.getResource("housing") - ha.storage.getResource("housing"));
     let header = ["INDEX", "SURNAME", "MEMBERS", "WEALTH", "STAY", "DWELLING"];
     let rows: string[][] = [];
-    let cmds: string[] = [];
+    controller.replTerminal.memcmds = [];
     households.forEach((hh, i) => {
         let stay = hh.stay > 10 ? "LOCAL" : hh.stay.toString();
         rows.push([
-            (i+1).toString(),
+            i.toString(),
             hh.adults[0].heritage.surname,
             (hh.adults.length + hh.dependents.length).toString(),
             roundTo(hh.storage.gold).toString(),
             stay,
             houseToStr(hh.storage.getResource("housing"))
         ]);
-        cmds.push(`${i+1}: ${cmdprint(`hh --id=${hh.id}`)}`);
+        controller.replTerminal.memcmds.push(`hh --id=${hh.id}`);
     });
     let table = createTable(title, header, rows);
-    return table.concat(cmds);
+    table.push(`use ${cmdprint('mem $index')} to inspect individual rows`);
+    return table;
 }
 
 

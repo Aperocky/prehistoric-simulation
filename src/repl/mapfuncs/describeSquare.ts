@@ -66,7 +66,7 @@ export default function describeSquare(controller: Controller, ...args: string[]
         return ["x and y coordinates must be in map"];
     }
     if (hh) {
-        return householdsList(controller.terrain[y][x].simInfo.households);
+        return householdsList(controller.terrain[y][x].simInfo.households, controller);
     }
     if (store) {
         return describeStorage(controller.terrain[y][x].simInfo.households);
@@ -84,8 +84,6 @@ function describe(controller: Controller, x: number, y: number): string[] {
     result.push(...describeSquareItself(square));
     if (square.simInfo.households.length) {
         result.push(...describePeople(square.simInfo.households, square.simInfo.people));
-        result.push(...describeWork(square.simInfo.people));
-        result.push(...describeIncome(square.simInfo.people));
     }
     result.push(...describeProduction(controller, x, y))
     return result;

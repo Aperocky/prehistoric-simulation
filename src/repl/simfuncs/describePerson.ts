@@ -25,17 +25,19 @@ export default function describePerson(controller: Controller, ...args: string[]
         return ["id argument is required"];
     }
     if (controller.simulation.people.has(ppid)) {
-        return describe(controller.simulation, controller.simulation.people.get(ppid));
+        return describe(controller, controller.simulation.people.get(ppid));
     } else {
         return [`Cannot find person with id of ${ppid}`]
     }
 }
 
-function describe(sim: Simulation, person: Person): string[] {
+function describe(controller: Controller, person: Person): string[] {
     let result = [];
-    result.push(`HOUSEHOLD: ${cmdprint(`hh --id=${person.household.id}`)}`);
+    controller.replTerminal.memcmds = [];
+    result.push(`HOUSEHOLD: ${cmdprint("mem 0")}`);
+    controller.replTerminal.memcmds.push(`hh --id=${person.household.id}`);
     result.push(...personTable(person));
-    result.push(...heritageTable(sim, person));
+    result.push(...heritageTable(controller, person));
     return result;
 }
 
@@ -54,7 +56,8 @@ function personTable(person: Person): string[] {
     return createTable(title, header, rows);
 }
 
-function heritageTable(sim: Simulation, person: Person): string[] {
+function heritageTable(controller: Controller, person: Person): string[] {
+    let sim = controller.simulation;
     let getPerson = (sim: Simulation, id: string): Person | null => {
         if (sim.people.has(id)) {
             return sim.people.get(id);
@@ -69,14 +72,17 @@ function heritageTable(sim: Simulation, person: Person): string[] {
     let father = getPerson(sim, person.heritage.father);
     rows.push(["1", "MOTHER", mother ? "YES" : "NO", mother ? mother.getName() : "-"]);
     rows.push(["2", "FATHER", father ? "YES" : "NO", father ? father.getName() : "-"]);
-    if (mother) cmds.push(`1: ${cmdprint(`pp --id=${mother.id}`)}`);
-    if (father) cmds.push(`2: ${cmdprint(`pp --id=${father.id}`)}`);
+    controller.replTerminal.memcmds.push(`pp --id=${person.heritage.mother}`);
+    controller.replTerminal.memcmds.push(`pp --id=${person.heritage.father}`);
     if (person.heritage.children.length) {
         person.heritage.children.forEach((c, i) => {
             let child = getPerson(sim, c);
             rows.push([(i + 3).toString(), "CHILD", child ? "YES" : "NO", child ? child.getName() : "-"]);
             if (child) cmds.push(`${i+3}, ${cmdprint(`pp --id=${child.id}`)}`);
+            controller.replTerminal.memcmds.push(`pp --id=${c}`);
         });
     }
-    return createTable(title, header, rows).concat(cmds);
+    let table = createTable(title, header, rows);
+    table.push(`use ${cmdprint('mem $index')} to inspect individual rows`);
+    return table;
 }

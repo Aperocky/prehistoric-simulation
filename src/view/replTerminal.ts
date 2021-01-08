@@ -37,6 +37,7 @@ export class ReplTerminal {
     pointer: number;
     controller: Controller;
     paste: string;
+    memcmds: string[];
 
     constructor(controller: Controller) {
         this.command = "";
@@ -48,6 +49,7 @@ export class ReplTerminal {
         fitAddon.fit();
         this.setupTerminal();
         this.paste = "";
+        this.memcmds = [];
     }
 
     execute(): void {
@@ -65,13 +67,15 @@ export class ReplTerminal {
         }
     }
 
-    processCommand(): void {
+    processCommand(nested: boolean = false): void {
         let command = this.command.trim();
         let result: string[] = processor(this.controller, command);
         result.forEach(str => {
             this.terminal.write(CARRIAGE_RETURN + str);
         })
-        this.terminal.write(CARRIAGE_RETURN + TERMINAL_ADDR);
+        if (!nested) {
+            this.terminal.write(CARRIAGE_RETURN + TERMINAL_ADDR);
+        }
     }
 
     setupTerminal(): void {

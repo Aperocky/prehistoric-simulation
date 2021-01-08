@@ -6,6 +6,7 @@ import { Simulation } from '../../sim/sim';
 import { WORK_TYPES } from '../../sim/people/work/workTypes';
 import { roundTo, cmdprint, describeIncome, createTable, describeStorage } from '../util';
 
+
 const HELP = [
     "describe household information",
     "hh id=HOUSEHOLD_ID",
@@ -28,14 +29,14 @@ export default function describeHousehold(controller: Controller, ...args: strin
         return ["id argument is required"];
     }
     if (controller.simulation.households.has(hhid)) {
-        return describe(controller.simulation, controller.simulation.households.get(hhid));
+        return describe(controller, controller.simulation.households.get(hhid));
     } else {
         return [`Cannot find household with id of ${hhid}`]
     }
 }
 
 
-function describe(sim: Simulation, household: Household): string[] {
+function describe(controller: Controller, household: Household): string[] {
     let result = [];
     if (household.isSingle) {
         if (household.dependents.length) {
@@ -48,7 +49,7 @@ function describe(sim: Simulation, household: Household): string[] {
     }
     result.push(`location: ${cmdprint(`square x=${household.location.x} y=${household.location.y}`)}`);
     let fam = [].concat(...[household.adults, household.dependents]);
-    result.push(...describeFamilyMember(fam));
+    result.push(...describeFamilyMember(fam, controller));
     result.push(...describeStorage([household]));
     result.push(...describeConsumption(household));
     result.push(...describeIncome(fam));
@@ -57,11 +58,11 @@ function describe(sim: Simulation, household: Household): string[] {
 }
 
 
-function describeFamilyMember(members: Person[]): string[] {
+function describeFamilyMember(members: Person[], controller: Controller): string[] {
     let title = "MEMBERS"
     let header = ["INDEX", "NAME", "GENDER", "AGE", "HEALTH", "WORK"]
     let rows: string[][] = [];
-    let cmds = [];
+    controller.replTerminal.memcmds = [];
     members.forEach((p, i) => {
         rows.push([
             (i + 1).toString(),
@@ -71,9 +72,11 @@ function describeFamilyMember(members: Person[]): string[] {
             roundTo(p.health, 0).toString(),
             p.age > 10 ? WORK_TYPES[p.work.work].name : "Child",
         ]);
-        cmds.push(`${i}: ${cmdprint(`pp --id=${p.id}`)}`);
+        controller.replTerminal.memcmds.push(`pp --id=${p.id}`);
     });
-    return createTable(title, header, rows).concat(cmds);
+    let table = createTable(title, header, rows);
+    table.push(`use ${cmdprint('mem $index')} to inspect individual rows`);
+    return table;
 }
 
 

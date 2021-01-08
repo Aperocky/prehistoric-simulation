@@ -42,8 +42,16 @@ function changeFunc(person: Person, square: Square): string {
 function produceFunc(strength: number, square: Square): number {
     let exponent = 1.2;
     exponent += square.isCoast ? 0.05 : 0;
-    exponent += square.isRiver() ? 0.1 : 0;
-    return strength ** exponent;
+    exponent += square.isRiver()
+            ? (square.flowVolume < 10
+            ? 0.05
+            : square.flowVolume < 20
+            ? 0.1 : 0.2)
+            : 0;
+    // local bonus
+    let baseBonus = square.simInfo.people.length * 2;
+    baseBonus = baseBonus > 400 ? 400 : baseBonus;
+    return strength ** exponent + baseBonus;
 }
 
 

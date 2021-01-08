@@ -10,6 +10,7 @@ import describePerson from './simfuncs/describePerson';
 import describeSim from './simfuncs/describeSim';
 import describeMarket from './simfuncs/describeMarket';
 import displayMode from './viewfuncs/displayMode';
+import memfunc from './memfunc';
 
 
 interface ReplFunction {
@@ -39,6 +40,7 @@ FUNC_MAP.set("describe-market", describeMarket);
 FUNC_MAP.set("market", describeMarket);
 FUNC_MAP.set("display-mode", displayMode);
 FUNC_MAP.set("mode", displayMode);
+FUNC_MAP.set("mem", memfunc);
 
 
 const HELP_MAP: Map<string, string[]> = new Map();
@@ -52,6 +54,7 @@ HELP_MAP.set("describe-sim", ["describe-sim", "sim"]);
 HELP_MAP.set("describe-market", ["describe-market", "market"]);
 HELP_MAP.set("display-mode", ["display-mode", "mode"]);
 HELP_MAP.set("describe-person", ["describe-person", "pp"]);
+HELP_MAP.set("mem", ["mem"]);
 
 
 export default function processor(controller: Controller, command: string): string[] {
