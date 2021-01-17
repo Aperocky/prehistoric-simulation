@@ -98,10 +98,13 @@ function sell(currentSupplies: {[resourceType: string]: number},
         if (currentSupplies[key] > safetyMargin) {
             let quantity = (currentSupplies[key] - safetyMargin) * hh.projectedConsumption[key];
             if (key == ResourceType.Haus) {
+                let house = hh.storage.getResource(ResourceType.Haus);
                 if (hh.adults[0].isHungry()) {
-                    quantity = val * 0.5;
+                    quantity = house * 0.5;
                 } else if (currentSupplies[ResourceType.Food] < 1) {
-                    quantity = val * 0.2;
+                    quantity = house * 0.2;
+                } else if (hh.adults.some(p => p.work.work == "HAUS")) {
+                    quantity = house * 0.05;
                 } else {
                     continue;
                 }

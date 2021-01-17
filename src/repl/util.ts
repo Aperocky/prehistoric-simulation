@@ -99,6 +99,7 @@ export function describeIncome(people: Person[]): string[] {
             };
         }
     });
+
     let rows: string[][] = [];
     Object.entries(prodHash)
         .sort(([,a],[,b]) => b.total - a.total)
@@ -115,6 +116,83 @@ export function describeIncome(people: Person[]): string[] {
         });
     let title = "INCOME";
     let header = ["WORK", "PEOPLE", "RESOURCE", "TOTAL", "MAX", "AVG"];
+    return createTable(title, header, rows);
+}
+
+
+export function describeLocalMarket(households: Household[]) {
+    let result = [];
+    type Record = {
+        totalIncome: number;
+        totalBought: number;
+        totalSold: number;
+        totalStorage: number;
+    };
+    let records: {[resource: string]: Record} = {
+        "gold": {
+            totalIncome: 0,
+            totalBought: 0,
+            totalSold: 0,
+            totalStorage: 0,
+        }
+    };
+    households.forEach(hh => {
+        hh.allDo(p => {
+            let resource = WORK_TYPES[p.work.work].produceType;
+            if (resource in records) {
+                records[resource].totalIncome += p.work.produce;
+            } else {
+                records[resource] = {
+                    totalIncome: p.work.produce,
+                    totalBought: 0,
+                    totalSold: 0,
+                    totalStorage: 0,
+                }
+            }
+        });
+        hh.orders.filter(o => o.delivered).forEach(o => {
+            if (!(o.resourceType in records)) {
+                records[o.resourceType] = {
+                    totalIncome: 0,
+                    totalBought: 0,
+                    totalSold: 0,
+                    totalStorage: 0,
+                };
+            }
+            if (o.orderType) {
+                records[o.resourceType].totalBought += o.quantity;
+                records["gold"].totalSold += o.quantity * o.settlePrice;
+            } else {
+                records[o.resourceType].totalSold += o.quantity;
+                records["gold"].totalBought += o.quantity * o.settlePrice;
+            }
+        });
+        for (const [resource, amount] of Object.entries(hh.storage.storage)) {
+            if (!(resource in records)) {
+                records[resource] = {
+                    totalIncome: 0,
+                    totalBought: 0,
+                    totalSold: 0,
+                    totalStorage: 0,
+                };
+            }
+            records[resource].totalStorage += amount;
+        }
+        records["gold"].totalStorage += hh.storage.gold;
+    });
+
+    let rows: string[][] = [];
+    for (const [resource, record] of Object.entries(records)) {
+        rows.push([
+            resource,
+            roundTo(record.totalIncome).toString(),
+            roundTo(record.totalBought).toString(),
+            roundTo(record.totalSold).toString(),
+            roundTo(record.totalStorage).toString(),
+        ]);
+    }
+    let title = "LOCAL MARKET";
+    let header = ["RESOURCE", "INCOME", "BOUGHT", "SOLD", "STORAGE"];
     return createTable(title, header, rows);
 }
 

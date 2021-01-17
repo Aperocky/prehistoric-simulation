@@ -232,7 +232,7 @@ export class Household {
         }
     }
 
-    private allDo(func: (person: Person) => void): void {
+    allDo(func: (person: Person) => void): void {
         [].concat(...[this.adults, this.dependents]).map(func);
     }
 

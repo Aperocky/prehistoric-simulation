@@ -22,8 +22,13 @@ export default function runTurn(controller: Controller, ...args: string[]): stri
             turns = parseInt(kvps[0].key);
         }
     }
+    if (Number.isNaN(turns)) {
+        return ["Turns must be numbers"];
+    } else if (turns < 0) {
+        return ["Turns must be positive"]
+    }
     turns = turns > 20 ? 20 : (turns < 1) ? 1 : turns;
-    let result = [`ran ${turns} turn${ turns > 1 ? "s" : ""}`]; 
+    let result = [`ran ${turns} turn${ turns > 1 ? "s" : ""}`];
     while (turns > 0) {
         controller.runTurn();
         turns--;

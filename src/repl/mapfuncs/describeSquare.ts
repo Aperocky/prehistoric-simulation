@@ -5,7 +5,7 @@ import { DEFAULT_MAP_SIZE } from '../../constant/displayConstants';
 import { DIRECTIONS_DESCRIPTION } from '../../constant/mapConstants';
 import { locationToString } from '../../sim/util/location';
 import { WORK_TYPES } from '../../sim/people/work/workTypes';
-import { roundTo, describePeople, createTable, householdsList, describeStorage, classList, describeIncome } from '../util';
+import { roundTo, describePeople, createTable, householdsList, describeStorage, classList, describeIncome, describeLocalMarket } from '../util';
 import { ResourceType } from '../../sim/people/properties/resourceTypes';
 
 
@@ -14,7 +14,6 @@ const HELP = [
     "x: x coordinate of the square",
     "y: y coordinate of the square",
     "[--hh] show list of households",
-    "[--store] show all storage",
     "[--city] show city stats",
     "example$ square x=1 y=1",
     "example$ square x=1 y=1 hh",
@@ -67,9 +66,6 @@ export default function describeSquare(controller: Controller, ...args: string[]
     if (hh) {
         return householdsList(controller.terrain[y][x].simInfo.households, controller);
     }
-    if (store) {
-        return describeStorage(controller.terrain[y][x].simInfo.households);
-    }
     if (city) {
         return describeCity(controller.terrain[y][x]);
     }
@@ -83,6 +79,7 @@ function describe(controller: Controller, x: number, y: number): string[] {
     result.push(...describeSquareItself(square));
     if (square.simInfo.households.length) {
         result.push(...describePeople(square.simInfo.households, square.simInfo.people));
+        result.push(...describeLocalMarket(square.simInfo.households));
     }
     result.push(...describeProduction(controller, x, y))
     return result;
@@ -136,6 +133,6 @@ function describeCity(square: Square): string[] {
     let result = [];
     result.push(...classList(households));
     result.push(...describeIncome(people));
-    result.push(...describeStorage(households));
+    result.push(...describeLocalMarket(households));
     return result;
 }
