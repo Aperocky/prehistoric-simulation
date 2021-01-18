@@ -5,7 +5,6 @@ import { CitySprite } from './base/citySprite';
 import { Location, locationToString } from '../sim/util/location';
 import { getColorFromTrio } from './base/util';
 import { ReplTerminal } from './replTerminal';
-import * as PIXI from 'pixi.js';
 import * as displayConstants from '../constant/displayConstants';
 
 

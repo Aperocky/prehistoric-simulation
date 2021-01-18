@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js';
 import * as displayConstants from '../../constant/displayConstants';
 import { Household } from '../../sim/people/household';
 import { ReplTerminal } from '../replTerminal';

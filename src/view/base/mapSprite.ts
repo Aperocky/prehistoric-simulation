@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js';
 import * as displayConstants from '../../constant/displayConstants';
 import * as util from './util';
 import { Square, Terrain } from '../../map/square';

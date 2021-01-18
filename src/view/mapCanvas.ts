@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js';
 import * as displayConstants from '../constant/displayConstants';
 import { MapSprite } from './base/mapSprite';
 import { RiverGraphic } from './base/riverGraphic';
