@@ -11,7 +11,7 @@ import inherit from './actions/inherit';
 import getHouseholdSpending from './actions/getHouseholdSpending';
 import { v4 as uuid } from 'uuid';
 import { SICK_PROBABILITY } from '../../constant/mapConstants';
-import { Order } from '../market/order';
+import { Order } from 'market-transactions-engine';
 
 
 export class Household {
@@ -28,6 +28,7 @@ export class Household {
 
     // Market orders
     orders: Order[];
+    budget: number; // intermediary ledger for budgeting purposes, used for shopping.
 
     // stay time in one location
     stay: number;
@@ -57,6 +58,7 @@ export class Household {
         this.percentSatisfied = {};
         this.orders = [];
         this.stay = 0;
+        this.budget = 0;
     }
 
     getProjectedConsumption(): void {
@@ -238,36 +240,36 @@ export class Household {
 
     // Market dynamics
 
-    createMarketOrder(resourceType: string, quantity: number, amount: number, orderType: boolean): Order {
-        if (orderType) {
-            // buy
-            this.storage.spendGold(amount);
-        } else {
+    // Market component details moved to npm:market-transactions-engine
+    createMarketOrder(resourceType: string, quantity: number, amount: number, orderType: boolean): Order | null {
+        if (quantity === 0) {
+            return null;
+        }
+        if (!orderType) {
             if (this.storage.getResource(resourceType) < quantity) {
                 throw new Error("Cannot supply more than storage");
             }
             this.storage.spendResource(resourceType, quantity);
+        } else {
+            this.budget += amount;
+            this.storage.spendGold(amount);
         }
-        return new Order(this.id, resourceType, quantity, amount, orderType);
+        let unitPrice = amount / quantity;
+        return new Order(resourceType, orderType, unitPrice, quantity);
     }
 
     settleMarketOrders(): void {
         this.orders.forEach(order => {
             if (order.delivered) {
+                this.storage.addGold(order.getIncome());
                 if (order.orderType) {
-                    this.storage.addResource(order.resourceType, order.quantity);
-                    this.storage.addGold((order.unitPrice - order.settlePrice) * order.quantity);
+                    this.storage.addResource(order.resourceName, order.quantityFulfilled);
                 } else {
-                    // successfully sold
-                    this.storage.addGold(order.settlePrice * order.quantity);
+                    this.storage.spendResource(order.resourceName, order.quantity - order.quantityFulfilled);
                 }
             } else {
-                if (order.orderType) {
-                    // refund
-                    this.storage.addGold(order.amount);
-                } else {
-                    // return goods
-                    this.storage.addResource(order.resourceType, order.quantity);
+                if (!order.orderType) {
+                    this.storage.addResource(order.resourceName, order.quantity);
                 }
             }
         });
@@ -276,6 +278,8 @@ export class Household {
     shop(): Order[] {
         // renew orders
         this.orders = shop(this);
+        this.storage.addGold(this.budget); // return the money from budgeting exercise
+        this.budget = 0;
         return this.orders;
     }
 }

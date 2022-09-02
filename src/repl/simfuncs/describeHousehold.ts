@@ -65,7 +65,7 @@ function describeFamilyMember(members: Person[], controller: Controller): string
     controller.replTerminal.memcmds = [];
     members.forEach((p, i) => {
         rows.push([
-            (i + 1).toString(),
+            (i).toString(),
             p.getName(),
             p.heritage.gender == 0 ? "FEMALE" : "MALE",
             p.age.toString(),
@@ -104,11 +104,11 @@ function describeOrders(hh: Household): string[] {
         hh.orders.forEach(order => {
             rows.push([
                 order.orderType ? "BUY": "SELL",
-                order.resourceType.toUpperCase(),
+                order.resourceName.toUpperCase(),
                 roundTo(order.quantity).toString(),
-                roundTo(order.amount, 4).toString(),
+                roundTo(order.unitPrice * order.quantity, 4).toString(),
                 order.delivered.toString(),
-                order.delivered ? `${roundTo(order.settlePrice * order.quantity, 4)}` : "-"
+                order.delivered ? `${roundTo(order.settlePrice * order.quantityFulfilled, 4)}` : "-"
             ]);
         });
         return createTable(title, header, rows);

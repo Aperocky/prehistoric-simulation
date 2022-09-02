@@ -1,5 +1,6 @@
 import { SimMarket } from '../../../src/sim/market/simMarket';
 import { getSimulationOnTerrain } from '../simTest';
+import { MarketTransactionsEngine } from 'market-transactions-engine';
 import { expect } from 'chai';
 
 
@@ -35,12 +36,12 @@ describe('market:integration', () => {
         let sim = getSimulationOnTerrain();
         let turn = 0;
         while (turn < 20) {
-            sim.runTurn();
-            turn++;
             // pump money
             sim.allDo(hh => hh.storage.addGold(1));
-            let foodEngine = sim.simMarket.ledger.get("food")
-            expect(foodEngine.sellOrderCount + foodEngine.buyOrderCount).to.be.gt(0);
+            sim.runTurn();
+            turn++;
+            let engine = sim.simMarket.engine;
+            expect(engine.orders.size).to.be.gt(0);
         }
     });
 });

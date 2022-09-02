@@ -1,61 +1,44 @@
-import { Order } from './order';
-import { MarketEngine } from './marketEngine';
+import { Order, MarketTransactionsEngine, MarketDataForResource } from 'market-transactions-engine';
 import { Household } from '../people/household';
 
-export type MarketReport = {
-    sellOrders: number;
-    buyOrders: number;
-    sellOrderDelivered: number;
-    buyOrderDelivered: number;
-    sellVolume: number;
-    buyVolume: number;
-    settlePrice: number;
-}
+// export type MarketReport = {
+//     sellOrders: number;
+//     buyOrders: number;
+//     sellOrderDelivered: number;
+//     buyOrderDelivered: number;
+//     sellVolume: number;
+//     buyVolume: number;
+//     settlePrice: number;
+// }
 
 export class SimMarket {
 
-    ledger: Map<string, MarketEngine>;
-    report: Map<string, MarketReport>;
+    engine: MarketTransactionsEngine;
+    report: Map<string, MarketDataForResource>;
+
+    constructor() {
+        this.engine = new MarketTransactionsEngine();
+        this.report = new Map();
+    }
 
     getOrders(households: Household[]): void {
-        this.ledger = new Map();
+        this.engine.resetMarket();
         households.forEach(hh => {
             let orders = hh.shop();
-            orders.forEach(order => {
-                let rType = order.resourceType;
-                if (!(this.ledger.has(rType))) {
-                    this.ledger.set(rType, new MarketEngine(rType));
-                }
-                this.ledger.get(rType).addOrder(order);
-            });
+            this.engine.addOrders(orders);
         });
     }
 
     executeOrders(households: Household[]): void {
-        this.report = new Map();
-        this.ledger.forEach((marketEngine, resourceType) => {
-            marketEngine.run();
-            this.report.set(resourceType, this.generateMarketReport(marketEngine));
-        });
+        this.engine.processOrders();
         households.forEach(hh => {
             hh.settleMarketOrders();
         });
+        this.report = this.engine.getData();
     }
 
     run(households: Household[]): void {
         this.getOrders(households);
         this.executeOrders(households);
-    }
-
-    private generateMarketReport(engine: MarketEngine): MarketReport {
-        return {
-            sellOrders: engine.sellOrderCount,
-            buyOrders: engine.buyOrderCount,
-            sellOrderDelivered: engine.sellOrderDelivered,
-            buyOrderDelivered: engine.buyOrderDelivered,
-            sellVolume: engine.sellVolume,
-            buyVolume: engine.buyVolume,
-            settlePrice: engine.settlePrice
-        }
     }
 }

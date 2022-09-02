@@ -1,6 +1,6 @@
 import shop from '../../../../src/sim/people/actions/shop';
 import { Household } from '../../../../src/sim/people/household';
-import { Order } from '../../../../src/sim/market/order';
+import { Order } from 'market-transactions-engine';
 import { WILL_TURNER, LIZ_SWANN, getRandomOriginPerson } from '../personTest';
 import { expect } from 'chai';
 
@@ -14,8 +14,7 @@ describe('people:shop', () => {
         let orders = shop(hh);
         expect(orders.length).to.equal(1);
         let order = orders[0];
-        expect(order.resourceType).to.equal("food");
-        expect(order.amount).to.equal(1);
+        expect(order.resourceName).to.equal("food");
         expect(order.quantity).to.equal(1);
         expect(order.unitPrice).to.equal(1);
         expect(order.orderType).to.be.true;
@@ -33,14 +32,12 @@ describe('people:shop', () => {
         let orders = shop(hh);
         expect(orders.length).to.equal(2);
         let firstOrder = orders[0];
-        expect(firstOrder.resourceType).to.equal("food");
-        expect(firstOrder.amount).to.equal(0.5);
+        expect(firstOrder.resourceName).to.equal("food");
         expect(firstOrder.quantity).to.equal(1);
         expect(firstOrder.unitPrice).to.equal(0.5);
         expect(firstOrder.orderType).to.be.true;
         let secondOrder = orders[1];
-        expect(secondOrder.resourceType).to.equal("food");
-        expect(secondOrder.amount).to.equal(0.1);
+        expect(secondOrder.resourceName).to.equal("food");
         expect(secondOrder.quantity).to.equal(1);
         expect(secondOrder.unitPrice).to.equal(0.1);
         expect(secondOrder.orderType).to.be.true;
@@ -65,19 +62,17 @@ describe('people:shop', () => {
         let orders = shop(pirates);
         expect(orders.length).to.equal(4);
         let firstOrder = orders[0];
-        expect(firstOrder.resourceType).to.equal("food");
-        expect(firstOrder.amount).to.equal(5);
+        expect(firstOrder.resourceName).to.equal("food");
         expect(firstOrder.quantity).to.equal(0.5);
         expect(firstOrder.unitPrice).to.equal(10);
         expect(firstOrder.orderType).to.be.true;
         let secondOrder = orders[1];
-        expect(secondOrder.resourceType).to.equal("food");
-        expect(secondOrder.amount).to.equal(1.125);
+        expect(secondOrder.resourceName).to.equal("food");
         expect(secondOrder.quantity).to.equal(3.75);
         expect(secondOrder.unitPrice).to.equal(0.3);
         expect(secondOrder.orderType).to.be.true;
         let thirdOrder = orders[2];
-        expect(thirdOrder.resourceType).to.equal("medicine");
+        expect(thirdOrder.resourceName).to.equal("medicine");
         // Cleanup
         LIZ_SWANN.health = 10;
         WILL_TURNER.health = 10;
@@ -94,14 +89,12 @@ describe('people:shop', () => {
         let orders = shop(hh);
         expect(orders.length).to.equal(2);
         let firstOrder = orders[0];
-        expect(firstOrder.resourceType).to.equal("food");
-        expect(firstOrder.amount).to.equal(0.5);
+        expect(firstOrder.resourceName).to.equal("food");
         expect(firstOrder.quantity).to.equal(0.5);
         expect(firstOrder.unitPrice).to.equal(1);
         expect(firstOrder.orderType).to.be.true;
         let secondOrder = orders[1];
-        expect(secondOrder.resourceType).to.equal("food");
-        expect(secondOrder.amount).to.equal(0.1);
+        expect(secondOrder.resourceName).to.equal("food");
         expect(secondOrder.quantity).to.equal(1);
         expect(secondOrder.unitPrice).to.equal(0.1);
         expect(secondOrder.orderType).to.be.true;
@@ -121,8 +114,7 @@ describe('people:shop', () => {
         let orders = shop(hh);
         expect(orders.length).to.equal(1);
         let order = orders[0];
-        expect(order.resourceType).to.equal("food");
-        expect(order.amount).to.equal(0.1);
+        expect(order.resourceName).to.equal("food");
         expect(order.quantity).to.equal(0.5);
         expect(order.unitPrice).to.equal(0.2);
         expect(order.orderType).to.be.true;
@@ -141,9 +133,9 @@ describe('people:shop', () => {
         let orders = shop(hh);
         expect(orders.length).to.equal(1);
         let order = orders[0];
-        expect(order.resourceType).to.equal("food");
-        expect(order.amount).to.equal(0.375);
+        expect(order.resourceName).to.equal("food");
         expect(order.quantity).to.equal(3);
+        expect(order.unitPrice).to.equal(0.125);
         expect(order.orderType).to.be.false;
         expect(hh.storage.getResource("food")).to.equal(2);
         // Cleanup
@@ -161,8 +153,7 @@ describe('people:shop', () => {
         let orders = shop(hh);
         expect(orders.length).to.equal(1);
         let order = orders[0];
-        expect(order.resourceType).to.equal("wood");
-        expect(order.amount).to.equal(0.125);
+        expect(order.resourceName).to.equal("wood");
         expect(order.quantity).to.equal(5);
         expect(order.orderType).to.be.false;
         expect(hh.storage.getResource("wood")).to.equal(0);
@@ -180,7 +171,7 @@ describe('people:shop', () => {
         hh.storage.addResource("wood", 5);
         hh.storage.addResource("housing", 10);
         let orders = shop(hh);
-        expect(orders.every(o => o.resourceType != "housing")).to.be.true;
+        expect(orders.every(o => o.resourceName != "housing")).to.be.true;
         // Cleanup
         WILL_TURNER.health = 10;
         WILL_TURNER.setHousehold(undefined);
@@ -194,7 +185,7 @@ describe('people:shop', () => {
         hh.storage.gold = 1;
         hh.storage.addResource("housing", 10);
         let orders = shop(hh);
-        let sellHouse = orders.filter(o => o.resourceType == "housing")[0];
+        let sellHouse = orders.filter(o => o.resourceName == "housing")[0];
         expect(sellHouse.quantity).to.equal(2);
         // Cleanup
         WILL_TURNER.health = 10;
@@ -211,13 +202,11 @@ describe('people:shop', () => {
         let orders = shop(hh);
         expect(orders.length).to.equal(2);
         let sellOrder = orders[0];
-        expect(sellOrder.resourceType).to.equal("food");
-        expect(sellOrder.amount).to.equal(0.375);
+        expect(sellOrder.resourceName).to.equal("food");
         expect(sellOrder.quantity).to.equal(3);
         expect(sellOrder.orderType).to.be.false;
         let buyOrder = orders[1];
-        expect(buyOrder.resourceType).to.equal("wood");
-        expect(buyOrder.amount).to.equal(0.5);
+        expect(buyOrder.resourceName).to.equal("wood");
         expect(buyOrder.quantity).to.equal(4);
         expect(buyOrder.unitPrice).to.equal(0.125);
         expect(buyOrder.orderType).to.be.true;
@@ -236,21 +225,21 @@ describe('people:shop', () => {
         hh.getProjectedConsumption();
         hh.storage.gold = 1;
         hh.storage.addResource("food", 5);
+        expect(hh.budget).to.equal(0); // budget is contained within shopping
         let orders = hh.shop();
         expect(hh.orders.length).to.equal(2);
         expect(orders.length).to.equal(2);
         let sellOrder = orders[0];
-        expect(sellOrder.resourceType).to.equal("food");
-        expect(sellOrder.amount).to.equal(0.375);
+        expect(sellOrder.resourceName).to.equal("food");
         expect(sellOrder.quantity).to.equal(3);
         expect(sellOrder.orderType).to.be.false;
         let buyOrder = orders[1];
-        expect(buyOrder.resourceType).to.equal("wood");
-        expect(buyOrder.amount).to.equal(0.5);
+        expect(buyOrder.resourceName).to.equal("wood");
         expect(buyOrder.quantity).to.equal(4);
         expect(buyOrder.unitPrice).to.equal(0.125);
         expect(buyOrder.orderType).to.be.true;
-        expect(hh.storage.gold).to.equal(0.5);
+        expect(hh.storage.gold).to.equal(1); // gold is returned and only processed after
+        expect(hh.budget).to.equal(0); // budget is contained within shopping
         expect(hh.storage.getResource("food")).to.equal(2);
         hh.shop();
         expect(hh.orders.length).to.equal(1);

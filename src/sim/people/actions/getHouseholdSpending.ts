@@ -29,7 +29,7 @@ function meetsCriteria(hh: Household): boolean {
         // has enough food
         return true;
     }
-    let foodOrders = hh.orders.filter(o => o.resourceType == ResourceType.Food);
+    let foodOrders = hh.orders.filter(o => o.resourceName == ResourceType.Food);
     if (foodOrders.some(o => !o.orderType)) {
         // was just selling food
         return true;

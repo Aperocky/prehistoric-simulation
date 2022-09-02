@@ -37,7 +37,7 @@ describe('people:household', () => {
         pirates.storage.addResource("food", 20);
         pirates.getProjectedConsumption();
         let orders = shop(pirates);
-        expect(orders.some(o => o.resourceType == "housing" && o.orderType));
+        expect(orders.some(o => o.resourceName == "housing" && o.orderType));
         // cleanup
         LIZ_SWANN.setHousehold(undefined);
         WILL_TURNER.setHousehold(undefined);

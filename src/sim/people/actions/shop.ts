@@ -1,5 +1,5 @@
 import { Household } from '../household';
-import { Order } from '../../market/order';
+import { Order } from 'market-transactions-engine';
 import { ResourceType } from '../properties/resourceTypes';
 
 
@@ -38,7 +38,7 @@ function buy(currentSupplies: {[resourceType: string]: number},
              hh: Household,
              riskAcceptance: number,
              safetyMargin: number): Order[] {
-    if (hh.storage.gold === 0) {
+    if (hh.storage.gold <= 0) {
         return [];
     }
     let orders = [];

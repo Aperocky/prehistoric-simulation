@@ -151,8 +151,8 @@ export function describeLocalMarket(households: Household[]) {
             }
         });
         hh.orders.filter(o => o.delivered).forEach(o => {
-            if (!(o.resourceType in records)) {
-                records[o.resourceType] = {
+            if (!(o.resourceName in records)) {
+                records[o.resourceName] = {
                     totalIncome: 0,
                     totalBought: 0,
                     totalSold: 0,
@@ -160,10 +160,10 @@ export function describeLocalMarket(households: Household[]) {
                 };
             }
             if (o.orderType) {
-                records[o.resourceType].totalBought += o.quantity;
+                records[o.resourceName].totalBought += o.quantity;
                 records["gold"].totalSold += o.quantity * o.settlePrice;
             } else {
-                records[o.resourceType].totalSold += o.quantity;
+                records[o.resourceName].totalSold += o.quantity;
                 records["gold"].totalBought += o.quantity * o.settlePrice;
             }
         });

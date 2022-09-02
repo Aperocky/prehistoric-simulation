@@ -1,6 +1,6 @@
 import { Controller } from '../../controller';
 import { argparse, KeyValue } from '../parser';
-import { SimMarket, MarketReport } from '../../sim/market/simMarket';
+import { SimMarket } from '../../sim/market/simMarket';
 import { roundTo, createTable } from '../util';
 
 const HELP = [
@@ -35,15 +35,15 @@ function orderTable(market: SimMarket): string[] {
     market.report.forEach((report, resourceType) => {
         rows.push([
             resourceType.toUpperCase(),
-            report.buyOrders.toString(),
-            report.buyOrderDelivered.toString(),
-            report.sellOrders.toString(),
-            report.sellOrderDelivered.toString(),
+            report.buyOrdersCount.toString(),
+            report.buyOrdersDelivered.toString(),
+            report.sellOrdersCount.toString(),
+            report.sellOrdersDelivered.toString(),
         ]);
-        totalBuyOrders += report.buyOrders;
-        totalSellOrders += report.sellOrders;
-        totalBuyOrderDelivered += report.buyOrderDelivered;
-        totalSellOrderDelivered += report.sellOrderDelivered;
+        totalBuyOrders += report.buyOrdersCount;
+        totalSellOrders += report.sellOrdersCount;
+        totalBuyOrderDelivered += report.buyOrdersDelivered;
+        totalSellOrderDelivered += report.sellOrdersDelivered;
     });
     rows.push([
         "TOTAL",
@@ -62,19 +62,19 @@ function marketTable(market: SimMarket): string[] {
     let totalQuantity = 0;
     let totalVolume = 0;
     market.report.forEach((report, resourceType) => {
-        let decimals = report.settlePrice < 0.001
+        let decimals = report.actualPrice < 0.001
                 ? 5
-                : report.settlePrice < 0.1
+                : report.actualPrice < 0.1
                 ? 3
                 : 2;
         rows.push([
             resourceType.toUpperCase(),
-            roundTo(report.buyVolume).toString(),
-            roundTo(report.settlePrice, decimals).toString(),
-            roundTo(report.buyVolume * report.settlePrice, decimals).toString()
+            roundTo(report.actualVolume).toString(),
+            roundTo(report.actualPrice, decimals).toString(),
+            roundTo(report.actualVolume * report.actualPrice, decimals).toString()
         ]);
-        totalQuantity += report.buyVolume;
-        totalVolume += report.buyVolume * report.settlePrice;
+        totalQuantity += report.actualVolume;
+        totalVolume += report.actualVolume * report.actualPrice;
     });
     rows.push([
         "TOTAL",
