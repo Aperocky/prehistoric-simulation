@@ -2,5 +2,4 @@
 src/**/*.js
 asset/*.js
 node_modules/*
-package-lock.json
 .webconfig
